@@ -1,0 +1,36 @@
+# Java
+target/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Environment
+.env
+.DS_Store
+
+# Frontend
+node_modules/
+dist/
+build/
+.npm
+
+# Backend Go (if any)
+bin/
+*.exe
+
+# Uploads
+uploads/
+imagenes_joyas_ocultas/
+
+# Junk / temporary files
+borrar.html
+payload.json
+test_photo.png
+demo.tsx
+index.css
+

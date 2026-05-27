@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Explorar - ITERA</title>
+<meta name="description" content="Descubre tu próxima aventura con ITERA. Explora atracciones, gastronomía y movilidad en destinos de todo el mundo."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, h4, .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-effect { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    @keyframes fadeSlideUp {
+        from { opacity: 0; transform: translateY(18px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeSlideUp 0.45s ease-out forwards; }
+    .line-clamp-2 {
+        display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2;
+        -webkit-box-orient: vertical; overflow: hidden;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+        animation: fadeIn 0.2s ease-out forwards;
+    }
+    
+    /* Custom scrollbar for sidebar filters */
+    .sidebar-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+    .sidebar-scroll::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .sidebar-scroll::-webkit-scrollbar-thumb {
+        background: rgba(0, 80, 203, 0.15);
+        border-radius: 99px;
+    }
+    .sidebar-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 80, 203, 0.3);
+    }
+    .dark .sidebar-scroll::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+    }
+    .dark .sidebar-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+</style>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                "colors": {
+                    "tertiary-fixed-dim": "#ffb596", "on-background": "#191c1d",
+                    "background": "#f8f9fa", "on-secondary-container": "#2e4c85",
+                    "surface-container-low": "#f3f4f5", "inverse-primary": "#aec6ff",
+                    "on-primary": "#ffffff", "secondary": "#405d98",
+                    "surface-bright": "#f8f9fa", "tertiary": "#9f3c00",
+                    "surface": "#f8f9fa", "on-tertiary-container": "#fffbff",
+                    "on-secondary-fixed": "#001a42", "primary-fixed": "#d8e2ff",
+                    "on-primary-container": "#fefcff", "on-primary-fixed": "#001a42",
+                    "inverse-surface": "#2e3132", "primary-fixed-dim": "#aec6ff",
+                    "on-tertiary-fixed": "#360f00", "surface-tint": "#005ac4",
+                    "tertiary-container": "#c84d00", "secondary-container": "#a1beff",
+                    "error": "#ba1a1a", "on-secondary": "#ffffff",
+                    "on-error": "#ffffff", "outline": "#727786",
+                    "on-primary-fixed-variant": "#004396",
+                    "surface-container-highest": "#e1e3e4",
+                    "on-secondary-fixed-variant": "#27457e",
+                    "secondary-fixed-dim": "#aec6ff",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "surface-variant": "#e1e3e4", "outline-variant": "#c1c6d7",
+                    "surface-container": "#edeeef", "inverse-on-surface": "#f0f1f2",
+                    "surface-dim": "#d9dadb", "tertiary-fixed": "#ffdbcd",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#414755", "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff", "primary-container": "#006fef",
+                    "on-surface": "#191c1d", "on-error-container": "#93000a",
+                    "secondary-fixed": "#d8e2ff",
+                    "surface-container-high": "#e7e8e9", "primary": "#0058bf"
+                },
+                "borderRadius": { "DEFAULT":"0.25rem","lg":"0.5rem","xl":"1.5rem","full":"9999px" },
+                "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"], "display": ["Plus Jakarta Sans"],
+                    "body": ["Inter"], "label": ["Inter"]
+                }
+            }
+        }
+    }
+</script>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-fixed-dim">
+
+<!-- ===== GLOBAL HEADER ===== -->
+<header id="main-header" class="fixed top-0 w-full z-50 transition-all duration-500 bg-transparent py-2 border-b border-white/10">
+<div id="header-container" class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto transition-all duration-500">
+    <div class="flex items-center gap-8">
+        <span id="header-logo" class="text-3xl font-medium uppercase tracking-widest text-white transition-colors duration-300 drop-shadow-md" style="font-family: 'Montserrat', sans-serif;">ITER<span style="letter-spacing: -2px;">Λ</span></span>
+        <nav class="hidden md:flex items-center gap-6">
+            <a class="nav-link text-white/95 hover:text-white transition-colors text-sm font-medium duration-300 drop-shadow-md" href="../home/index.html">Inicio</a>
+            <a class="nav-link text-white/95 hover:text-white transition-colors text-sm font-medium duration-300 drop-shadow-md" href="../dashboard/index.html">Mis Viajes</a>
+            <a id="nav-link-active" class="text-white font-bold border-b-2 border-white pb-1 text-sm transition-colors duration-300 drop-shadow-md" href="../destinations/index.html">Explorar Destinos</a>
+        </nav>
+    </div>
+    <div class="flex items-center gap-4">
+        <div class="relative hidden sm:block">
+            <button onclick="document.getElementById('lang-dropdown').classList.toggle('hidden')" id="lang-btn" class="flex items-center gap-2 text-sm font-bold text-white bg-white/20 px-4 py-2 rounded-full hover:bg-white/30 transition-colors focus:outline-none backdrop-blur-sm border border-white/20 drop-shadow-md">
+<img id="current-lang-flag" src="https://flagcdn.com/w20/es.png" class="w-4 h-3 object-cover rounded-sm" alt="flag">
+<span id="current-lang-display" class="font-bold">ES</span>
+                <span class="material-symbols-outlined text-sm">language</span>
+            </button>
+            <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-36 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden z-50">
+                        <div class="py-1">
+                            <button onclick="changeSystemLanguage('es')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">es</span>
+                                    <img src="https://flagcdn.com/w20/es.png" class="w-4 h-3 object-cover rounded-sm" alt="es">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Español</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('en')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">en</span>
+                                    <img src="https://flagcdn.com/w20/us.png" class="w-4 h-3 object-cover rounded-sm" alt="en">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">English</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('pt')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">pt</span>
+                                    <img src="https://flagcdn.com/w20/br.png" class="w-4 h-3 object-cover rounded-sm" alt="pt">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Português</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('it')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">it</span>
+                                    <img src="https://flagcdn.com/w20/it.png" class="w-4 h-3 object-cover rounded-sm" alt="it">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Italiano</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('fr')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">fr</span>
+                                    <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-3 object-cover rounded-sm" alt="fr">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Français</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('de')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">de</span>
+                                    <img src="https://flagcdn.com/w20/de.png" class="w-4 h-3 object-cover rounded-sm" alt="de">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Deutsch</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('zh')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">zh</span>
+                                    <img src="https://flagcdn.com/w20/cn.png" class="w-4 h-3 object-cover rounded-sm" alt="zh">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">中文</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('ja')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">ja</span>
+                                    <img src="https://flagcdn.com/w20/jp.png" class="w-4 h-3 object-cover rounded-sm" alt="ja">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">日本語</span>
+                            </button>
+</div>
+                    </div>
+        </div>
+        <!-- Search Profile Button -->
+        <button id="btn-buscar-perfil" onclick="window.openSearchUserModal()" class="p-2 text-white hover:bg-white/20 rounded-lg transition-all active:scale-95 duration-150 drop-shadow-md flex items-center justify-center animate-fade-in" title="Buscar Perfiles">
+            <span class="material-symbols-outlined">search</span>
+        </button>
+        <button id="notif-btn" class="p-2 text-white hover:bg-white/20 rounded-lg transition-all active:scale-95 duration-150 drop-shadow-md">
+            <span class="material-symbols-outlined">notifications</span>
+        </button>
+        <div class="relative group">
+            <button id="avatar-btn" class="h-10 w-10 rounded-full overflow-hidden border-2 border-white/50 shadow-sm bg-white/20 focus:outline-none transition-colors duration-300" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                <img alt="User profile avatar" id="header-avatar" class="h-full w-full object-cover" src="https://cdn-icons-png.flaticon.com/512/149/149071.png"/>
+            </button>
+            <div class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700 overflow-hidden z-50">
+                <div class="py-1">
+                    <a href="../profile/index.html" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
+                        <span class="material-symbols-outlined text-base">person</span> Perfil
+                    </a>
+                    <a href="#" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
+                        <span class="material-symbols-outlined text-base">settings</span> Configuración
+                    </a>
+                    <div class="border-t border-slate-100 dark:border-slate-700 my-1"></div>
+                    <a href="../auth/index.html" class="px-4 py-2 text-sm text-error hover:bg-error/5 flex items-center gap-2 transition-colors">
+                        <span class="material-symbols-outlined text-base">logout</span> Cerrar sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</header>
+
+<script>
+window.addEventListener('scroll', () => {
+    const header = document.getElementById('main-header');
+    const logo = document.getElementById('header-logo');
+    const navLinkActive = document.getElementById('nav-link-active');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const langBtn = document.getElementById('lang-btn');
+    const notifBtn = document.getElementById('notif-btn');
+    const avatarBtn = document.getElementById('avatar-btn');
+
+    if (window.scrollY > 50) {
+        header.classList.remove('bg-transparent', 'py-2', 'border-white/10');
+        header.classList.add('bg-white/85', 'backdrop-blur-xl', 'shadow-sm', 'dark:bg-slate-900/85', 'py-0', 'border-slate-200/60', 'dark:border-slate-700/50');
+        
+        logo.classList.remove('text-white', 'drop-shadow-md');
+        logo.classList.add('text-slate-900', 'dark:text-white');
+        
+        navLinkActive.classList.remove('text-white', 'border-white', 'drop-shadow-md');
+        navLinkActive.classList.add('text-blue-600', 'border-blue-600', 'dark:text-blue-400');
+        
+        navLinks.forEach(link => {
+            link.classList.remove('text-white/95', 'hover:text-white', 'drop-shadow-md');
+            link.classList.add('text-slate-600', 'hover:text-slate-900', 'dark:text-slate-400', 'dark:hover:text-white');
+        });
+        
+        if (langBtn) {
+            langBtn.classList.remove('text-white', 'bg-white/20', 'border-white/20', 'drop-shadow-md');
+            langBtn.classList.add('text-slate-700', 'dark:text-slate-200', 'bg-slate-100', 'dark:bg-slate-800', 'border-slate-200', 'dark:border-slate-700');
+        }
+        if (notifBtn) {
+            notifBtn.classList.remove('text-white', 'drop-shadow-md', 'hover:bg-white/20');
+            notifBtn.classList.add('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        }
+        const searchBtn = document.getElementById('btn-buscar-perfil');
+        if (searchBtn) {
+            searchBtn.classList.remove('text-white', 'drop-shadow-md', 'hover:bg-white/20');
+            searchBtn.classList.add('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        }
+        if (avatarBtn) {
+            avatarBtn.classList.remove('border-white/50', 'bg-white/20');
+            avatarBtn.classList.add('border-slate-200', 'dark:border-slate-700', 'bg-slate-100', 'dark:bg-slate-800');
+        }
+    } else {
+        header.classList.add('bg-transparent', 'py-2', 'border-white/10');
+        header.classList.remove('bg-white/85', 'backdrop-blur-xl', 'shadow-sm', 'dark:bg-slate-900/85', 'py-0', 'border-slate-200/60', 'dark:border-slate-700/50');
+        
+        logo.classList.add('text-white', 'drop-shadow-md');
+        logo.classList.remove('text-slate-900', 'dark:text-white');
+        
+        navLinkActive.classList.add('text-white', 'border-white', 'drop-shadow-md');
+        navLinkActive.classList.remove('text-blue-600', 'border-blue-600', 'dark:text-blue-400');
+        
+        navLinks.forEach(link => {
+            link.classList.add('text-white/95', 'hover:text-white', 'drop-shadow-md');
+            link.classList.remove('text-slate-600', 'hover:text-slate-900', 'dark:text-slate-400', 'dark:hover:text-white');
+        });
+        
+        if (langBtn) {
+            langBtn.classList.add('text-white', 'bg-white/20', 'border-white/20', 'drop-shadow-md');
+            langBtn.classList.remove('text-slate-700', 'dark:text-slate-200', 'bg-slate-100', 'dark:bg-slate-800', 'border-slate-200', 'dark:border-slate-700');
+        }
+        if (notifBtn) {
+            notifBtn.classList.add('text-white', 'drop-shadow-md', 'hover:bg-white/20');
+            notifBtn.classList.remove('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        }
+        const searchBtn = document.getElementById('btn-buscar-perfil');
+        if (searchBtn) {
+            searchBtn.classList.add('text-white', 'drop-shadow-md', 'hover:bg-white/20');
+            searchBtn.classList.remove('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        }
+        if (avatarBtn) {
+            avatarBtn.classList.add('border-white/50', 'bg-white/20');
+            avatarBtn.classList.remove('border-slate-200', 'dark:border-slate-700', 'bg-slate-100', 'dark:bg-slate-800');
+        }
+    }
+});
+</script>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="min-h-screen">
+
+<!-- Hero Background Section -->
+<div class="relative w-full pb-24 pt-40 px-6 md:px-10 overflow-hidden">
+    <div class="absolute inset-0 z-0 bg-cover bg-center" style="background-image: url('../../shared/img/fondo22.jpg');">
+        <!-- Dark Overlay -->
+        <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+    
+    <div class="relative z-10 max-w-[1600px] mx-auto">
+        <!-- Hero Title -->
+        <div class="mb-12 text-center flex flex-col items-center">
+            <h1 class="font-extrabold tracking-tight font-headline mb-6 text-5xl md:text-7xl text-white drop-shadow-lg">Descubre tu próxima aventura</h1>
+            <div class="w-full max-w-3xl relative mx-auto" id="hero-search-container">
+                <input id="hero-search-input" class="w-full py-5 md:py-7 px-8 md:px-10 rounded-full border-none bg-surface-container-lowest shadow-[0_20px_50px_rgba(0,0,0,0.15)] text-lg md:text-xl font-medium focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-on-surface-variant/50" placeholder="¿A dónde quieres ir hoy?" type="text" autocomplete="off"/>
+                
+                <div class="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center gap-3">
+                    <!-- Search Spinner (Hidden by default) -->
+                    <div id="hero-search-spinner" class="hidden">
+                        <svg class="animate-spin h-6 w-6 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                    <!-- Search Button -->
+                    <button id="hero-search-btn" class="bg-primary text-white p-3 md:p-5 rounded-full hover:scale-105 transition-transform flex items-center justify-center shadow-md">
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                    </button>
+                </div>
+                
+                <!-- Search Dropdown -->
+                <div id="hero-search-dropdown" class="hidden absolute w-full mt-3 bg-surface-container-lowest border border-outline-variant/20 rounded-2xl shadow-xl z-50 overflow-hidden max-h-[340px] overflow-y-auto text-left">
+                    <ul id="hero-search-results" class="divide-y divide-surface-container-high"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Major Category Selector -->
+        <div class="max-w-4xl mx-auto">
+            <div id="major-category-selector" class="flex items-stretch bg-white rounded-xl shadow-xl overflow-hidden h-20 md:h-24">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="p-6 md:p-10 max-w-[1600px] mx-auto pt-8">
+    <div class="flex flex-col lg:flex-row gap-0">
+        <!-- Filters Sidebar -->
+        <aside class="w-full lg:w-72 flex-shrink-0 lg:pr-10 pb-10 lg:pb-0">
+            <div class="flex flex-col gap-8 lg:sticky lg:top-24 lg:h-[calc(100vh-130px)] lg:overflow-y-auto pr-2 sidebar-scroll">
+                <!-- Quick Navigation -->
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant/60 mb-4 px-1">Navegación Rápida</h3>
+                    <ul class="space-y-1">
+                        <li><a id="nav-explore" class="flex items-center gap-3 py-2 px-3 rounded-lg bg-primary/5 text-primary font-semibold text-sm" href="../destinations/index.html"><span class="material-symbols-outlined text-sm">explore</span> Explorar</a></li>
+                        <li><a id="nav-favorites" class="flex items-center gap-3 py-2 px-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors text-sm font-medium cursor-pointer"><span class="material-symbols-outlined text-sm">favorite</span> Favoritos <span id="fav-count-badge" class="ml-auto text-[10px] font-bold bg-primary text-white rounded-full px-1.5 py-0.5 hidden">0</span></a></li>
+                    </ul>
+                </div>
+                <!-- Change Destination -->
+                <div class="bg-surface-container-low/50 p-4 rounded-2xl border border-outline-variant/10 shadow-sm transition-all hover:shadow-md">
+                    <h3 class="text-[10px] font-bold uppercase tracking-[0.15em] text-primary mb-4 px-1">Destino de Exploración</h3>
+                    <div class="relative group">
+                        <div class="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-primary transition-transform group-focus-within:scale-110">
+                            <span class="material-symbols-outlined text-lg">location_on</span>
+                        </div>
+                        <input id="sidebar-location-input" class="w-full bg-white dark:bg-slate-800 border border-outline-variant/30 rounded-xl py-3 pl-10 pr-4 text-sm font-medium placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all outline-none shadow-inner" placeholder="Escribe un destino..." type="text" autocomplete="off"/>
+                        
+                        <!-- Search Dropdown with improved styling -->
+                        <div id="sidebar-location-dropdown" class="hidden absolute left-0 right-0 top-full mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-outline-variant/20 overflow-hidden z-[60] max-h-64 overflow-y-auto">
+                            <ul id="sidebar-location-results" class="divide-y divide-surface-container-low"></ul>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-on-surface-variant/60 mt-3 px-1 italic">Presiona Enter para buscar</p>
+                </div>
+                <!-- Sub-Categories -->
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant/60 mb-4 px-1">Categorías</h3>
+                    <div id="filter-subcategories" class="grid grid-cols-2 gap-2">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+                <!-- Toggles -->
+                <div class="space-y-4">
+                    <label class="flex items-center justify-between cursor-pointer group">
+                        <span class="text-sm font-medium text-on-surface-variant">Verificados</span>
+                        <div class="relative inline-flex items-center cursor-pointer">
+                            <input id="toggle-verified" checked type="checkbox" class="sr-only peer"/>
+                            <div class="w-10 h-5 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                        </div>
+                    </label>
+                    <label class="flex items-center justify-between cursor-pointer group">
+                        <span class="text-sm font-medium text-on-surface-variant">Joyas Ocultas</span>
+                        <div class="relative inline-flex items-center cursor-pointer">
+                            <input id="toggle-hidden-gems" type="checkbox" class="sr-only peer"/>
+                            <div class="w-10 h-5 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                        </div>
+                    </label>
+                </div>
+                <!-- Price Filter -->
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant/60 mb-4 px-1">Precio</h3>
+                    <div id="filter-price-buttons" class="grid grid-cols-5 gap-1">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+                <!-- Rating Filter -->
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant/60 mb-4 px-1">Calificación mínima</h3>
+                    <div id="filter-rating-radios" class="space-y-2">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Vertical Divider Line -->
+        <div class="hidden lg:block w-px bg-outline-variant/20 self-stretch my-4"></div>
+
+        <!-- Main Grid -->
+        <div class="flex-1 min-w-0 lg:pl-10">
+            <div class="flex justify-between items-end mb-6">
+                <p class="text-on-surface-variant text-sm font-medium">Mostrando <span id="results-count" class="font-bold text-on-surface">0 resultados</span> <span id="results-location-label"></span></p>
+                <div class="relative">
+                    <button id="sort-dropdown-btn" class="flex items-center gap-3 bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/20 shadow-sm hover:bg-surface-container-high transition-all active:scale-95 group">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant/70">Ordenar por:</span>
+                        <span id="sort-current-label" class="text-xs font-extrabold text-primary">Relevancia</span>
+                        <span class="material-symbols-outlined text-sm text-primary transition-transform group-aria-expanded:rotate-180">expand_more</span>
+                    </button>
+                    
+                    <!-- Custom Dropdown Menu -->
+                    <div id="sort-dropdown-menu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-outline-variant/20 overflow-hidden z-[70] animate-fade-in">
+                        <div class="py-1">
+                            <button data-sort="relevance" class="w-full text-left px-4 py-2.5 text-xs font-bold text-on-surface-variant hover:bg-primary/5 hover:text-primary flex items-center justify-between transition-colors group">
+                                <span>Relevancia</span>
+                                <span class="material-symbols-outlined text-sm opacity-0 group-[.active]:opacity-100">check</span>
+                            </button>
+                            <button data-sort="price_asc" class="w-full text-left px-4 py-2.5 text-xs font-bold text-on-surface-variant hover:bg-primary/5 hover:text-primary flex items-center justify-between transition-colors group">
+                                <span>Precio: Menor a Mayor</span>
+                                <span class="material-symbols-outlined text-sm opacity-0 group-[.active]:opacity-100">check</span>
+                            </button>
+                            <button data-sort="rating" class="w-full text-left px-4 py-2.5 text-xs font-bold text-on-surface-variant hover:bg-primary/5 hover:text-primary flex items-center justify-between transition-colors group">
+                                <span>Calificación</span>
+                                <span class="material-symbols-outlined text-sm opacity-0 group-[.active]:opacity-100">check</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="results-grid" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                <!-- Skeletons go here -->
+            </div>
+
+            <!-- Pagination -->
+            <div id="pagination-container" class="hidden mt-12 mb-8 flex items-center justify-center gap-4">
+                <button id="btn-prev-page" class="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant/30 text-on-surface-variant hover:bg-primary hover:text-white hover:border-primary transition-all disabled:opacity-30 disabled:pointer-events-none">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <div id="pagination-pages" class="flex items-center gap-2">
+                    <!-- Page numbers injected by JS -->
+                </div>
+                <button id="btn-next-page" class="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant/30 text-on-surface-variant hover:bg-primary hover:text-white hover:border-primary transition-all disabled:opacity-30 disabled:pointer-events-none">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+
+            <!-- No results -->
+            <div id="no-results-state" class="hidden mt-8 bg-white rounded-xl p-16 text-center border border-outline-variant/10 shadow-sm">
+                <span class="material-symbols-outlined text-6xl text-outline mb-4 block">search_off</span>
+                <h3 class="text-xl font-bold mb-2">Sin resultados</h3>
+                <p class="text-on-surface-variant mb-6">No encontramos lugares con los criterios actuales. Probá modificar los filtros.</p>
+                <button id="btn-reset-all" class="px-8 py-3 rounded-full bg-primary text-on-primary font-bold hover:bg-primary-container transition-colors">Limpiar filtros</button>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+
+<!-- Bottom Navigation for Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t-0 py-3 px-6 flex justify-around items-center z-50">
+    <div class="flex flex-col items-center gap-1 text-slate-500 cursor-pointer" onclick="window.location.href='../home/index.html'"><span class="material-symbols-outlined">home</span><span class="text-[10px] font-medium">Inicio</span></div>
+    <div class="flex flex-col items-center gap-1 text-primary"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">explore</span><span class="text-[10px] font-bold">Explorar</span></div>
+    <div class="flex flex-col items-center gap-1 text-slate-500 cursor-pointer" onclick="window.location.href='../dashboard/index.html'"><span class="material-symbols-outlined">luggage</span><span class="text-[10px] font-medium">Viajes</span></div>
+    <div class="flex flex-col items-center gap-1 text-slate-500 cursor-pointer" onclick="window.location.href='../profile/index.html'"><span class="material-symbols-outlined">person</span><span class="text-[10px] font-medium">Perfil</span></div>
+</nav>
+
+<!-- ========== ATTRACTION DETAILS MODAL ========== -->
+<div id="details-modal" class="hidden fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300 p-4">
+  <div class="bg-surface rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col transform scale-95 transition-transform duration-300 relative">
+    <button id="btn-close-details" class="absolute top-4 right-4 z-20 w-10 h-10 bg-black/40 backdrop-blur-md rounded-full text-white flex items-center justify-center hover:bg-black/60 transition-colors"><span class="material-symbols-outlined">close</span></button>
+    
+    <div id="details-modal-image-container" class="relative h-64 md:h-80 w-full bg-slate-200 shrink-0">
+        <img id="details-modal-image" class="w-full h-full object-cover" src="" alt=""/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+        <!-- Galería de fotos (comunidad) -->
+        <div id="details-modal-gallery" class="hidden absolute bottom-2 right-4 flex gap-1.5 z-10"></div>
+        <!-- Badge de origen -->
+        <div id="details-modal-source-badge" class="hidden absolute bottom-4 left-4 z-10"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+            <h2 id="details-modal-title" class="text-3xl md:text-4xl font-extrabold text-white font-headline mb-2 drop-shadow-md"></h2>
+            <p class="text-white/90 text-sm font-medium flex items-center gap-1.5"><span class="material-symbols-outlined text-base">location_on</span> <span id="details-modal-address"></span></p>
+        </div>
+        <button id="details-modal-fav-btn" class="absolute top-4 left-4 z-20 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white text-white hover:text-red-500 transition-all shadow-sm">
+            <span class="material-symbols-outlined" id="details-modal-fav-icon">favorite_border</span>
+        </button>
+    </div>
+    
+    <div class="p-6 md:p-8 flex-1 overflow-y-auto space-y-6 relative">
+        <div id="details-loading" class="absolute inset-0 bg-surface/80 backdrop-blur flex items-center justify-center z-10 hidden">
+             <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+        </div>
+
+        <!-- Stats row: rating + precio + website -->
+        <div class="flex items-center gap-6 flex-wrap border-b border-outline-variant/20 pb-5">
+            <div class="flex flex-col">
+                <span class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mb-1.5">Calificación</span>
+                <div class="flex items-center gap-1 text-amber-500">
+                    <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1;">star</span>
+                    <span id="details-modal-rating" class="font-bold text-xl text-on-surface">-</span>
+                </div>
+            </div>
+            <div class="flex flex-col hidden" id="details-modal-price-container">
+                <span class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mb-1.5">Precio</span>
+                <span id="details-modal-price" class="font-bold text-xl text-emerald-600">Gratis</span>
+            </div>
+            <div class="flex flex-col hidden" id="details-modal-website-container">
+                <span class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mb-1.5">Sitio Web Oficial</span>
+                <a id="details-modal-website" href="#" target="_blank" class="text-primary hover:underline font-bold flex items-center gap-1 text-sm"><span class="material-symbols-outlined text-base">open_in_new</span> Visitar página</a>
+            </div>
+        </div>
+
+        <!-- Categorías pills (comunidad) -->
+        <div id="details-modal-categories-container" class="hidden">
+            <div id="details-modal-categories" class="flex flex-wrap gap-2"></div>
+        </div>
+        
+        <!-- Descripción -->
+        <div>
+            <h3 class="text-base font-bold text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary">info</span> Acerca de</h3>
+            <p id="details-modal-desc" class="text-on-surface-variant text-sm leading-relaxed">No hay descripción disponible para este lugar.</p>
+        </div>
+        
+        <!-- Horarios (Google Places) -->
+        <div id="details-modal-hours-container" class="hidden">
+            <h3 class="text-base font-bold text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary">schedule</span> Horarios</h3>
+            <ul id="details-modal-hours" class="text-sm text-on-surface-variant space-y-1.5 grid grid-cols-1 md:grid-cols-2 gap-x-4"></ul>
+        </div>
+
+        <!-- Accesibilidad (comunidad) -->
+        <div id="details-modal-accessibility-container" class="hidden">
+            <h3 class="text-base font-bold text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary">accessible</span> Accesibilidad</h3>
+            <div id="details-modal-accessibility" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Galería completa de fotos (comunidad) -->
+        <div id="details-modal-photos-container" class="hidden">
+            <h3 class="text-base font-bold text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary">photo_library</span> Fotos</h3>
+            <div id="details-modal-photos" class="grid grid-cols-2 md:grid-cols-3 gap-2"></div>
+        </div>
+
+        <!-- Reseñas -->
+        <div id="details-modal-reviews-container" class="mt-8 border-t border-outline-variant/20 pt-6">
+            <h3 class="text-xl font-bold text-on-surface mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-amber-500">star</span> Reseñas de la Comunidad</h3>
+            
+            <!-- Formulario para agregar reseña -->
+            <div id="review-form-container" class="bg-surface-container-low p-5 rounded-2xl mb-6 shadow-sm border border-outline-variant/10">
+                <h4 class="font-bold text-sm mb-3">Deja tu opinión</h4>
+                <div class="flex items-center gap-1 mb-3" id="review-stars-input">
+                    <span class="material-symbols-outlined text-outline-variant hover:text-amber-500 cursor-pointer text-2xl transition-colors" data-value="1">star</span>
+                    <span class="material-symbols-outlined text-outline-variant hover:text-amber-500 cursor-pointer text-2xl transition-colors" data-value="2">star</span>
+                    <span class="material-symbols-outlined text-outline-variant hover:text-amber-500 cursor-pointer text-2xl transition-colors" data-value="3">star</span>
+                    <span class="material-symbols-outlined text-outline-variant hover:text-amber-500 cursor-pointer text-2xl transition-colors" data-value="4">star</span>
+                    <span class="material-symbols-outlined text-outline-variant hover:text-amber-500 cursor-pointer text-2xl transition-colors" data-value="5">star</span>
+                </div>
+                <textarea id="review-comment-input" rows="3" class="w-full bg-white border border-outline-variant/30 rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none mb-3 placeholder:text-on-surface-variant/50" placeholder="¿Qué te pareció este lugar? Comparte tu experiencia..."></textarea>
+                <div class="flex justify-end">
+                    <button id="btn-submit-review" class="px-5 py-2 bg-primary text-white rounded-lg font-bold text-sm shadow hover:bg-primary-container transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none">Publicar Reseña</button>
+                </div>
+            </div>
+
+            <!-- Lista de Reseñas -->
+            <div id="details-modal-reviews-list" class="space-y-4">
+                <!-- Inyectadas por JS -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="p-4 md:p-6 border-t border-outline-variant/10 bg-surface-container-lowest shrink-0">
+        <button id="details-modal-add-btn" class="w-full py-4 rounded-xl bg-primary text-white font-bold text-lg hover:bg-primary-container transition-all shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 flex items-center justify-center gap-2 active:scale-[0.98]">
+            <span class="material-symbols-outlined">add_circle</span> Agregar al itinerario
+        </button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== ADD TO TRIP MODAL ========== -->
+<div id="add-to-trip-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+  <div class="bg-surface rounded-2xl shadow-2xl w-full max-w-md p-6 transform scale-95 transition-transform duration-300 flex flex-col max-h-[80vh]">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-bold text-on-surface">Agregar a Viaje</h3>
+      <button id="btn-close-modal" class="p-2 rounded-full hover:bg-surface-container transition-colors text-on-surface-variant"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <p class="text-sm text-on-surface-variant mb-4">Selecciona los viajes a los que deseas agregar <strong id="modal-attraction-name" class="text-primary"></strong>.</p>
+    <div id="modal-trips-container" class="flex-1 overflow-y-auto space-y-2 mb-6 min-h-[150px]"></div>
+    <div class="flex gap-4 mt-auto">
+      <button id="btn-cancel-modal" class="flex-1 py-3 font-semibold rounded-full border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors">Cancelar</button>
+      <button id="btn-save-modal" class="flex-1 py-3 font-semibold rounded-full bg-primary text-on-primary hover:bg-primary-container transition-colors shadow-md">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FAVORITES PANEL (REMOVED) ========== -->
+
+<script src="../../shared/utils/mockData.js"></script>
+<script src="../../shared/utils/translations.js"></script>
+<script src="destinations.js"></script>
+<script src="../../shared/utils/auto-translator.js"></script>
+<script src="../../shared/utils/avatar-loader.js"></script>
+<script>
+function changeSystemLanguage(lang) {
+    localStorage.setItem('itera_lang', lang);
+    const dd = document.getElementById('lang-dropdown');
+    if (dd) dd.classList.add('hidden');
+    const display = document.getElementById('current-lang-display');
+    if (display) display.textContent = lang.toUpperCase();
+    const flagImg = document.getElementById('current-lang-flag');
+    if (flagImg) {
+        const codeMap = { 'en': 'us', 'pt': 'br', 'zh': 'cn', 'ja': 'jp' };
+        const flagCode = codeMap[lang.toLowerCase()] || lang.toLowerCase();
+        flagImg.src = `https://flagcdn.com/w20/${flagCode}.png`;
+    }
+    if (window.autoTranslatePage) { window.autoTranslatePage(lang); }
+    else { window.location.reload(); }
+}
+document.addEventListener('DOMContentLoaded', function() {
+    var savedLang = localStorage.getItem('itera_lang') || 'es';
+    var el = document.getElementById('current-lang-display');
+    if (el) el.textContent = savedLang.toUpperCase();
+});
+document.addEventListener('click', function(e) {
+    var btn = e.target.closest('button[onclick*="lang-dropdown"]');
+    var dd = document.getElementById('lang-dropdown');
+    if (!btn && dd && !dd.classList.contains('hidden')) dd.classList.add('hidden');
+});
+</script>
+<div id="footer-container" class="hidden md:block"></div>
+<script src="../../shared/components/footer/footer.js"></script>
+<script src="../../shared/components/navbar/navbar.js"></script>
+</body>
+</html>
+

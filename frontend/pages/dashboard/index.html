@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>ITERA - Mis Viajes</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#405d98",
+                        "on-surface-variant": "#414755",
+                        "on-background": "#191c1d",
+                        "on-primary-fixed-variant": "#004396",
+                        "on-tertiary-fixed": "#360f00",
+                        "secondary-container": "#a1beff",
+                        "on-secondary-container": "#2e4c85",
+                        "surface-tint": "#005ac4",
+                        "on-tertiary-container": "#fffbff",
+                        "surface-variant": "#e1e3e4",
+                        "primary": "#0058bf",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#9f3c00",
+                        "on-primary-fixed": "#001a42",
+                        "surface-bright": "#f8f9fa",
+                        "outline-variant": "#c1c6d7",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#d8e2ff",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdbcd",
+                        "primary-container": "#006fef",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#27457e",
+                        "surface-container-high": "#e7e8e9",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f3f4f5",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#aec6ff",
+                        "on-secondary-fixed": "#001a42",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "primary-fixed-dim": "#aec6ff",
+                        "on-primary-container": "#fefcff",
+                        "tertiary-container": "#c84d00",
+                        "inverse-surface": "#2e3132",
+                        "surface": "#f8f9fa",
+                        "surface-dim": "#d9dadb",
+                        "inverse-on-surface": "#f0f1f2",
+                        "primary-fixed": "#d8e2ff",
+                        "on-error": "#ffffff",
+                        "background": "#f8f9fa",
+                        "surface-container": "#edeeef",
+                        "outline": "#727786",
+                        "on-surface": "#191c1d",
+                        "inverse-primary": "#aec6ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "1rem",
+                        "2xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .brand-font { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+
+    <header id="main-header" class="fixed top-0 w-full z-50 transition-all duration-500 bg-transparent py-2 border-b border-white/10">
+        <div id="header-container" class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto transition-all duration-500">
+            <div class="flex items-center gap-8">
+                <span id="header-logo" class="text-3xl font-medium uppercase tracking-widest text-white transition-colors duration-300 drop-shadow-md" style="font-family: 'Montserrat', sans-serif;">ITER<span style="letter-spacing: -2px;">Λ</span></span>
+                <nav class="hidden md:flex items-center gap-6">
+                    <a class="nav-link text-white/95 hover:text-white transition-colors text-sm font-medium duration-300 drop-shadow-md" href="../home/index.html">Inicio</a>
+                    <a id="nav-link-active" class="text-white font-bold border-b-2 border-white pb-1 text-sm transition-colors duration-300 drop-shadow-md" href="#">Mis Viajes</a>
+                    <a class="nav-link text-white/95 hover:text-white transition-colors text-sm font-medium duration-300 drop-shadow-md" href="../destinations/index.html">Explorar Destinos</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="relative hidden sm:block">
+                    <button onclick="document.getElementById('lang-dropdown').classList.toggle('hidden')" id="lang-btn" class="flex items-center gap-2 text-sm font-bold text-white bg-white/20 px-4 py-2 rounded-full hover:bg-white/30 transition-colors focus:outline-none backdrop-blur-sm border border-white/20 drop-shadow-md">
+<img id="current-lang-flag" src="https://flagcdn.com/w20/es.png" class="w-4 h-3 object-cover rounded-sm" alt="flag">
+<span id="current-lang-display" class="font-bold">ES</span>
+                        <span class="material-symbols-outlined text-sm">language</span>
+                    </button>
+                    <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-36 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden z-50">
+                        <div class="py-1">
+                            <button onclick="changeSystemLanguage('es')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">es</span>
+                                    <img src="https://flagcdn.com/w20/es.png" class="w-4 h-3 object-cover rounded-sm" alt="es">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Español</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('en')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">en</span>
+                                    <img src="https://flagcdn.com/w20/us.png" class="w-4 h-3 object-cover rounded-sm" alt="en">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">English</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('pt')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">pt</span>
+                                    <img src="https://flagcdn.com/w20/br.png" class="w-4 h-3 object-cover rounded-sm" alt="pt">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Português</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('it')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">it</span>
+                                    <img src="https://flagcdn.com/w20/it.png" class="w-4 h-3 object-cover rounded-sm" alt="it">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Italiano</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('fr')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">fr</span>
+                                    <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-3 object-cover rounded-sm" alt="fr">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Français</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('de')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">de</span>
+                                    <img src="https://flagcdn.com/w20/de.png" class="w-4 h-3 object-cover rounded-sm" alt="de">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Deutsch</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('zh')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">zh</span>
+                                    <img src="https://flagcdn.com/w20/cn.png" class="w-4 h-3 object-cover rounded-sm" alt="zh">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">中文</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('ja')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">ja</span>
+                                    <img src="https://flagcdn.com/w20/jp.png" class="w-4 h-3 object-cover rounded-sm" alt="ja">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">日本語</span>
+                            </button>
+</div>
+                    </div>
+                </div>
+                <!-- Search Profile Button -->
+                <button id="btn-buscar-perfil" onclick="window.openSearchUserModal()" class="p-2 text-white hover:bg-white/20 rounded-lg transition-all active:scale-95 duration-150 drop-shadow-md flex items-center justify-center animate-fade-in" title="Buscar Perfiles">
+                    <span class="material-symbols-outlined">search</span>
+                </button>
+                <button id="notif-btn" class="p-2 text-white hover:bg-white/20 rounded-lg transition-all active:scale-95 duration-150 drop-shadow-md">
+                    <span class="material-symbols-outlined">notifications</span>
+                </button>
+                <div class="relative group">
+                    <button id="avatar-btn" class="h-10 w-10 rounded-full overflow-hidden border-2 border-white/50 shadow-sm bg-white/20 focus:outline-none transition-colors duration-300" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        <img alt="User profile avatar" id="header-avatar" class="h-full w-full object-cover" src="https://cdn-icons-png.flaticon.com/512/149/149071.png"/>
+                    </button>
+                    <div class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700 overflow-hidden z-50">
+                        <div class="py-1">
+                            <a href="../profile/index.html" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
+                                <span class="material-symbols-outlined text-base">person</span> Perfil
+                            </a>
+                            <a href="#" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
+                                <span class="material-symbols-outlined text-base">settings</span> Configuración
+                            </a>
+                            <div class="border-t border-slate-100 dark:border-slate-700 my-1"></div>
+                            <a href="../auth/index.html" class="px-4 py-2 text-sm text-error hover:bg-error/5 flex items-center gap-2 transition-colors">
+                                <span class="material-symbols-outlined text-base">logout</span> Cerrar sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <script>
+    window.addEventListener('scroll', () => {
+        const header = document.getElementById('main-header');
+        const logo = document.getElementById('header-logo');
+        const navLinkActive = document.getElementById('nav-link-active');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const langBtn = document.getElementById('lang-btn');
+        const notifBtn = document.getElementById('notif-btn');
+        const avatarBtn = document.getElementById('avatar-btn');
+
+        if (window.scrollY > 50) {
+            header.classList.remove('bg-transparent', 'py-2', 'border-white/10');
+            header.classList.add('bg-white/85', 'backdrop-blur-xl', 'shadow-sm', 'dark:bg-slate-900/85', 'py-0', 'border-slate-200/60', 'dark:border-slate-700/50');
+            
+            logo.classList.remove('text-white', 'drop-shadow-md');
+            logo.classList.add('text-slate-900', 'dark:text-white');
+            
+            navLinkActive.classList.remove('text-white', 'border-white', 'drop-shadow-md');
+            navLinkActive.classList.add('text-blue-600', 'border-blue-600', 'dark:text-blue-400');
+            
+            navLinks.forEach(link => {
+                link.classList.remove('text-white/95', 'hover:text-white', 'drop-shadow-md');
+                link.classList.add('text-slate-600', 'hover:text-slate-900', 'dark:text-slate-400', 'dark:hover:text-white');
+            });
+            
+            if (langBtn) {
+                langBtn.classList.remove('text-white', 'bg-white/20', 'border-white/20', 'drop-shadow-md');
+                langBtn.classList.add('text-slate-700', 'dark:text-slate-200', 'bg-slate-100', 'dark:bg-slate-800', 'border-slate-200', 'dark:border-slate-700');
+            }
+            if (notifBtn) {
+                notifBtn.classList.remove('text-white', 'drop-shadow-md', 'hover:bg-white/20');
+                notifBtn.classList.add('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+            }
+            const searchBtn = document.getElementById('btn-buscar-perfil');
+            if (searchBtn) {
+                searchBtn.classList.remove('text-white', 'drop-shadow-md', 'hover:bg-white/20');
+                searchBtn.classList.add('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+            }
+            if (avatarBtn) {
+                avatarBtn.classList.remove('border-white/50', 'bg-white/20');
+                avatarBtn.classList.add('border-slate-200', 'dark:border-slate-700', 'bg-slate-100', 'dark:bg-slate-800');
+            }
+        } else {
+            header.classList.add('bg-transparent', 'py-2', 'border-white/10');
+            header.classList.remove('bg-white/85', 'backdrop-blur-xl', 'shadow-sm', 'dark:bg-slate-900/85', 'py-0', 'border-slate-200/60', 'dark:border-slate-700/50');
+            
+            logo.classList.add('text-white', 'drop-shadow-md');
+            logo.classList.remove('text-slate-900', 'dark:text-white');
+            
+            navLinkActive.classList.add('text-white', 'border-white', 'drop-shadow-md');
+            navLinkActive.classList.remove('text-blue-600', 'border-blue-600', 'dark:text-blue-400');
+            
+            navLinks.forEach(link => {
+                link.classList.add('text-white/95', 'hover:text-white', 'drop-shadow-md');
+                link.classList.remove('text-slate-600', 'hover:text-slate-900', 'dark:text-slate-400', 'dark:hover:text-white');
+            });
+            
+            if (langBtn) {
+                langBtn.classList.add('text-white', 'bg-white/20', 'border-white/20', 'drop-shadow-md');
+                langBtn.classList.remove('text-slate-700', 'dark:text-slate-200', 'bg-slate-100', 'dark:bg-slate-800', 'border-slate-200', 'dark:border-slate-700');
+            }
+            if (notifBtn) {
+                notifBtn.classList.add('text-white', 'drop-shadow-md', 'hover:bg-white/20');
+                notifBtn.classList.remove('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+            }
+            const searchBtn = document.getElementById('btn-buscar-perfil');
+            if (searchBtn) {
+                searchBtn.classList.add('text-white', 'drop-shadow-md', 'hover:bg-white/20');
+                searchBtn.classList.remove('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+            }
+            if (avatarBtn) {
+                avatarBtn.classList.add('border-white/50', 'bg-white/20');
+                avatarBtn.classList.remove('border-slate-200', 'dark:border-slate-700', 'bg-slate-100', 'dark:bg-slate-800');
+            }
+        }
+    });
+    </script>
+
+    <!-- Eliminando llamada al script de navbar dinámico, ya está embebido -->
+    
+    <main class="pb-20 min-h-screen bg-surface">
+        <!-- Banner Header Section con Foto de Los Ángeles y Efecto Parallax -->
+        <section class="relative w-full h-[300px] mb-12 overflow-hidden bg-slate-900 flex items-end pb-12 px-8">
+            <div class="absolute inset-0 z-0 bg-cover bg-center" style="background-image: url('../../shared/img/fondo14.jpg');">
+                <!-- Overlay con opacidad ajustada -->
+                <div class="absolute inset-0 bg-black/40"></div>
+            </div>
+            
+            <div class="relative z-10 max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+
+
+                <div>
+                    <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-white mb-3 drop-shadow-md">Mis Viajes</h1>
+                    <p class="text-white/70 text-lg md:text-xl max-w-2xl font-medium">Organiza y gestiona tus próximas aventuras por el mundo.</p>
+                </div>
+                <button onclick="localStorage.removeItem('current_trip_id'); window.location.href='../create-trip/index.html'" 
+                        class="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md px-10 py-4 rounded-full font-bold shadow-xl flex items-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all group">
+                    <span class="material-symbols-outlined transition-transform group-hover:rotate-90">add_circle</span>
+                    Crear Nuevo Viaje
+                </button>
+            </div>
+        </section>
+
+        <div class="px-8 max-w-7xl mx-auto">
+
+
+        <!-- Filters & Tabs Block -->
+        <div class="flex flex-col lg:flex-row justify-between items-center gap-6 mb-10 border-b border-outline-variant/20 pb-4">
+            <div class="flex gap-10" id="dash-tabs">
+                <button data-tab="all" class="dash-tab relative pb-4 font-semibold text-primary transition-colors">
+                    Todos mis viajes
+                    <span class="tab-indicator absolute bottom-0 left-0 w-full h-1 bg-primary rounded-full"></span>
+                </button>
+                <button data-tab="confirmados" class="dash-tab relative pb-4 font-medium text-on-surface-variant hover:text-on-surface transition-colors">
+                    Confirmados / Próximos
+                    <span class="tab-indicator hidden absolute bottom-0 left-0 w-full h-1 bg-primary rounded-full"></span>
+                </button>
+
+            </div>
+            <div class="flex items-center gap-4 w-full lg:w-auto">
+                <div class="flex-1 lg:w-72 bg-surface-container-low px-4 py-3 rounded-xl flex items-center gap-3">
+                    <span class="material-symbols-outlined text-outline text-xl" data-icon="search">search</span>
+                    <input id="trip-search-input" class="bg-transparent border-none focus:ring-0 text-sm w-full" placeholder="Buscar viaje..." type="text"/>
+                </div>
+                <div class="relative">
+                    <button id="sort-button" class="flex items-center gap-2 bg-surface-container-lowest px-4 py-3 rounded-xl shadow-sm border border-outline-variant/10 hover:bg-surface-container-low transition-colors focus:outline-none">
+                        <span class="text-sm font-medium text-on-surface-variant">Ordenar por: <span id="current-sort-label" class="text-on-surface">Fecha más cercana</span></span>
+                        <span class="material-symbols-outlined text-on-surface-variant" data-icon="expand_more">expand_more</span>
+                    </button>
+                    <div id="sort-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden z-[60]">
+                        <div class="py-1">
+                            <button data-sort="date-asc" class="sort-option w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Fecha más cercana</button>
+                            <button data-sort="date-desc" class="sort-option w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Fecha más lejana</button>
+                            <button data-sort="name-asc" class="sort-option w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Nombre (A-Z)</button>
+                            <button data-sort="name-desc" class="sort-option w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Nombre (Z-A)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trip List -->
+        <section id="trips-container" class="flex flex-col gap-6">
+            <!-- Loading template, will be replaced by JS -->
+            <div class="col-span-full py-20 text-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                <p class="text-on-surface-variant">Cargando tus aventuras...</p>
+            </div>
+        </section>
+
+
+    </main>
+
+    <!-- BottomNavBar (Mobile Only) adaptado para Mis Viajes -->
+    <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-6 pb-6 pt-3 md:hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)] z-50 rounded-t-3xl">
+        <a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-blue-500 transition-all" href="../home/index.html">
+            <span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">home</span>
+            <span class="text-[10px] font-medium Inter">Inicio</span>
+        </a>
+        <a class="flex flex-col items-center justify-center bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl px-5 py-2 group" href="#">
+            <span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">luggage</span>
+            <span class="text-[10px] font-medium Inter">Viajes</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-blue-500 transition-all" href="../destinations/index.html">
+            <span class="material-symbols-outlined mb-1">explore</span>
+            <span class="text-[10px] font-medium Inter">Explorar</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-blue-500 transition-all" href="../profile/index.html">
+            <span class="material-symbols-outlined mb-1">person</span>
+            <span class="text-[10px] font-medium Inter">Perfil</span>
+        </a>
+    </nav>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-on-background/40 backdrop-blur-sm px-6">
+        <div class="bg-surface-container-lowest max-w-md w-full rounded-3xl p-8 shadow-2xl animate-in zoom-in-95 duration-200">
+            <div class="w-16 h-16 bg-error/10 text-error rounded-full flex items-center justify-center mb-6">
+                <span class="material-symbols-outlined text-4xl">delete_forever</span>
+            </div>
+            <h3 class="text-2xl font-bold text-on-surface mb-3 tracking-tight">¿Eliminar este viaje?</h3>
+            <p class="text-on-surface-variant mb-8 leading-relaxed">Esta acción no se puede deshacer. Se borrarán permanentemente todos los destinos, actividades e itinerarios asociados a este viaje.</p>
+            
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="cancel-delete" class="flex-1 px-6 py-3.5 rounded-2xl font-bold text-on-surface-variant bg-surface-container-high hover:bg-surface-container-highest transition-colors order-2 sm:order-1">
+                    Cancelar
+                </button>
+                <button id="confirm-delete" class="flex-1 px-6 py-3.5 rounded-2xl font-bold text-white bg-error hover:bg-red-700 transition-colors shadow-lg shadow-error/20 order-1 sm:order-2">
+                    Eliminar ahora
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../shared/utils/mockData.js"></script>
+    <script src="../../shared/utils/translations.js"></script>
+    <script src="../../shared/utils/auto-translator.js"></script>
+    <script src="../../shared/utils/avatar-loader.js"></script>
+    <script src="dashboard.js"></script>
+    <script>
+    function changeSystemLanguage(lang) {
+    localStorage.setItem('itera_lang', lang);
+    const dd = document.getElementById('lang-dropdown');
+    if (dd) dd.classList.add('hidden');
+    const display = document.getElementById('current-lang-display');
+    if (display) display.textContent = lang.toUpperCase();
+    const flagImg = document.getElementById('current-lang-flag');
+    if (flagImg) {
+        const codeMap = { 'en': 'us', 'pt': 'br', 'zh': 'cn', 'ja': 'jp' };
+        const flagCode = codeMap[lang.toLowerCase()] || lang.toLowerCase();
+        flagImg.src = `https://flagcdn.com/w20/${flagCode}.png`;
+    }
+    if (window.autoTranslatePage) {
+        window.autoTranslatePage(lang);
+    } else {
+        window.location.reload();
+    }
+}
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('itera_lang') || 'es';
+        const el = document.getElementById('current-lang-display');
+        if (el) el.textContent = savedLang.toUpperCase();
+    });
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[onclick*="lang-dropdown"]');
+        const dd = document.getElementById('lang-dropdown');
+        if (!btn && dd && !dd.classList.contains('hidden')) dd.classList.add('hidden');
+    });
+    </script>
+<div id="footer-container" class="hidden md:block"></div>
+<script src="../../shared/components/footer/footer.js"></script>
+<script src="../../shared/components/navbar/navbar.js"></script>
+    </script>
+</body>
+</html>

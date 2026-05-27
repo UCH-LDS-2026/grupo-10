@@ -1,0 +1,2528 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;family=Montserrat:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;family=Montserrat:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#f8f9fa",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "tertiary": "#9f3c00",
+                    "secondary-container": "#a1beff",
+                    "surface-container-low": "#f3f4f5",
+                    "surface-tint": "#005ac4",
+                    "outline-variant": "#c1c6d7",
+                    "on-secondary-fixed": "#001a42",
+                    "inverse-surface": "#2e3132",
+                    "on-background": "#191c1d",
+                    "on-primary-fixed": "#001a42",
+                    "secondary-fixed-dim": "#aec6ff",
+                    "on-primary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#c84d00",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#ffdbcd",
+                    "surface-dim": "#d9dadb",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed-variant": "#27457e",
+                    "surface-container": "#edeeef",
+                    "primary-container": "#006fef",
+                    "on-tertiary-fixed": "#360f00",
+                    "surface": "#f8f9fa",
+                    "primary-fixed": "#d8e2ff",
+                    "outline": "#727786",
+                    "on-tertiary-container": "#fffbff",
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface-container-high": "#e7e8e9",
+                    "on-surface-variant": "#414755",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "on-primary-container": "#fefcff",
+                    "primary-fixed-dim": "#aec6ff",
+                    "primary": "#0058bf",
+                    "on-surface": "#191c1d",
+                    "on-secondary-container": "#2e4c85",
+                    "on-primary-fixed-variant": "#004396",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#e1e3e4",
+                    "on-tertiary": "#ffffff",
+                    "inverse-primary": "#aec6ff",
+                    "error": "#ba1a1a",
+                    "background": "#f8f9fa",
+                    "surface-variant": "#e1e3e4",
+                    "secondary-fixed": "#d8e2ff",
+                    "secondary": "#405d98"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8b4X4Be-V-hYXJhGPzMyt-pMZ5QU0z40&libraries=places"></script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+<div id="navbar-container"></div>
+<script src="../../shared/components/navbar/navbar.js"></script>
+
+
+
+<div class="min-h-screen pt-28">
+<!-- SideNavBar -->
+<aside class="hidden lg:block h-screen w-64 fixed left-0 top-0 pt-28 bg-slate-50 dark:bg-slate-950 font-plus-jakarta-sans text-sm font-medium z-40 border-r border-slate-200 dark:border-slate-800">
+<div class="flex flex-col gap-2 p-6">
+<div class="mb-8">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white">Asistente de Viaje</h2>
+<p class="text-xs text-on-surface-variant">Paso 3 de 3</p>
+<div class="mt-4 h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full rounded-full"></div>
+</div>
+</div>
+<nav class="space-y-2">
+<div class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl transition-all duration-300 ease-in-out hover:translate-x-1 cursor-pointer" onclick="window.location.href='../create-trip/index.html'">
+<span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span>
+<span>Concepto</span>
+</div>
+<div class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl transition-all duration-300 ease-in-out hover:translate-x-1 cursor-pointer" onclick="window.location.href='../trip-route/index.html'">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span>Ruta</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-xl transition-all duration-300 ease-in-out hover:translate-x-1 cursor-default">
+<span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+<span>Itinerario</span>
+</div>
+</nav>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="lg:ml-64 p-4 md:p-10 bg-surface overflow-x-hidden min-h-screen pb-40">
+<!-- Header Section -->
+<div class="mb-10 flex justify-between items-start">
+    <div>
+        <h1 class="text-4xl font-extrabold font-headline tracking-tight text-on-surface mb-2">Paso 3 de 3: Itinerario</h1>
+        <p class="text-on-surface-variant">Revisa y personaliza tu aventura diaria.</p>
+    </div>
+    <button onclick="openLogisticsModal()" class="flex items-center gap-2 px-5 py-2.5 bg-blue-100 text-blue-700 hover:bg-blue-200 font-bold rounded-xl transition-colors shadow-sm cursor-pointer border border-blue-200">
+        <span class="material-symbols-outlined">flight_takeoff</span>
+        Logística
+    </button>
+</div>
+<!-- Destination Tabs -->
+<div class="flex flex-wrap gap-4 mb-8" id="destinations-tabs">
+</div>
+<!-- Hero Image Section -->
+<section class="relative w-full h-[300px] rounded-xl overflow-hidden mb-12 shadow-lg" id="td-hero-img-container">
+<div class="absolute inset-0 bg-cover bg-center transition-all duration-500" id="td-hero-img"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-10">
+<h2 class="text-5xl font-bold font-headline text-white mb-2" id="td-destino">Destino</h2>
+<p class="text-xl text-white/90 font-medium" id="td-fechas-dias">X Noches</p>
+</div>
+</section>
+<div class="grid grid-cols-12 gap-10">
+<!-- Left Column: Contextual Widgets -->
+<div class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Calendar Widget -->
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-sm relative group">
+    <div id="widget-calendar-content">
+        <!-- Rendered via JS -->
+    </div>
+</div>
+
+<!-- Map Widget -->
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-sm relative overflow-hidden group">
+    <div class="flex items-center justify-between mb-4">
+        <span class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Tu Ruta</span>
+        <span class="material-symbols-outlined text-primary">map</span>
+    </div>
+    <a href="#" id="widget-map-link" target="_blank" class="block relative w-full h-[200px] rounded-lg overflow-hidden group">
+        <div id="widget-map-container" class="w-full h-full pointer-events-none"></div>
+        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center pointer-events-none">
+            <div class="bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-bold px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 shadow-lg">
+                <span class="material-symbols-outlined">open_in_new</span>
+                Abrir en Maps
+            </div>
+        </div>
+    </a>
+</div>
+
+<!-- Flight Logistics Widget -->
+<div id="widget-flights" class="bg-surface-container-lowest p-6 rounded-xl shadow-sm hidden">
+    <div class="flex items-center justify-between mb-4">
+        <span class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Tus Vuelos</span>
+        <span class="material-symbols-outlined text-primary">flight</span>
+    </div>
+    <div id="widget-flights-content" class="space-y-6">
+        <!-- Rendered via JS -->
+    </div>
+</div>
+</div>
+<!-- Right Column: Timeline -->
+<div class="col-span-12 lg:col-span-8">
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-2xl font-bold font-headline text-on-surface" id="current-day-title">Día 1</h3>
+<div class="flex gap-2">
+<button class="p-2 rounded-full bg-surface-container-high text-primary hover:bg-surface-container-highest transition-colors" onclick="prevDay()"><span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span></button>
+<button class="p-2 rounded-full bg-surface-container-high text-primary hover:bg-surface-container-highest transition-colors" onclick="nextDay()"><span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span></button>
+</div>
+</div>
+<div class="space-y-8 relative" id="timeline-area">
+<!-- Dynamic Content -->
+</div>
+<!-- Add Attraction Button -->
+<button onclick="openAddAttractionModal()" class="w-full mt-8 p-4 border-2 border-dashed border-outline-variant/30 rounded-xl hover:border-primary/50 hover:bg-primary/5 transition-all group flex flex-col items-center justify-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</div>
+<span class="font-bold text-on-surface-variant group-hover:text-primary transition-colors">Añadir Atracción</span>
+</button>
+
+    <!-- Footer de navegación del paso (Relativo para no tapar contenido) -->
+    <footer class="mt-12 bg-white dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+        <div class="px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-4">
+                <button class="px-6 py-3 text-on-surface-variant font-bold hover:text-on-surface transition-colors flex items-center gap-2 bg-surface-container-low rounded-xl" onclick="window.location.href='../trip-route/index.html'">
+                    <span class="material-symbols-outlined text-lg">arrow_back</span>
+                    Atrás
+                </button>
+            </div>
+            <div class="flex items-center gap-6">
+                <button id="btn-finalizar" class="w-full md:w-auto px-10 py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2">
+                    Finalizar Itinerario
+                    <span class="material-symbols-outlined">check_circle</span>
+                </button>
+            </div>
+        </div>
+    </footer>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- El footer anterior se movió dentro de main para ser relativo -->
+</div>
+
+<!-- Add Attraction Modal -->
+<div id="add-attraction-modal" class="fixed inset-0 bg-black/50 z-[100] hidden items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-surface-container-lowest w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden relative">
+        <!-- Panel Izquierdo: Buscador y Resultados -->
+        <div class="w-full md:w-3/5 bg-surface-container-lowest p-6 border-r border-outline-variant/20 flex flex-col h-[50vh] md:h-auto overflow-hidden relative">
+            <!-- VISTA DE BUSQUEDA -->
+            <div id="attr-search-view" class="flex flex-col h-full w-full">
+                <h3 class="text-xl font-bold mb-4 font-headline text-on-surface" id="modal-title-text">Añadir Actividad</h3>
+                
+                <div class="space-y-3 mb-4 shrink-0">
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+                        <input type="text" id="attr-search-input" class="w-full bg-surface-container-low border-0 rounded-xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none" placeholder="Buscar lugares en tu destino..." onkeydown="if(event.key === 'Enter') searchPlaces()">
+                    </div>
+                    
+                    <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                        <button onclick="setSearchCategory('Atracciones')" id="cat-btn-Atracciones" class="cat-filter-btn px-4 py-1.5 rounded-full border border-outline-variant/30 text-sm font-medium whitespace-nowrap hover:bg-surface-container-high transition-colors bg-primary/10 border-primary text-primary">Atracciones</button>
+                        <button onclick="setSearchCategory('Gastronomía')" id="cat-btn-Gastronomía" class="cat-filter-btn px-4 py-1.5 rounded-full border border-outline-variant/30 text-sm font-medium whitespace-nowrap hover:bg-surface-container-high transition-colors">Gastronomía</button>
+                        <button onclick="setSearchCategory('Alojamiento')" id="cat-btn-Alojamiento" class="cat-filter-btn px-4 py-1.5 rounded-full border border-outline-variant/30 text-sm font-medium whitespace-nowrap hover:bg-surface-container-high transition-colors">Alojamiento</button>
+                        <button onclick="searchPlaces()" class="ml-auto bg-primary text-white p-1.5 rounded-full hover:bg-primary-container transition-colors shrink-0"><span class="material-symbols-outlined text-sm">search</span></button>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto pr-2 space-y-3" id="attr-search-results">
+                    <div class="text-center p-8 text-on-surface-variant flex flex-col items-center justify-center h-full">
+                        <span class="material-symbols-outlined text-4xl mb-2 opacity-50">travel_explore</span>
+                        <p>Ingresa una búsqueda o selecciona una categoría para ver opciones en el destino.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA DE DETALLE -->
+            <div id="attr-detail-view" class="hidden flex-col h-full w-full overflow-y-auto pr-2">
+                <button onclick="showSearchView()" class="mb-4 text-primary flex items-center gap-1 hover:bg-primary/10 w-fit px-3 py-1.5 rounded-xl transition-colors font-bold text-sm bg-surface-container-low">
+                    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                    Volver a resultados
+                </button>
+                <div id="attr-detail-content" class="flex-1">
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel Derecho: Detalles de lo seleccionado y formulario -->
+        <div class="w-full md:w-2/5 bg-surface-container-low/30 p-6 flex flex-col h-[40vh] md:h-[90vh] overflow-y-auto">
+            <h4 class="font-bold text-lg mb-4 text-on-surface">Detalles</h4>
+            
+            <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20 shadow-sm mb-6 flex items-start gap-4">
+                <div id="selected-place-img" class="w-16 h-16 rounded-lg bg-surface-container flex-shrink-0 bg-cover bg-center hidden"></div>
+                <div id="selected-place-icon" class="w-16 h-16 rounded-lg bg-surface-container flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-3xl text-on-surface-variant/50">place</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <input type="text" id="attr-title" class="w-full font-bold text-lg text-on-surface bg-transparent border-0 p-0 focus:ring-0 placeholder:text-on-surface-variant/50 truncate" placeholder="Título de la actividad" required>
+                    <p id="attr-place-address" class="text-xs text-on-surface-variant truncate mt-1"></p>
+                    <p id="attr-place-rating" class="text-[10px] text-amber-600 font-bold mt-1"></p>
+                </div>
+            </div>
+
+            <div class="space-y-4 flex-1">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-sm font-bold text-on-surface-variant mb-1 block">Hora</label>
+                        <input type="time" id="attr-time" class="w-full bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-3 focus:ring-2 focus:ring-primary outline-none shadow-sm">
+                    </div>
+                    <div>
+                        <label class="text-sm font-bold text-on-surface-variant mb-1 block">Categoría</label>
+                        <select id="attr-category" class="w-full bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-3 focus:ring-2 focus:ring-primary outline-none text-sm shadow-sm pointer-events-none appearance-none">
+                            <option value="Atracciones">Atracciones</option>
+                            <option value="Gastronomía">Gastronomía</option>
+                            <option value="Alojamiento">Alojamiento</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-sm font-bold text-on-surface-variant mb-1 block">Comentario</label>
+                    <textarea id="attr-desc" class="w-full bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-3 focus:ring-2 focus:ring-primary outline-none shadow-sm" rows="3" placeholder="Añade un comentario sobre esta actividad..."></textarea>
+                </div>
+            </div>
+
+            <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-outline-variant/20">
+                <button onclick="closeAddAttractionModal()" class="px-5 py-2.5 text-on-surface-variant font-medium hover:bg-surface-container-highest rounded-lg transition-colors bg-surface-container-lowest border border-outline-variant/30 shadow-sm">Cancelar</button>
+                <button onclick="saveAttraction()" class="px-5 py-2.5 bg-primary text-white font-bold rounded-lg hover:bg-primary-container transition-colors shadow-md">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Logistics Modal -->
+<div id="logistics-modal" class="fixed inset-0 bg-black/50 z-[100] hidden items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-surface-container-lowest w-full max-w-4xl rounded-2xl p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold font-headline text-on-surface flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-3xl">flight_takeoff</span>
+                Logística de Transporte
+            </h3>
+            <button onclick="closeLogisticsModal()" class="text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <!-- Vuelos -->
+            <button onclick="switchLogisticsTab('flight')" id="tab-btn-flight" class="p-4 rounded-xl border-2 border-primary bg-primary/5 flex flex-col items-center justify-center gap-2 transition-all">
+                <span class="material-symbols-outlined text-3xl text-primary">flight_takeoff</span>
+                <span class="font-bold text-primary">Agregar Vuelos</span>
+            </button>
+            <!-- Autos -->
+            <button onclick="switchLogisticsTab('car')" id="tab-btn-car" class="p-4 rounded-xl border-2 border-outline-variant/30 hover:border-primary/50 hover:bg-surface-container-low flex flex-col items-center justify-center gap-2 transition-all text-on-surface-variant">
+                <span class="material-symbols-outlined text-3xl">directions_car</span>
+                <span class="font-bold">Alquiler de Autos</span>
+            </button>
+            <!-- Transporte -->
+            <button onclick="switchLogisticsTab('public')" id="tab-btn-public" class="p-4 rounded-xl border-2 border-outline-variant/30 hover:border-primary/50 hover:bg-surface-container-low flex flex-col items-center justify-center gap-2 transition-all text-on-surface-variant">
+                <span class="material-symbols-outlined text-3xl">directions</span>
+                <span class="font-bold">Rutas y Transporte</span>
+            </button>
+        </div>
+
+        <div id="logistics-flight-form" class="space-y-6">
+            <!-- Menú de Selección -->
+            <div id="flight-direction-menu" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <button onclick="openFlightDirection('ida')" class="p-8 rounded-2xl border-2 border-outline-variant/30 hover:border-primary hover:bg-surface-container-low transition-all group flex flex-col items-center justify-center gap-4">
+                    <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all text-primary">
+                        <span class="material-symbols-outlined text-3xl">flight_takeoff</span>
+                    </div>
+                    <div class="text-center">
+                        <span class="font-bold text-lg text-on-surface block">Vuelos de Ida</span>
+                        <span class="text-sm text-on-surface-variant">Ruta de partida y escalas</span>
+                    </div>
+                </button>
+
+                <button onclick="openFlightDirection('vuelta')" class="p-8 rounded-2xl border-2 border-outline-variant/30 hover:border-primary hover:bg-surface-container-low transition-all group flex flex-col items-center justify-center gap-4">
+                    <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all text-primary">
+                        <span class="material-symbols-outlined text-3xl">flight_land</span>
+                    </div>
+                    <div class="text-center">
+                        <span class="font-bold text-lg text-on-surface block">Vuelos de Vuelta</span>
+                        <span class="text-sm text-on-surface-variant">Ruta de retorno al hogar</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Editor de Vuelos -->
+            <div id="flight-editor" class="hidden space-y-4">
+                <button onclick="closeFlightDirection()" class="flex items-center gap-2 text-primary font-bold hover:bg-primary/5 px-4 py-2 rounded-lg transition-colors w-fit mb-2">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
+                    Volver
+                </button>
+                
+                <h4 id="flight-editor-title" class="font-bold text-xl text-primary flex items-center gap-2 border-b border-primary/20 pb-4 mb-4">
+                    <span id="flight-editor-icon" class="material-symbols-outlined"></span>
+                    <span></span>
+                </h4>
+                
+                <div id="flight-segments-container" class="space-y-4 max-h-[50vh] overflow-y-auto pr-2">
+                    <!-- Vuelos se renderizan por JS -->
+                </div>
+                
+                <button id="flight-add-btn" class="w-full py-4 border-2 border-dashed border-primary/30 rounded-xl text-primary font-bold hover:bg-primary/5 transition-colors flex items-center justify-center gap-2 mt-4">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    Añadir Vuelo / Escala
+                </button>
+            </div>
+        </div>
+
+        <div id="logistics-car-form" class="hidden space-y-6 max-h-[60vh] overflow-y-auto pr-2">
+            <div>
+                <h4 class="font-bold text-on-surface mb-1">Agencias Globales de Alquiler</h4>
+                <p class="text-xs text-on-surface-variant mb-4">Explora y reserva en las agencias más reconocidas a nivel mundial.</p>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <!-- Hertz -->
+                    <a href="https://www.hertz.com" target="_blank" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex flex-col items-center gap-3 group">
+                        <img src="https://logo.clearbit.com/hertz.com" alt="Hertz" class="h-10 w-auto max-h-10 object-contain group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/100x40?text=Hertz'">
+                        <span class="font-bold text-sm text-on-surface">Hertz</span>
+                    </a>
+                    <!-- Avis -->
+                    <a href="https://www.avis.com" target="_blank" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex flex-col items-center gap-3 group">
+                        <img src="https://logo.clearbit.com/avis.com" alt="Avis" class="h-10 w-auto max-h-10 object-contain group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/100x40?text=Avis'">
+                        <span class="font-bold text-sm text-on-surface">Avis</span>
+                    </a>
+                    <!-- Enterprise -->
+                    <a href="https://www.enterprise.com" target="_blank" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex flex-col items-center gap-3 group">
+                        <img src="https://logo.clearbit.com/enterprise.com" alt="Enterprise" class="h-10 w-auto max-h-10 object-contain group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/100x40?text=Enterprise'">
+                        <span class="font-bold text-sm text-on-surface">Enterprise</span>
+                    </a>
+                    <!-- Sixt -->
+                    <a href="https://www.sixt.com" target="_blank" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex flex-col items-center gap-3 group">
+                        <img src="https://logo.clearbit.com/sixt.com" alt="Sixt" class="h-10 w-auto max-h-10 object-contain group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/100x40?text=Sixt'">
+                        <span class="font-bold text-sm text-on-surface">Sixt</span>
+                    </a>
+                    <!-- Europcar -->
+                    <a href="https://www.europcar.com" target="_blank" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex flex-col items-center gap-3 group">
+                        <img src="https://logo.clearbit.com/europcar.com" alt="Europcar" class="h-10 w-auto max-h-10 object-contain group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/100x40?text=Europcar'">
+                        <span class="font-bold text-sm text-on-surface">Europcar</span>
+                    </a>
+                    <!-- Alamo -->
+                    <a href="https://www.alamo.com" target="_blank" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex flex-col items-center gap-3 group">
+                        <img src="https://logo.clearbit.com/alamo.com" alt="Alamo" class="h-10 w-auto max-h-10 object-contain group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/100x40?text=Alamo'">
+                        <span class="font-bold text-sm text-on-surface">Alamo</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30">
+                <h4 class="font-bold text-sm uppercase tracking-wider text-on-surface-variant mb-4">Guardar Detalles de Reserva</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Compañía Elegida</label>
+                        <input id="log-car-company" type="text" class="w-full bg-surface-container-lowest border-none rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary" placeholder="Ej: Sixt" />
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Número de Reserva</label>
+                        <input id="log-car-booking" type="text" class="w-full bg-surface-container-lowest border-none rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary" placeholder="Ej: ABC123456" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="logistics-public-form" class="hidden space-y-6">
+            <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30">
+                <h4 class="font-bold text-sm uppercase tracking-wider text-on-surface-variant mb-4">Planificador de Rutas</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Origen</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">my_location</span>
+                            <input id="transit-origin" type="text" class="w-full bg-surface-container-lowest border-none rounded-lg py-2.5 pl-9 pr-3 text-sm focus:ring-2 focus:ring-primary" placeholder="Ej: Tu hotel o ubicación actual" />
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Destino (Atracción)</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">location_on</span>
+                            <input id="transit-dest" type="text" class="w-full bg-surface-container-lowest border-none rounded-lg py-2.5 pl-9 pr-3 text-sm focus:ring-2 focus:ring-primary" placeholder="Ej: Museo del Louvre" />
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Medio de Transporte</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">commute</span>
+                            <select id="transit-mode" class="w-full bg-surface-container-lowest border-none rounded-lg py-2.5 pl-9 pr-3 text-sm focus:ring-2 focus:ring-primary">
+                                <option value="TRANSIT">Transporte Público</option>
+                                <option value="DRIVING">Auto</option>
+                                <option value="WALKING">Caminando</option>
+                                <option value="BICYCLING">Bicicleta</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 flex justify-end">
+                    <button onclick="calculateTransitRoute()" class="px-6 py-2 bg-primary text-white font-bold rounded-lg hover:bg-primary-container transition-colors flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">directions</span>
+                        Buscar Ruta
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contenedor de Resultados -->
+            <div id="transit-results-container" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Panel de Instrucciones -->
+                <div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/30 shadow-sm max-h-[400px] overflow-y-auto" id="transit-directions-panel">
+                    <!-- Instrucciones renderizadas aquí -->
+                </div>
+                <!-- Mapa -->
+                <div class="relative w-full h-[400px] rounded-xl overflow-hidden border border-outline-variant/30 shadow-sm">
+                    <div id="transit-map" class="w-full h-full"></div>
+                </div>
+            </div>
+            
+
+        </div>
+
+        <div class="mt-8 flex justify-end gap-3">
+            <button onclick="closeLogisticsModal()" class="px-5 py-2.5 text-on-surface-variant font-medium hover:bg-surface-container-highest rounded-lg transition-colors">Cerrar</button>
+            <button onclick="saveLogisticsData()" class="px-5 py-2.5 bg-primary text-white font-bold rounded-lg hover:bg-primary-container transition-colors">Guardar Logística</button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Confirmation Modal -->
+<div id="confirm-modal" class="fixed inset-0 bg-black/40 z-[200] hidden items-center justify-center p-4 backdrop-blur-[2px]">
+    <div class="bg-white dark:bg-slate-800 w-full max-w-[320px] rounded-2xl shadow-xl overflow-hidden transform transition-all scale-95 opacity-0 duration-300" id="confirm-modal-box">
+        <div class="p-6 text-center">
+            <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="material-symbols-outlined text-2xl text-blue-500">info</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2" id="confirm-modal-title">¿Quitar atracción?</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6" id="confirm-modal-msg">Se eliminará de la lista de pendientes.</p>
+            <div class="flex gap-3">
+                <button id="confirm-modal-no" class="flex-1 py-2.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-600 transition-all text-sm">
+                    No
+                </button>
+                <button id="confirm-modal-yes" class="flex-1 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl shadow-md shadow-blue-500/10 transition-all active:scale-[0.98] text-sm">
+                    Sí, quitar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- BottomNavBar (Mobile Only) -->
+    <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-6 pb-6 pt-3 lg:hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)] z-50 rounded-t-3xl">
+        <a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-blue-500 transition-all" href="../home/index.html">
+            <span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">home</span>
+            <span class="text-[10px] font-medium Inter">Inicio</span>
+        </a>
+        <a class="flex flex-col items-center justify-center bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl px-5 py-2 group" href="../dashboard/index.html">
+            <span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">luggage</span>
+            <span class="text-[10px] font-medium Inter">Viajes</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-blue-500 transition-all" href="../destinations/index.html">
+            <span class="material-symbols-outlined mb-1">explore</span>
+            <span class="text-[10px] font-medium Inter">Explorar</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-blue-500 transition-all" href="#">
+            <span class="material-symbols-outlined mb-1">person</span>
+            <span class="text-[10px] font-medium Inter">Perfil</span>
+        </a>
+    </nav>
+
+<script>
+let destinations = [];
+let itineraries = {};
+let currentDestIndex = 0;
+let currentDay = 1;
+let currentSelectedPlace = null;
+let pendingItems = [];
+
+// --- Mapeo de Iconos por Categoría ---
+const categoryIcons = {
+    'Atracciones': 'explore',
+    'Gastronomía': 'restaurant',
+    'Alojamiento': 'hotel'
+};
+
+// --- Funciones de Idioma ---
+function changeSystemLanguage(lang) {
+    localStorage.setItem('itera_lang', lang);
+    const dd = document.getElementById('lang-dropdown');
+    if (dd) dd.classList.add('hidden');
+    const display = document.getElementById('current-lang-display');
+    if (display) display.textContent = lang.toUpperCase();
+    const flagImg = document.getElementById('current-lang-flag');
+    if (flagImg) {
+        const codeMap = { 'en': 'us', 'pt': 'br', 'zh': 'cn', 'ja': 'jp' };
+        const flagCode = codeMap[lang.toLowerCase()] || lang.toLowerCase();
+        flagImg.src = `https://flagcdn.com/w20/${flagCode}.png`;
+    }
+    if (window.autoTranslatePage) {
+        window.autoTranslatePage(lang);
+    } else {
+        window.location.reload();
+    }
+}
+
+// Inicializar Idioma
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('itera_lang') || 'es';
+    document.getElementById('current-lang-display').textContent = savedLang.toUpperCase();
+});
+
+// Cerrar dropdown al hacer clic fuera
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[onclick*="lang-dropdown"]');
+    const dropdown = document.getElementById('lang-dropdown');
+    if (!btn && dropdown && !dropdown.classList.contains('hidden')) {
+        dropdown.classList.add('hidden');
+    }
+});
+// ---------------------------
+
+// Obtener trip_id activo — URL params tienen prioridad (venimos del dashboard)
+const urlParams = new URLSearchParams(window.location.search);
+const urlTripId = urlParams.get('id');
+const currentTripId = urlTripId || localStorage.getItem('current_trip_id');
+if (currentTripId) localStorage.setItem('current_trip_id', currentTripId);
+
+const DEST_KEY = currentTripId ? 'itera_trip_destinations_' + currentTripId : 'itera_trip_destinations';
+const ITIN_KEY = currentTripId ? 'itera_trip_itineraries_' + currentTripId : 'itera_trip_itineraries';
+const LOGISTICS_KEY = currentTripId ? 'itera_trip_logistics_' + currentTripId : 'itera_trip_logistics';
+
+async function init() {
+    // Cargar destinos desde key por viaje, fallback a backend
+    let data = localStorage.getItem(DEST_KEY);
+    if (data) {
+        destinations = JSON.parse(data);
+    } else if (currentTripId) {
+        // Intentar cargar desde backend
+        try {
+            const resp = await fetch(`http://localhost:8000/api/viajes/${currentTripId}/destinos`);
+            if (resp.ok) {
+                const backendDests = await resp.json();
+                if (backendDests && backendDests.length > 0) {
+                    destinations = backendDests.map((d, i) => ({
+                        id: d.id || Date.now() + i,
+                        city: d.city,
+                        country: d.country,
+                        nights: d.nights || 1,
+                        photoUrl: d.photo_url || 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&q=80'
+                    }));
+                    localStorage.setItem(DEST_KEY, JSON.stringify(destinations));
+                }
+            }
+        } catch(e) {
+            console.warn('No se pudieron cargar destinos desde backend');
+        }
+    }
+    
+    if (destinations.length === 0) {
+        destinations = [
+            {id: 1, city: "Santorini", country: "Grecia", nights: 3, photoUrl: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&q=80"}
+        ];
+    }
+
+    const savedItin = localStorage.getItem(ITIN_KEY);
+    if (savedItin) {
+        itineraries = JSON.parse(savedItin);
+    } else {
+        destinations.forEach(d => {
+            itineraries[d.id] = {};
+            for(let i=1; i<=d.nights; i++) {
+                itineraries[d.id][i] = [];
+            }
+        });
+    }
+
+    // Load items from backend and merge with local
+    if (currentTripId) {
+        try {
+            const resp = await fetch(`http://localhost:8000/api/viajes/${currentTripId}/itinerario`);
+            if (resp.ok) {
+                const backendItems = await resp.json();
+                pendingItems = [];
+                
+                // Obtener fecha de inicio global para mapear fechas a días
+                let globalStartDate = new Date();
+                const conceptStr = localStorage.getItem('itera_trip_concept_' + currentTripId);
+                if (conceptStr) {
+                    const concept = JSON.parse(conceptStr);
+                    if (concept.startDate) globalStartDate = new Date(concept.startDate + "T12:00:00");
+                }
+
+                backendItems.forEach(item => {
+                    if (!item.fecha_asignada) {
+                        pendingItems.push(item);
+                    } else {
+                        // Mapear fecha a destino y día
+                        const itemDate = new Date(item.fecha_asignada + "T12:00:00");
+                        
+                        // Encontrar a qué destino pertenece esta fecha
+                        let accumulatedNights = 0;
+                        let foundDest = null;
+                        let foundDay = 1;
+
+                        for (const d of destinations) {
+                            const dStart = new Date(globalStartDate);
+                            dStart.setDate(dStart.getDate() + accumulatedNights);
+                            const dEnd = new Date(dStart);
+                            dEnd.setDate(dEnd.getDate() + (d.nights - 1));
+
+                            if (itemDate >= dStart && itemDate <= dEnd) {
+                                foundDest = d;
+                                const diffTime = Math.abs(itemDate - dStart);
+                                foundDay = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                                break;
+                            }
+                            accumulatedNights += parseInt(d.nights);
+                        }
+
+                        if (foundDest) {
+                            if (!itineraries[foundDest.id]) itineraries[foundDest.id] = {};
+                            if (!itineraries[foundDest.id][foundDay]) itineraries[foundDest.id][foundDay] = [];
+                            
+                            // Evitar duplicados si ya estaba en local (priorizar backend)
+                            const exists = itineraries[foundDest.id][foundDay].find(a => a.id === item.id);
+                            if (!exists) {
+                                itineraries[foundDest.id][foundDay].push({
+                                    id: item.id,
+                                    title: item.atraccion_nombre || item.nombre || "Actividad",
+                                    time: (item.hora_inicio || "10:00").substring(0, 5),
+                                    category: item.categoria || "Atracciones",
+                                    desc: item.descripcion || "",
+                                    placeInfo: {
+                                        address: item.direccion || "",
+                                        photoUrl: item.foto_url || "",
+                                        placeId: item.google_place_id || item.atraccion_id || "",
+                                        rating: item.rating || null
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+            }
+        } catch(e) { console.warn("Error loading items from backend", e); }
+    }
+
+    // Setup Google Places
+    if (window.google && google.maps && google.maps.places) {
+        const dummyMap = new google.maps.Map(document.createElement('div'));
+        window.placesService = new google.maps.places.PlacesService(dummyMap);
+
+        // Setup Autocomplete para Transporte Público
+        window.autocompleteTransitOrigin = new google.maps.places.Autocomplete(document.getElementById('transit-origin'));
+        window.autocompleteTransitDest = new google.maps.places.Autocomplete(document.getElementById('transit-dest'));
+    }
+
+    renderTabs();
+    selectDestination(0);
+    renderFlightsWidget();
+    renderRouteMap();
+}
+
+function renderTabs() {
+    const tabsContainer = document.getElementById('destinations-tabs');
+    tabsContainer.innerHTML = destinations.map((d, index) => {
+        const isCountry = d.isCountry;
+        const isActive = index === currentDestIndex;
+        
+        let classes = "px-6 py-3 rounded-full font-bold whitespace-nowrap transition-all flex items-center gap-2 ";
+        if (isActive) {
+            classes += isCountry ? "bg-amber-500 text-white shadow-lg shadow-amber-200" : "bg-primary text-white shadow-lg shadow-primary/20";
+        } else {
+            classes += isCountry ? "bg-amber-100 text-amber-700 hover:bg-amber-200" : "bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest";
+        }
+        
+        return `
+            <div class="relative group/dest">
+                <button onclick="selectDestination(${index})" class="${classes}">
+                    ${d.city}
+                </button>
+                <button onclick="event.stopPropagation(); deleteDestAt(${index})" class="absolute -top-1.5 -right-1.5 w-6 h-6 flex items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md text-error opacity-0 group-hover/dest:opacity-100 hover:scale-110 transition-all border border-error/10 z-10" title="Eliminar destino">
+                    <span class="material-symbols-outlined text-[14px] font-bold">close</span>
+                </button>
+            </div>
+        `;
+    }).join('') + `
+        <button onclick="openQuickAddDestModal()" class="px-6 py-3 rounded-full font-bold whitespace-nowrap transition-all bg-surface-container-low text-primary border-2 border-dashed border-primary/30 hover:bg-primary/5 hover:border-primary/50 flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm">add</span>
+            Agregar Destino
+        </button>
+    `;
+}
+
+window.deleteDestAt = function(index) {
+    if (destinations.length <= 1) {
+        alert("El viaje debe tener al menos un destino.");
+        return;
+    }
+    
+    // Guardar el índice y abrir modal personalizado
+    window.pendingDeleteIndex = index;
+    const modal = document.getElementById('delete-confirm-modal');
+    document.getElementById('delete-dest-name').textContent = destinations[index].city;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+};
+
+window.closeDeleteModal = function() {
+    const modal = document.getElementById('delete-confirm-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    window.pendingDeleteIndex = null;
+};
+
+window.confirmDeleteAction = async function() {
+    const index = window.pendingDeleteIndex;
+    if (index === null || index === undefined) return;
+
+    const removedId = destinations[index].id;
+    destinations.splice(index, 1);
+    delete itineraries[removedId];
+
+    // Ajustar índice activo si es necesario
+    if (currentDestIndex >= destinations.length) {
+        currentDestIndex = destinations.length - 1;
+    } else if (index < currentDestIndex) {
+        currentDestIndex--;
+    }
+
+    // Guardar
+    localStorage.setItem(DEST_KEY, JSON.stringify(destinations));
+    localStorage.setItem(ITIN_KEY, JSON.stringify(itineraries));
+
+    // Sincronizar backend
+    if (currentTripId) {
+        try {
+            const payload = destinations.map((d, i) => ({
+                city: d.city,
+                country: d.country,
+                nights: d.nights,
+                photo_url: d.photoUrl,
+                orden: i
+            }));
+            await fetch(`http://localhost:8000/api/viajes/${currentTripId}/destinos`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        } catch(e) { console.warn(e); }
+    }
+
+    closeDeleteModal();
+    renderTabs();
+    selectDestination(currentDestIndex);
+};
+
+function selectDestination(index) {
+    if (index < 0 || index >= destinations.length) return;
+    currentDestIndex = index;
+    currentDay = 1;
+    
+    const d = destinations[currentDestIndex];
+    
+    document.getElementById('td-hero-img').style.backgroundImage = `url('${d.photoUrl}')`;
+    document.getElementById('td-destino').textContent = d.city;
+    document.getElementById('td-fechas-dias').textContent = `${d.nights} Noches`;
+    
+    // Apply Bounds restriction
+    if (window.google && google.maps && google.maps.Geocoder) {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ address: `${d.city}, ${d.country}` }, (results, status) => {
+            if (status === 'OK' && results[0] && results[0].geometry.viewport) {
+                const bounds = results[0].geometry.viewport;
+                if (window.autocompleteAttr) {
+                    window.autocompleteAttr.setBounds(bounds);
+                    window.autocompleteAttr.setOptions({ strictBounds: true });
+                }
+                if (window.autocompleteTransitOrigin) {
+                    window.autocompleteTransitOrigin.setBounds(bounds);
+                    window.autocompleteTransitOrigin.setOptions({ strictBounds: true });
+                }
+                if (window.autocompleteTransitDest) {
+                    window.autocompleteTransitDest.setBounds(bounds);
+                    window.autocompleteTransitDest.setOptions({ strictBounds: true });
+                }
+            }
+        });
+    }
+
+    renderTabs();
+    renderDay();
+}
+
+function prevDay() {
+    if (currentDay > 1) {
+        currentDay--;
+        renderDay();
+    }
+}
+
+function nextDay() {
+    const d = destinations[currentDestIndex];
+    if (currentDay < d.nights) {
+        currentDay++;
+        renderDay();
+    }
+}
+
+function renderDay() {
+    const d = destinations[currentDestIndex];
+    document.getElementById('current-day-title').textContent = `Día ${currentDay} de ${d.nights} en ${d.city}`;
+    
+    renderCalendarWidget();
+    
+    const timelineArea = document.getElementById('timeline-area');
+    const addBtn = document.querySelector('button[onclick="openAddAttractionModal()"]');
+
+    if (d.isCountry) {
+        if (addBtn) addBtn.classList.add('hidden');
+        timelineArea.innerHTML = `
+            <div class="bg-amber-50 dark:bg-amber-900/10 border-2 border-dashed border-amber-200 dark:border-amber-900/30 rounded-2xl p-10 text-center animate-in fade-in zoom-in duration-500">
+                <div class="w-20 h-20 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="material-symbols-outlined text-4xl text-amber-600">location_city</span>
+                </div>
+                <h3 class="text-2xl font-bold text-amber-900 dark:text-amber-200 mb-3">Especifica una ciudad en ${d.city}</h3>
+                <p class="text-amber-800/70 dark:text-amber-400/70 max-w-md mx-auto mb-8">
+                    Para poder planificar actividades diarias y atracciones, necesitamos que definas qué ciudad o destino específico visitarás dentro de este país.
+                </p>
+                <button onclick="window.location.href='../trip-route/index.html'" class="px-8 py-3 bg-amber-500 text-white font-bold rounded-xl shadow-lg shadow-amber-200 hover:scale-105 transition-all">
+                    Volver a Ruta y Especificar
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    if (addBtn) addBtn.classList.remove('hidden');
+    
+    // Ensure day exists
+    if (!itineraries[d.id]) itineraries[d.id] = {};
+    if (!itineraries[d.id][currentDay]) itineraries[d.id][currentDay] = [];
+    
+    const attrs = itineraries[d.id][currentDay];
+    
+    const defaultSlots = [
+        { isPlaceholder: true, time: '09:00', defaultTitle: 'Primer Destino', icon: 'light_mode', typeName: 'Mañana', text: 'Agrega el primer destino o actividad principal', min: '00:00', max: '11:59' },
+        { isPlaceholder: true, time: '13:00', defaultTitle: 'Almuerzo', icon: 'restaurant', typeName: 'Mediodía', text: 'Programa un lugar para almorzar', min: '12:00', max: '14:29' },
+        { isPlaceholder: true, time: '15:00', defaultTitle: 'Actividad de la Tarde', icon: 'local_see', typeName: 'Tarde', text: 'Añade otra atracción turística o paseo', min: '14:30', max: '18:59' },
+        { isPlaceholder: true, time: '20:00', defaultTitle: 'Cena', icon: 'nightlife', typeName: 'Noche', text: 'Programa la cena o actividad nocturna', min: '19:00', max: '23:59' }
+    ];
+
+    let combinedItems = [...attrs];
+    defaultSlots.forEach(slot => {
+        const hasAttrInSlot = attrs.some(a => a.time >= slot.min && a.time <= slot.max);
+        if (!hasAttrInSlot) {
+            combinedItems.push(slot);
+        }
+    });
+
+    combinedItems.sort((a, b) => a.time.localeCompare(b.time));
+
+    // 1. Render Pending Items (Only on first day of first destination for now, or always at top)
+    let pendingHtml = '';
+    if (pendingItems.length > 0) {
+        pendingHtml = `
+        <div class="mb-8 p-4 bg-amber-50 rounded-xl border border-amber-200">
+            <h4 class="text-amber-800 font-bold text-sm flex items-center gap-2 mb-3">
+                <span class="material-symbols-outlined text-lg">pending_actions</span>
+                Atracciones por Programar
+            </h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                ${pendingItems.map(item => `
+                    <div class="bg-white p-3 rounded-lg shadow-sm border border-blue-100 flex items-center gap-3 hover:border-blue-300 transition-colors">
+                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100 shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">${categoryIcons[item.categoria || item.category] || 'push_pin'}</span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-bold text-on-surface truncate">${item.atraccion_nombre || item.atraccion_id || item.title}</p>
+                            <p class="text-[10px] text-blue-600 font-bold uppercase tracking-wider">${item.categoria || item.category || 'Sin Categoría'}</p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(item.atraccion_nombre || item.title)}&destination_place_id=${item.google_place_id || item.placeId || ''}', '_blank')" class="p-2 hover:bg-blue-50 rounded-full transition-colors text-blue-500" title="¿Cómo llegar?">
+                                <span class="material-symbols-outlined text-[20px]">directions</span>
+                            </button>
+                            <button onclick="openProgramPendingModal('${item.id}')" class="p-2 hover:bg-amber-100 rounded-full transition-colors text-amber-600" title="Programar actividad">
+                                <span class="material-symbols-outlined">calendar_add_on</span>
+                            </button>
+                            <button onclick="deletePendingItem('${item.id}')" class="p-2 hover:bg-red-100 rounded-full transition-colors text-red-400" title="Eliminar de pendientes">
+                                <span class="material-symbols-outlined">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>`;
+    }
+
+    timelineArea.innerHTML = pendingHtml + `
+        <div class="relative before:absolute before:left-[105px] before:top-2 before:bottom-2 before:w-[2px] before:bg-surface-variant">
+            ${combinedItems.map((item, index) => {
+                if (item.isPlaceholder) {
+                    return `
+                    <div class="relative pl-[135px] mb-2 group cursor-pointer" onclick="openAddSuggestedAttraction('${item.defaultTitle}', '${item.time}')">
+                        <div class="absolute left-0 top-[18px] w-[62px] text-right">
+                            <span class="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest group-hover:text-primary transition-colors">${item.time}</span>
+                        </div>
+                        <div class="absolute left-[68px] top-[14px] w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant/50 group-hover:bg-primary/10 group-hover:text-primary transition-all z-20 border border-transparent group-hover:border-primary/20">
+                            <span class="material-symbols-outlined text-[16px]">${item.icon}</span>
+                        </div>
+                        <div class="absolute left-[100px] top-[22px] w-3 h-3 rounded-full bg-surface-container-highest border-2 border-surface shadow-sm z-10 group-hover:bg-primary transition-colors"></div>
+                        <div class="bg-transparent border border-dashed border-outline-variant/40 p-3 pr-4 rounded-xl hover:border-primary/50 hover:bg-primary/5 transition-all relative flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:bg-white group-hover:text-primary group-hover:shadow-sm transition-all">
+                                    <span class="material-symbols-outlined text-[20px]" data-icon="${item.icon}">${item.icon}</span>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2 mb-0.5">
+                                        <span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">${item.typeName}</span>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-on-surface-variant group-hover:text-primary transition-colors">${item.text}</h4>
+                                </div>
+                            </div>
+                            <button class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
+                                <span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                            </button>
+                        </div>
+                    </div>
+                    `;
+                }
+
+                const attr = item;
+                const safeTitle = attr.title ? attr.title.replace(/'/g, "\\'") : '';
+                const safeAddress = (attr.placeInfo && attr.placeInfo.address) ? attr.placeInfo.address.replace(/'/g, "\\'") : '';
+                
+                let html = `
+                <div class="relative pl-[135px] mb-2 group">
+                    <div class="absolute left-0 top-[22px] w-[62px] text-right">
+                        <span class="text-sm font-bold ${attr.time ? 'text-primary' : 'text-red-500'}">${attr.time || '--:--'}</span>
+                    </div>
+                    <div class="absolute left-[68px] top-[18px] w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-sm z-20 transition-all group-hover:scale-110">
+                        <span class="material-symbols-outlined text-[16px]">${categoryIcons[attr.category] || 'explore'}</span>
+                    </div>
+                    <div class="absolute left-[100px] top-[26px] w-3 h-3 rounded-full ${attr.time ? 'bg-primary' : 'bg-red-500 animate-pulse'} border-2 border-surface shadow-sm z-10"></div>
+                    <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow relative border border-outline-variant/20 flex gap-4">
+                        <!-- Photo -->
+                        ${attr.placeInfo && attr.placeInfo.photoUrl ? `
+                            <div class="w-24 h-24 rounded-lg bg-cover bg-center shrink-0 shadow-inner" style="background-image: url('${attr.placeInfo.photoUrl}')"></div>
+                        ` : `
+                            <div class="w-24 h-24 rounded-lg bg-surface-container flex flex-col items-center justify-center shrink-0 text-on-surface-variant/30">
+                                <span class="material-symbols-outlined text-3xl">image</span>
+                                <span class="text-[8px] uppercase font-bold tracking-tighter mt-1">Sin Foto</span>
+                            </div>
+                        `}
+
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-1">
+                                <div>
+                                    <span class="text-[10px] font-bold text-primary uppercase tracking-widest">${attr.category || 'Actividad'}</span>
+                                    <h4 class="text-lg font-bold text-on-surface truncate pr-8">${attr.title}</h4>
+                                </div>
+                                <div class="flex gap-1 absolute right-3 top-3">
+                                    <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(attr.title)}&destination_place_id=${attr.placeInfo?.placeId || ''}', '_blank')" class="p-1.5 hover:bg-blue-50 rounded-full transition-colors text-blue-500" title="¿Cómo llegar? (Google Maps)">
+                                        <span class="material-symbols-outlined text-sm">directions</span>
+                                    </button>
+                                    <button onclick="openEditAttractionModal('${attr.id}')" class="p-1.5 hover:bg-primary/10 rounded-full transition-colors text-primary" title="Editar"><span class="material-symbols-outlined text-sm">edit</span></button>
+                                    <button onclick="deleteAttraction('${attr.id}')" class="p-1.5 hover:bg-red-50 rounded-full transition-colors text-red-400" title="Eliminar"><span class="material-symbols-outlined text-sm">delete</span></button>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
+                                ${attr.placeInfo && attr.placeInfo.address ? `<p class="text-xs text-on-surface-variant flex items-center gap-1 max-w-full truncate"><span class="material-symbols-outlined text-[14px]">location_on</span> <span class="truncate">${attr.placeInfo.address}</span></p>` : ''}
+                                ${attr.placeInfo && attr.placeInfo.rating ? `<p class="text-xs text-amber-500 font-bold flex items-center gap-1 flex-shrink-0"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span> ${attr.placeInfo.rating}</p>` : ''}
+                            </div>
+                            ${!attr.time ? `
+                                <div class="flex items-center gap-2 mb-3 bg-red-50 text-red-700 px-3 py-1.5 rounded-lg border border-red-100 w-fit animate-pulse">
+                                    <span class="material-symbols-outlined text-lg">warning</span>
+                                    <span class="text-xs font-bold">Esta atracción no tiene hora asignada</span>
+                                </div>
+                            ` : ''}
+                            ${attr.desc ? `<p class="text-on-surface-variant text-sm leading-relaxed border-l-2 border-primary/30 pl-3 italic line-clamp-2">"${attr.desc}"</p>` : ''}
+                        </div>
+                    </div>
+                </div>
+                `;
+
+                // Add Logistics Route if there's a next item
+                let nextAttr = null;
+                for (let i = index + 1; i < combinedItems.length; i++) {
+                    if (!combinedItems[i].isPlaceholder) {
+                        nextAttr = combinedItems[i];
+                        break;
+                    }
+                }
+                
+                if (nextAttr) {
+                    const nextSafeTitle = nextAttr.title ? nextAttr.title.replace(/'/g, "\\'") : '';
+                    const nextSafeAddress = (nextAttr.placeInfo && nextAttr.placeInfo.address) ? nextAttr.placeInfo.address.replace(/'/g, "\\'") : '';
+                    
+                    if (attr.routeToNext) {
+                        let icon = 'commute';
+                        if (attr.routeToNext.mode === 'DRIVING') icon = 'directions_car';
+                        if (attr.routeToNext.mode === 'WALKING') icon = 'directions_walk';
+                        if (attr.routeToNext.mode === 'BICYCLING') icon = 'directions_bike';
+                        if (attr.routeToNext.mode === 'TRANSIT') icon = 'directions_transit';
+                        
+                        html += `
+                        <div class="relative pl-[135px] mb-2 group flex items-center justify-start h-8">
+                            <div class="absolute left-[100px] top-[-20px] bottom-[-20px] w-0.5 border-l-2 border-dashed border-primary/50"></div>
+                            <button onclick="openRouteLogistics('${attr.id}', '${nextAttr.id}', '${safeTitle}', '${nextSafeTitle}', '${safeAddress}', '${nextSafeAddress}')" class="bg-primary/10 hover:bg-primary/20 text-primary font-bold px-4 py-1.5 rounded-full shadow-sm flex items-center gap-3 transition-colors z-20 text-xs border border-primary/20 group/btn">
+                                <span class="material-symbols-outlined text-[16px]">${icon}</span>
+                                <span>${attr.routeToNext.duration} (${attr.routeToNext.distance})</span>
+                                <span class="material-symbols-outlined text-[14px] opacity-0 group-hover/btn:opacity-100 transition-opacity">edit</span>
+                            </button>
+                        </div>
+                        `;
+                    } else {
+                        html += `
+                        <div class="relative pl-[135px] mb-2 group flex items-center justify-start h-8">
+                            <div class="absolute left-[100px] top-[-20px] bottom-[-20px] w-0.5 border-l-2 border-dashed border-outline-variant/30"></div>
+                            <button onclick="openRouteLogistics('${attr.id}', '${nextAttr.id}', '${safeTitle}', '${nextSafeTitle}', '${safeAddress}', '${nextSafeAddress}')" class="bg-surface-container-high hover:bg-primary/10 text-on-surface-variant hover:text-primary px-4 py-1.5 rounded-full flex items-center gap-2 transition-all z-20 text-[10px] font-bold uppercase tracking-wider border border-transparent hover:border-primary/20">
+                                <span class="material-symbols-outlined text-[14px]">add_circle</span>
+                                Logística
+                            </button>
+                        </div>
+                        `;
+                    }
+                }
+                
+                return html;
+            }).join('')}
+        </div>`;
+}
+
+function renderCalendarWidget() {
+    const d = destinations[currentDestIndex];
+    const container = document.getElementById('widget-calendar-content');
+    if (!container) return;
+
+    // Obtener la fecha de inicio del viaje
+    let globalStartDate = new Date(); // Fallback
+    let globalEndDate = new Date();
+    const conceptStr = localStorage.getItem('itera_trip_concept_' + currentTripId) || localStorage.getItem('itera_trip_concept');
+    if (conceptStr) {
+        const concept = JSON.parse(conceptStr);
+        if (concept.startDate) {
+            globalStartDate = new Date(concept.startDate + "T12:00:00");
+        }
+        if (concept.endDate) {
+            globalEndDate = new Date(concept.endDate + "T12:00:00");
+        } else {
+            let totalNights = destinations.reduce((sum, dest) => sum + parseInt(dest.nights || 1), 0);
+            globalEndDate = new Date(globalStartDate);
+            globalEndDate.setDate(globalEndDate.getDate() + totalNights);
+        }
+    } else {
+        let totalNights = destinations.reduce((sum, dest) => sum + parseInt(dest.nights || 1), 0);
+        globalEndDate = new Date(globalStartDate);
+        globalEndDate.setDate(globalEndDate.getDate() + totalNights);
+    }
+
+    let daysBefore = 0;
+    for (let j = 0; j < currentDestIndex; j++) {
+        daysBefore += parseInt(destinations[j].nights);
+    }
+
+    const destStartDate = new Date(globalStartDate);
+    destStartDate.setDate(destStartDate.getDate() + daysBefore);
+    
+    const displayYear = destStartDate.getFullYear();
+    const displayMonth = destStartDate.getMonth();
+
+    const editingDate = new Date(destStartDate);
+    editingDate.setDate(editingDate.getDate() + (currentDay - 1));
+
+    const weekDays = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+    const daysInMonth = new Date(displayYear, displayMonth + 1, 0).getDate();
+    let firstDayIndex = new Date(displayYear, displayMonth, 1).getDay();
+    firstDayIndex = (firstDayIndex + 6) % 7; // Monday start
+
+    let html = `
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-base font-bold text-on-surface">${monthNames[displayMonth]} ${displayYear}</h3>
+            <div class="flex gap-0.5">
+                <button class="p-1 hover:bg-surface-container rounded-full text-on-surface-variant"><span class="material-symbols-outlined text-lg">chevron_left</span></button>
+                <button class="p-1 hover:bg-surface-container rounded-full text-on-surface-variant"><span class="material-symbols-outlined text-lg">chevron_right</span></button>
+            </div>
+        </div>
+        <div class="grid grid-cols-7 gap-y-1">
+            ${weekDays.map(wd => `<div class="text-center text-[10px] font-bold text-on-surface-variant/50 uppercase tracking-tighter pb-1">${wd}</div>`).join('')}
+    `;
+
+    for (let i = 0; i < firstDayIndex; i++) {
+        html += `<div class="w-8 h-8 mx-auto"></div>`;
+    }
+
+    const toDateString = (dateObj) => `${dateObj.getFullYear()}-${String(dateObj.getMonth()+1).padStart(2,'0')}-${String(dateObj.getDate()).padStart(2,'0')}`;
+    const globalStartStr = toDateString(globalStartDate);
+    const globalEndStr = toDateString(globalEndDate);
+    const destStartStr = toDateString(destStartDate);
+    
+    const destEndDate = new Date(destStartDate);
+    destEndDate.setDate(destEndDate.getDate() + parseInt(d.nights) - 1);
+    const destEndStr = toDateString(destEndDate);
+    
+    const editingStr = toDateString(editingDate);
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const currentDate = new Date(displayYear, displayMonth, day, 12, 0, 0);
+        const currentStr = toDateString(currentDate);
+
+        const isEditingDay = (currentStr === editingStr);
+        const isTripDay = (currentStr >= globalStartStr && currentStr <= globalEndStr);
+        const isCurrentDestDay = (currentStr >= destStartStr && currentStr <= destEndStr);
+
+        let dayOfDest = -1;
+        if (isCurrentDestDay) {
+            const diffTime = Math.abs(currentDate - destStartDate);
+            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+            dayOfDest = diffDays + 1;
+        }
+
+        if (isEditingDay) {
+            html += `
+                <div class="flex items-center justify-center relative">
+                    <div class="w-8 h-8 rounded-full bg-primary text-white font-bold flex items-center justify-center text-xs shadow-sm z-10 scale-105 cursor-default">
+                        ${day}
+                    </div>
+                </div>
+            `;
+        } else if (isCurrentDestDay) {
+            html += `
+                <div onclick="selectDay(${dayOfDest})" class="flex items-center justify-center relative group/day">
+                    <div class="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-xs hover:bg-primary/20 cursor-pointer transition-colors">
+                        ${day}
+                    </div>
+                </div>
+            `;
+        } else if (isTripDay) {
+            html += `
+                <div class="flex items-center justify-center relative">
+                    <div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center text-xs">
+                        ${day}
+                    </div>
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="flex items-center justify-center text-xs text-on-surface-variant/30 w-8 h-8 mx-auto">
+                    ${day}
+                </div>
+            `;
+        }
+    }
+    
+    html += `</div>`;
+    container.innerHTML = html;
+}
+
+function selectDay(day) {
+    const d = destinations[currentDestIndex];
+    if (day >= 1 && day <= d.nights) {
+        currentDay = day;
+        renderDay();
+    }
+}
+
+function openAddAttractionModal() {
+    editingAttractionId = null;
+    document.getElementById('modal-title-text').textContent = 'Añadir Actividad';
+    
+    document.getElementById('attr-title').value = '';
+    document.getElementById('attr-time').value = '10:00';
+    document.getElementById('attr-desc').value = '';
+    
+    document.getElementById('attr-search-input').value = '';
+    document.getElementById('attr-search-results').innerHTML = `
+        <div class="text-center p-8 text-on-surface-variant flex flex-col items-center justify-center h-full">
+            <span class="material-symbols-outlined text-4xl mb-2 opacity-50">travel_explore</span>
+            <p>Ingresa una búsqueda o selecciona una categoría para ver opciones en el destino.</p>
+        </div>
+    `;
+    document.getElementById('add-attraction-modal').classList.remove('hidden');
+    document.getElementById('add-attraction-modal').classList.add('flex');
+    
+    setSearchCategory('Atracciones');
+    resetSelectedPlaceUI();
+    showSearchView();
+}
+
+function openAddSuggestedAttraction(title, time) {
+    editingAttractionId = null;
+    document.getElementById('modal-title-text').textContent = 'Añadir Actividad';
+    
+    document.getElementById('attr-title').value = title;
+    document.getElementById('attr-time').value = time;
+    document.getElementById('attr-desc').value = '';
+    
+    // Determine if it's a generic title from the guide (should search by category instead of literal title)
+    const genericTitles = ['Primer Destino', 'Almuerzo', 'Actividad de la Tarde', 'Cena'];
+    const isGeneric = genericTitles.includes(title);
+    
+    // If it's generic, we clear the search input so searchPlaces uses the category query
+    document.getElementById('attr-search-input').value = isGeneric ? '' : title;
+    
+    let defaultCat = 'Atracciones';
+    if (title.toLowerCase().includes('almuerzo') || title.toLowerCase().includes('cena')) {
+        defaultCat = 'Gastronomía';
+    }
+    document.getElementById('add-attraction-modal').classList.remove('hidden');
+    document.getElementById('add-attraction-modal').classList.add('flex');
+    
+    setSearchCategory(defaultCat);
+    resetSelectedPlaceUI();
+    showSearchView();
+}
+
+function openEditAttractionModal(id) {
+    const d = destinations[currentDestIndex];
+    const attr = itineraries[d.id][currentDay].find(a => a.id === id);
+    if (!attr) return;
+    
+    editingAttractionId = id;
+    document.getElementById('modal-title-text').textContent = 'Editar Actividad';
+    
+    document.getElementById('attr-title').value = attr.title || '';
+    document.getElementById('attr-time').value = attr.time || '10:00';
+    document.getElementById('attr-desc').value = attr.desc || '';
+    
+    setSearchCategory(attr.category || 'Atracciones', false); // No trigger search
+    
+    if (attr.placeInfo && attr.placeInfo.address) {
+        currentSelectedPlace = {
+            name: attr.title,
+            address: attr.placeInfo.address,
+            rating: attr.placeInfo.rating || null,
+            photoUrl: attr.placeInfo.photoUrl || ''
+        };
+        document.getElementById('attr-place-address').textContent = attr.placeInfo.address;
+        document.getElementById('attr-place-rating').textContent = attr.placeInfo.rating ? `Valoración: ${attr.placeInfo.rating} ⭐` : '';
+        
+        if (attr.placeInfo.photoUrl) {
+            document.getElementById('selected-place-img').style.backgroundImage = `url('${attr.placeInfo.photoUrl}')`;
+            document.getElementById('selected-place-img').classList.remove('hidden');
+            document.getElementById('selected-place-icon').classList.add('hidden');
+        } else {
+            document.getElementById('selected-place-img').classList.add('hidden');
+            document.getElementById('selected-place-icon').classList.remove('hidden');
+        }
+    } else {
+        resetSelectedPlaceUI();
+    }
+    showSearchView();
+    
+    document.getElementById('add-attraction-modal').classList.remove('hidden');
+    document.getElementById('add-attraction-modal').classList.add('flex');
+}
+
+function openProgramPendingModal(id) {
+    const item = pendingItems.find(p => p.id === id);
+    if (!item) return;
+
+    editingAttractionId = id; // Store the backend ID
+    document.getElementById('modal-title-text').textContent = 'Programar Atracción';
+    
+    // Clear previous
+    resetSelectedPlaceUI();
+    document.getElementById('attr-title').value = item.atraccion_nombre || '';
+    document.getElementById('attr-time').value = '10:00';
+    document.getElementById('attr-desc').value = '';
+    
+    // If we have a Google Place ID, fetch full details automatically
+    if (item.atraccion_id && window.placesService) {
+        // Show detail view immediately
+        document.getElementById('attr-search-view').classList.add('hidden');
+        document.getElementById('attr-search-view').classList.remove('flex');
+        document.getElementById('attr-detail-view').classList.remove('hidden');
+        document.getElementById('attr-detail-view').classList.add('flex');
+        document.getElementById('attr-detail-content').innerHTML = '<div class="text-center p-8 text-on-surface-variant"><span class="material-symbols-outlined animate-spin block text-3xl mx-auto mb-2">refresh</span> Cargando detalles...</div>';
+
+        window.placesService.getDetails({
+            placeId: item.atraccion_id,
+            fields: ['name', 'formatted_address', 'rating', 'photos', 'editorial_summary', 'reviews', 'website', 'formatted_phone_number', 'opening_hours']
+        }, (place, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK && place) {
+                let photoUrl = '';
+                if (place.place_id) {
+                    photoUrl = `/api/places/${place.place_id}/photo?max_width=800`;
+                }
+                
+                currentSelectedPlace = {
+                    name: place.name,
+                    address: place.formatted_address || '',
+                    rating: place.rating || null,
+                    photoUrl: photoUrl
+                };
+                
+                document.getElementById('attr-title').value = place.name;
+                document.getElementById('attr-place-address').textContent = place.formatted_address || '';
+                document.getElementById('attr-place-rating').textContent = place.rating ? `Valoración: ${place.rating} ⭐` : '';
+                
+                if (photoUrl) {
+                    document.getElementById('selected-place-img').style.backgroundImage = `url('${photoUrl}')`;
+                    document.getElementById('selected-place-img').classList.remove('hidden');
+                    document.getElementById('selected-place-icon').classList.add('hidden');
+                }
+
+                // Render Detailed Content (copied logic from showPlaceDetails)
+                const detailedDesc = place.editorial_summary && place.editorial_summary.overview ? place.editorial_summary.overview : 'No hay descripción detallada disponible para este lugar.';
+                
+                let hoursHtml = '';
+                if (place.opening_hours && place.opening_hours.weekday_text) {
+                    hoursHtml = `
+                        <div class="mt-4 mb-4">
+                            <h5 class="text-sm font-bold text-on-surface mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">schedule</span> Horarios</h5>
+                            <ul class="text-xs text-on-surface-variant space-y-1 pl-6 list-disc">
+                                ${place.opening_hours.weekday_text.map(day => `<li>${day}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                let websiteHtml = '';
+                if (place.website) {
+                    websiteHtml = `
+                        <div class="mb-6">
+                            <a href="${place.website}" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-primary flex items-center gap-1 hover:underline w-fit">
+                                <span class="material-symbols-outlined text-[18px]">language</span> Sitio Web Oficial
+                            </a>
+                        </div>
+                    `;
+                }
+                
+                let html = `
+                    ${photoUrl ? `<div class="w-full h-56 md:h-64 rounded-xl bg-cover bg-center mb-4 shadow-sm" style="background-image: url('${photoUrl}')"></div>` : ''}
+                    <h4 class="text-3xl font-bold text-on-surface mb-1 font-headline">${place.name}</h4>
+                    ${place.rating ? `<p class="text-sm text-amber-600 font-bold mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span> ${place.rating}</p>` : ''}
+                    <p class="text-xs text-on-surface-variant mb-4 flex items-start gap-1"><span class="material-symbols-outlined text-[16px] mt-0.5">location_on</span> <span>${place.formatted_address || ''}</span></p>
+                    <div class="text-sm text-on-surface mb-4 leading-relaxed bg-surface-container-low p-3 rounded-xl border border-outline-variant/20">${detailedDesc}</div>
+                    ${hoursHtml}
+                    ${websiteHtml}
+                `;
+                document.getElementById('attr-detail-content').innerHTML = html;
+            } else {
+                document.getElementById('attr-detail-content').innerHTML = '<div class="text-center p-8 text-error">No se pudieron cargar los detalles del lugar.</div>';
+            }
+        });
+    } else {
+        showSearchView(); 
+    }
+    
+    document.getElementById('add-attraction-modal').classList.remove('hidden');
+    document.getElementById('add-attraction-modal').classList.add('flex');
+}
+
+let pendingDeleteId = null;
+
+function deletePendingItem(id) {
+    pendingDeleteId = id;
+    const modal = document.getElementById('confirm-modal');
+    const box = document.getElementById('confirm-modal-box');
+    
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    
+    setTimeout(() => {
+        box.classList.remove('scale-95', 'opacity-0');
+        box.classList.add('scale-100', 'opacity-100');
+    }, 10);
+}
+
+function closeConfirmModal() {
+    const modal = document.getElementById('confirm-modal');
+    const box = document.getElementById('confirm-modal-box');
+    
+    box.classList.remove('scale-100', 'opacity-100');
+    box.classList.add('scale-95', 'opacity-0');
+    
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        pendingDeleteId = null;
+    }, 300);
+}
+
+document.getElementById('confirm-modal-no').addEventListener('click', closeConfirmModal);
+
+document.getElementById('confirm-modal-yes').addEventListener('click', async () => {
+    if (!pendingDeleteId) return;
+    
+    try {
+        const resp = await fetch(`http://localhost:8000/api/viajes/${currentTripId}/items/${pendingDeleteId}`, { method: 'DELETE' });
+        if (resp.ok) {
+            pendingItems = pendingItems.filter(p => p.id === pendingDeleteId ? false : true);
+            closeConfirmModal();
+            renderDay();
+        } else {
+            alert("Error al eliminar la atracción.");
+            closeConfirmModal();
+        }
+    } catch(e) {
+        console.error("Error deleting pending item", e);
+        alert("Error de conexión.");
+        closeConfirmModal();
+    }
+});
+
+function closeAddAttractionModal() {
+    document.getElementById('add-attraction-modal').classList.add('hidden');
+    document.getElementById('add-attraction-modal').classList.remove('flex');
+}
+
+function resetSelectedPlaceUI() {
+    currentSelectedPlace = null;
+    document.getElementById('selected-place-img').classList.add('hidden');
+    document.getElementById('selected-place-img').style.backgroundImage = 'none';
+    document.getElementById('selected-place-icon').classList.remove('hidden');
+    document.getElementById('attr-place-address').textContent = '';
+    document.getElementById('attr-place-rating').textContent = '';
+}
+
+let currentSearchCategory = 'Atracciones';
+let currentPlaceResults = [];
+
+function setSearchCategory(cat, triggerSearch = true) {
+    currentSearchCategory = cat;
+    document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-primary/10', 'border-primary', 'text-primary');
+        btn.classList.add('border-outline-variant/30');
+    });
+    const activeBtn = document.getElementById('cat-btn-' + cat);
+    if(activeBtn) {
+        activeBtn.classList.remove('border-outline-variant/30');
+        activeBtn.classList.add('bg-primary/10', 'border-primary', 'text-primary');
+    }
+    
+    document.getElementById('attr-category').value = cat;
+
+    if(triggerSearch && !document.getElementById('add-attraction-modal').classList.contains('hidden')) {
+        searchPlaces();
+    }
+}
+
+function searchPlaces() {
+    if (!window.placesService) return;
+    
+    const d = destinations[currentDestIndex];
+    const city = d.city + ', ' + d.country;
+    const inputVal = document.getElementById('attr-search-input').value.trim();
+    
+    const query = inputVal ? `${inputVal} en ${city}` : `${currentSearchCategory} en ${city}`;
+    
+    const request = {
+        query: query,
+        fields: ['name', 'geometry', 'formatted_address', 'rating', 'photos', 'place_id']
+    };
+
+    document.getElementById('attr-search-results').innerHTML = '<div class="text-center p-8 text-on-surface-variant"><span class="material-symbols-outlined animate-spin block text-3xl mx-auto mb-2">refresh</span> Buscando...</div>';
+
+    window.placesService.textSearch(request, (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+            currentPlaceResults = results;
+            renderSearchResults(results);
+        } else {
+            document.getElementById('attr-search-results').innerHTML = '<div class="text-center p-8 text-on-surface-variant"><span class="material-symbols-outlined text-4xl mb-2 opacity-50">error</span><p>No se encontraron resultados.</p></div>';
+        }
+    });
+}
+
+function renderSearchResults(results) {
+    const container = document.getElementById('attr-search-results');
+    if (results.length === 0) {
+        container.innerHTML = '<div class="text-center p-8 text-on-surface-variant">No se encontraron lugares.</div>';
+        return;
+    }
+    
+    let html = '';
+    results.slice(0, 15).forEach((place, index) => {
+        let photoUrl = '';
+        if (place.photos && place.photos.length > 0) {
+        if (place.place_id) {
+            photoUrl = `/api/places/${place.place_id}/photo?max_width=200`;
+        }
+        }
+        
+        html += `
+            <div onclick="selectPlaceFromResult(${index})" class="flex flex-col p-3 bg-white hover:bg-surface-container-low border border-outline-variant/20 rounded-xl cursor-pointer transition-colors group">
+                <div class="flex items-center gap-4 mb-2">
+                    ${photoUrl ? `<div class="w-16 h-16 rounded-lg bg-cover bg-center shrink-0" style="background-image: url('${photoUrl}')"></div>` : `<div class="w-16 h-16 rounded-lg bg-surface-container flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-surface-variant/50">image</span></div>`}
+                    <div class="flex-1 min-w-0">
+                        <h5 class="font-bold text-on-surface text-lg truncate group-hover:text-primary transition-colors">${place.name}</h5>
+                        <p class="text-xs text-on-surface-variant truncate mt-0.5">${place.formatted_address || ''}</p>
+                        ${place.rating ? `<div class="text-[10px] text-amber-600 font-bold mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">star</span> ${place.rating}</div>` : ''}
+                    </div>
+                </div>
+                <div class="flex justify-end mt-1">
+                    <button onclick="event.stopPropagation(); showPlaceDetails('${place.place_id}', ${index})" class="text-xs font-bold text-primary hover:bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20 transition-colors">Ver Detalle</button>
+                </div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+function selectPlaceFromResult(index) {
+    const place = currentPlaceResults[index];
+    if (!place) return;
+    
+    let photoUrl = '';
+    if (place.photos && place.photos.length > 0) {
+    if (place.place_id) {
+        photoUrl = `/api/places/${place.place_id}/photo?max_width=400`;
+    }
+    }
+    
+    currentSelectedPlace = {
+        name: place.name,
+        address: place.formatted_address || '',
+        rating: place.rating || null,
+        photoUrl: photoUrl
+    };
+    
+    document.getElementById('attr-title').value = place.name;
+    document.getElementById('attr-place-address').textContent = place.formatted_address || '';
+    document.getElementById('attr-place-rating').textContent = place.rating ? `Valoración: ${place.rating} ⭐` : '';
+    
+    if (photoUrl) {
+        document.getElementById('selected-place-img').style.backgroundImage = `url('${photoUrl}')`;
+        document.getElementById('selected-place-img').classList.remove('hidden');
+        document.getElementById('selected-place-icon').classList.add('hidden');
+    } else {
+        document.getElementById('selected-place-img').classList.add('hidden');
+        document.getElementById('selected-place-icon').classList.remove('hidden');
+    }
+}
+
+function showSearchView() {
+    document.getElementById('attr-search-view').classList.remove('hidden');
+    document.getElementById('attr-search-view').classList.add('flex');
+    document.getElementById('attr-detail-view').classList.add('hidden');
+    document.getElementById('attr-detail-view').classList.remove('flex');
+}
+
+function showPlaceDetails(placeId, index) {
+    selectPlaceFromResult(index);
+    
+    document.getElementById('attr-search-view').classList.add('hidden');
+    document.getElementById('attr-search-view').classList.remove('flex');
+    document.getElementById('attr-detail-view').classList.remove('hidden');
+    document.getElementById('attr-detail-view').classList.add('flex');
+    
+    document.getElementById('attr-detail-content').innerHTML = '<div class="text-center p-8 text-on-surface-variant"><span class="material-symbols-outlined animate-spin block text-3xl mx-auto mb-2">refresh</span> Cargando detalles...</div>';
+    
+    if(!window.placesService) return;
+    
+    window.placesService.getDetails({
+        placeId: placeId,
+        fields: ['name', 'formatted_address', 'rating', 'photos', 'editorial_summary', 'reviews', 'website', 'formatted_phone_number', 'opening_hours']
+    }, (place, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && place) {
+            let photoUrl = '';
+            if (place.place_id) {
+                photoUrl = `/api/places/${place.place_id}/photo?max_width=800`;
+            }
+            
+            const desc = place.editorial_summary && place.editorial_summary.overview ? place.editorial_summary.overview : 'No hay descripción detallada disponible para este lugar.';
+            
+            let hoursHtml = '';
+            if (place.opening_hours && place.opening_hours.weekday_text) {
+                hoursHtml = `
+                    <div class="mt-4 mb-4">
+                        <h5 class="text-sm font-bold text-on-surface mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">schedule</span> Horarios</h5>
+                        <ul class="text-xs text-on-surface-variant space-y-1 pl-6 list-disc">
+                            ${place.opening_hours.weekday_text.map(day => `<li>${day}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            let websiteHtml = '';
+            if (place.website) {
+                websiteHtml = `
+                    <div class="mb-6">
+                        <a href="${place.website}" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-primary flex items-center gap-1 hover:underline w-fit">
+                            <span class="material-symbols-outlined text-[18px]">language</span> Sitio Web Oficial
+                        </a>
+                    </div>
+                `;
+            } else {
+                websiteHtml = '<div class="mb-6"></div>';
+            }
+            
+            let html = `
+                ${photoUrl ? `<div class="w-full h-56 md:h-64 rounded-xl bg-cover bg-center mb-4 shadow-sm" style="background-image: url('${photoUrl}')"></div>` : ''}
+                <h4 class="text-3xl font-bold text-on-surface mb-1 font-headline">${place.name}</h4>
+                ${place.rating ? `<p class="text-sm text-amber-600 font-bold mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span> ${place.rating}</p>` : ''}
+                <p class="text-xs text-on-surface-variant mb-4 flex items-start gap-1"><span class="material-symbols-outlined text-[16px] mt-0.5">location_on</span> <span>${place.formatted_address || ''}</span></p>
+                <div class="text-sm text-on-surface mb-4 leading-relaxed bg-surface-container-low p-3 rounded-xl border border-outline-variant/20">${desc}</div>
+                
+                ${hoursHtml}
+                ${websiteHtml}
+            `;
+            document.getElementById('attr-detail-content').innerHTML = html;
+        } else {
+            document.getElementById('attr-detail-content').innerHTML = '<div class="text-center p-8 text-error">No se pudieron cargar los detalles.</div>';
+        }
+    });
+}
+
+async function saveAttraction() {
+    let title = document.getElementById('attr-title').value.trim();
+    const time = document.getElementById('attr-time').value;
+    const category = document.getElementById('attr-category').value;
+    const desc = document.getElementById('attr-desc').value.trim();
+    
+    if (!title) {
+        alert("Por favor ingresa un título o busca un lugar");
+        return;
+    }
+    
+    let placeInfo = null;
+    if (currentSelectedPlace) {
+        title = currentSelectedPlace.name; // User selected a valid place
+        placeInfo = {
+            address: currentSelectedPlace.address,
+            rating: currentSelectedPlace.rating,
+            photoUrl: currentSelectedPlace.photoUrl
+        };
+    }
+    
+    const d = destinations[currentDestIndex];
+    if (!itineraries[d.id]) itineraries[d.id] = {};
+    if (!itineraries[d.id][currentDay]) itineraries[d.id][currentDay] = [];
+    
+    // Check if we are programming a pending item from the backend
+    const pendingIdx = pendingItems.findIndex(p => p.id === editingAttractionId);
+    if (pendingIdx !== -1) {
+        try {
+            // Delete from backend as it's now being scheduled in local storage
+            await fetch(`http://localhost:8000/api/viajes/${currentTripId}/items/${editingAttractionId}`, { method: 'DELETE' });
+            pendingItems.splice(pendingIdx, 1);
+        } catch(e) { console.error("Error removing pending item", e); }
+        
+        // Add to local itineraries
+        itineraries[d.id][currentDay].push({
+            id: Date.now().toString(),
+            title, time, category, desc, placeInfo
+        });
+    } else if (editingAttractionId) {
+        const index = itineraries[d.id][currentDay].findIndex(a => a.id === editingAttractionId);
+        if (index !== -1) {
+            itineraries[d.id][currentDay][index].title = title;
+            itineraries[d.id][currentDay][index].time = time;
+            itineraries[d.id][currentDay][index].category = category;
+            itineraries[d.id][currentDay][index].desc = desc;
+            itineraries[d.id][currentDay][index].placeInfo = placeInfo;
+        }
+    } else {
+        itineraries[d.id][currentDay].push({
+            id: Date.now().toString(),
+            title, time, category, desc, placeInfo
+        });
+    }
+    
+    localStorage.setItem(ITIN_KEY, JSON.stringify(itineraries));
+    closeAddAttractionModal();
+    renderDay();
+    editingAttractionId = null; // Reset
+}
+
+function deleteAttraction(id) {
+    const d = destinations[currentDestIndex];
+    itineraries[d.id][currentDay] = itineraries[d.id][currentDay].filter(a => a.id !== id);
+    localStorage.setItem(ITIN_KEY, JSON.stringify(itineraries));
+    renderDay();
+}
+
+let flightSegmentsIda = [];
+let flightSegmentsVuelta = [];
+
+function createEmptyFlight() {
+    return { id: Date.now().toString() + Math.random().toString(36).substr(2, 5), airline: '', flight: '', origin: '', dest: '', dep: '', arr: '', type: 'final' };
+}
+
+let currentFlightDirection = null;
+
+function renderFlightSegments() {
+    if (!currentFlightDirection) return;
+    
+    const segments = currentFlightDirection === 'ida' ? flightSegmentsIda : flightSegmentsVuelta;
+    const container = document.getElementById('flight-segments-container');
+    
+    if (segments.length === 0) {
+        container.innerHTML = `<div class="text-center p-8 text-on-surface-variant italic border border-dashed border-outline-variant/30 rounded-xl">No hay vuelos agregados en esta ruta.</div>`;
+        return;
+    }
+    
+    container.innerHTML = segments.map((f, index) => `
+        <div class="bg-surface-container-low p-5 rounded-xl border border-outline-variant/30 shadow-sm relative group">
+            <div class="flex justify-between items-center mb-3">
+                <h4 class="font-bold text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined text-base">flight</span>
+                    Vuelo ${index + 1}
+                </h4>
+                <button onclick="removeFlightSegment('${currentFlightDirection}', '${f.id}')" class="text-error opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-error/10 rounded-full"><span class="material-symbols-outlined text-sm">delete</span></button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1 col-span-1 md:col-span-2">
+                    <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Tipo de Vuelo</label>
+                    <select onchange="updateFlight('${currentFlightDirection}', '${f.id}', 'type', this.value)" class="w-full bg-surface-container-lowest border-none rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary font-bold text-primary">
+                        <option value="final" ${f.type === 'final' ? 'selected' : ''}>Vuelo Final / Directo</option>
+                        <option value="escala" ${f.type === 'escala' ? 'selected' : ''}>Escala / Conexión</option>
+                    </select>
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Aerolínea</label>
+                    <input type="text" value="${f.airline}" onchange="updateFlight('${currentFlightDirection}', '${f.id}', 'airline', this.value)" class="w-full bg-surface-container-lowest border-none rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary" placeholder="Ej: Iberia" />
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Vuelo</label>
+                    <input type="text" value="${f.flight}" onchange="updateFlight('${currentFlightDirection}', '${f.id}', 'flight', this.value)" class="w-full bg-surface-container-lowest border-none rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary" placeholder="Ej: IB 340" />
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Origen</label>
+                    <input type="text" value="${f.origin}" onchange="updateFlight('${currentFlightDirection}', '${f.id}', 'origin', this.value)" class="w-full bg-surface-container-lowest border-none rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary" placeholder="Aeropuerto Origen" />
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Destino</label>
+                    <input type="text" value="${f.dest}" onchange="updateFlight('${currentFlightDirection}', '${f.id}', 'dest', this.value)" class="w-full bg-surface-container-lowest border-none rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary" placeholder="Aeropuerto Destino" />
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Salida</label>
+                    <input type="datetime-local" value="${f.dep}" onchange="updateFlight('${currentFlightDirection}', '${f.id}', 'dep', this.value)" class="w-full bg-surface-container-lowest border-none rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary" />
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Llegada</label>
+                    <input type="datetime-local" value="${f.arr}" onchange="updateFlight('${currentFlightDirection}', '${f.id}', 'arr', this.value)" class="w-full bg-surface-container-lowest border-none rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary" />
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateFlight(routeType, id, field, value) {
+    const segments = routeType === 'ida' ? flightSegmentsIda : flightSegmentsVuelta;
+    const flight = segments.find(f => f.id === id);
+    if (flight) {
+        flight[field] = value;
+    }
+}
+
+function addFlightSegment(routeType) {
+    if (routeType === 'ida') {
+        flightSegmentsIda.push(createEmptyFlight());
+    } else {
+        flightSegmentsVuelta.push(createEmptyFlight());
+    }
+    renderFlightSegments();
+}
+
+function removeFlightSegment(routeType, id) {
+    if (routeType === 'ida') {
+        flightSegmentsIda = flightSegmentsIda.filter(f => f.id !== id);
+    } else {
+        flightSegmentsVuelta = flightSegmentsVuelta.filter(f => f.id !== id);
+    }
+    renderFlightSegments();
+}
+
+function openFlightDirection(direction) {
+    currentFlightDirection = direction;
+    document.getElementById('flight-direction-menu').classList.add('hidden');
+    document.getElementById('flight-editor').classList.remove('hidden');
+    
+    if (direction === 'ida') {
+        document.getElementById('flight-editor-title').querySelector('span:nth-child(2)').textContent = 'Vuelos de Ida';
+        document.getElementById('flight-editor-icon').textContent = 'flight_takeoff';
+        document.getElementById('flight-add-btn').onclick = () => addFlightSegment('ida');
+    } else {
+        document.getElementById('flight-editor-title').querySelector('span:nth-child(2)').textContent = 'Vuelos de Vuelta';
+        document.getElementById('flight-editor-icon').textContent = 'flight_land';
+        document.getElementById('flight-add-btn').onclick = () => addFlightSegment('vuelta');
+    }
+    
+    renderFlightSegments();
+}
+
+function closeFlightDirection() {
+    currentFlightDirection = null;
+    document.getElementById('flight-editor').classList.add('hidden');
+    document.getElementById('flight-direction-menu').classList.remove('hidden');
+}
+
+let currentRouteEditing = { originId: null, destId: null };
+let currentRouteCalculated = null;
+
+function openRouteLogistics(originId, destId, originTitle, destTitle, originAddress, destAddress) {
+    currentRouteEditing = { originId, destId };
+    currentRouteCalculated = null; // Reset
+    
+    openLogisticsModal();
+    switchLogisticsTab('public');
+    
+    // Fill the inputs with the address or title
+    const origin = originAddress || originTitle;
+    const dest = destAddress || destTitle;
+    
+    const originInput = document.getElementById('transit-origin');
+    const destInput = document.getElementById('transit-dest');
+    
+    if (originInput) originInput.value = origin;
+    if (destInput) destInput.value = dest;
+    
+    // Auto-calculate route if both exist
+    if (origin && dest && typeof calculateTransitRoute === 'function') {
+        // Small timeout to allow map/directions to initialize if needed
+        setTimeout(() => calculateTransitRoute(), 500);
+    }
+}
+
+function openLogisticsModal() {
+    const savedData = localStorage.getItem(LOGISTICS_KEY);
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        
+        if (data.flightsIda) {
+            flightSegmentsIda = data.flightsIda;
+        } else if (data.flights && data.flights.length > 0) {
+            flightSegmentsIda = data.flights; // backward compatibility
+        } else {
+            flightSegmentsIda = [createEmptyFlight()];
+        }
+        
+        if (data.flightsVuelta) {
+            flightSegmentsVuelta = data.flightsVuelta;
+        } else {
+            flightSegmentsVuelta = [];
+        }
+        
+        if (data.carCompany) document.getElementById('log-car-company').value = data.carCompany;
+        if (data.carBooking) document.getElementById('log-car-booking').value = data.carBooking;
+    } else {
+        flightSegmentsIda = [createEmptyFlight()];
+        flightSegmentsVuelta = [];
+    }
+    
+    renderFlightSegments();
+    
+    document.getElementById('logistics-modal').classList.remove('hidden');
+    document.getElementById('logistics-modal').classList.add('flex');
+    closeFlightDirection(); // Ensure it opens at the main menu
+}
+
+function closeLogisticsModal() {
+    document.getElementById('logistics-modal').classList.add('hidden');
+    document.getElementById('logistics-modal').classList.remove('flex');
+}
+
+async function saveLogisticsData() {
+    const savedData = localStorage.getItem(LOGISTICS_KEY);
+    let data = savedData ? JSON.parse(savedData) : {};
+    
+    data.flightsIda = flightSegmentsIda;
+    data.flightsVuelta = flightSegmentsVuelta;
+    data.carCompany = document.getElementById('log-car-company').value;
+    data.carBooking = document.getElementById('log-car-booking').value;
+    
+    localStorage.setItem(LOGISTICS_KEY, JSON.stringify(data));
+    
+    // Guardar ruta calculada entre atracciones si existe
+    if (currentRouteEditing.originId && currentRouteEditing.destId && currentRouteCalculated) {
+        const d = destinations[currentDestIndex];
+        if (itineraries[d.id] && itineraries[d.id][currentDay]) {
+            const originAttr = itineraries[d.id][currentDay].find(a => a.id === currentRouteEditing.originId);
+            if (originAttr) {
+                originAttr.routeToNext = currentRouteCalculated;
+                localStorage.setItem(ITIN_KEY, JSON.stringify(itineraries));
+            }
+        }
+    }
+    
+    // Sincronizar vuelos con backend
+    if (currentTripId) {
+        try {
+            const allFlights = [];
+            flightSegmentsIda.forEach((f, i) => {
+                allFlights.push({
+                    direction: 'ida',
+                    airline: f.airline || '',
+                    flight: f.flight || '',
+                    origin: f.origin || '',
+                    dest: f.dest || '',
+                    dep: f.dep || null,
+                    arr: f.arr || null,
+                    flight_type: f.type || 'final',
+                    orden: i
+                });
+            });
+            flightSegmentsVuelta.forEach((f, i) => {
+                allFlights.push({
+                    direction: 'vuelta',
+                    airline: f.airline || '',
+                    flight: f.flight || '',
+                    origin: f.origin || '',
+                    dest: f.dest || '',
+                    dep: f.dep || null,
+                    arr: f.arr || null,
+                    flight_type: f.type || 'final',
+                    orden: i
+                });
+            });
+            
+            await fetch(`http://localhost:8000/api/viajes/${currentTripId}/vuelos`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(allFlights)
+            });
+        } catch(e) {
+            console.warn('No se pudieron sincronizar vuelos:', e);
+        }
+    }
+    
+    renderDay(); // Actualizar el itinerario para mostrar la ruta guardada
+    renderFlightsWidget();
+    closeLogisticsModal();
+}
+
+function switchLogisticsTab(tabId) {
+    // Reset all tabs
+    const allBtns = ['flight', 'car', 'public'];
+    allBtns.forEach(id => {
+        const btn = document.getElementById(`tab-btn-${id}`);
+        const form = document.getElementById(`logistics-${id}-form`);
+        
+        btn.classList.remove('border-primary', 'bg-primary/5');
+        btn.classList.add('border-outline-variant/30');
+        btn.querySelector('.text-primary')?.classList.remove('text-primary');
+        btn.querySelector('.text-on-surface-variant')?.classList.remove('text-on-surface-variant');
+        
+        form.classList.add('hidden');
+    });
+    
+    // Activate selected tab
+    const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+    const activeForm = document.getElementById(`logistics-${tabId}-form`);
+    
+    activeBtn.classList.remove('border-outline-variant/30');
+    activeBtn.classList.add('border-primary', 'bg-primary/5');
+    
+    activeBtn.querySelectorAll('span').forEach(s => s.classList.add('text-primary'));
+    
+    activeForm.classList.remove('hidden');
+    
+    if (tabId === 'flight') {
+        closeFlightDirection();
+    }
+}
+
+function renderFlightsWidget() {
+    const savedData = localStorage.getItem(LOGISTICS_KEY);
+    if (!savedData) return;
+    
+    const data = JSON.parse(savedData);
+    let ida = data.flightsIda || [];
+    if (!data.flightsIda && data.flights) ida = data.flights; // backward compat
+    let vuelta = data.flightsVuelta || [];
+    
+    // Filter out empty ones
+    ida = ida.filter(f => f.airline || f.flight || f.origin || f.dest);
+    vuelta = vuelta.filter(f => f.airline || f.flight || f.origin || f.dest);
+    
+    const widget = document.getElementById('widget-flights');
+    const content = document.getElementById('widget-flights-content');
+    
+    if (ida.length === 0 && vuelta.length === 0) {
+        widget.classList.add('hidden');
+        return;
+    }
+    
+    widget.classList.remove('hidden');
+    let html = '';
+    
+    const formatTime = (isoString) => {
+        if (!isoString) return '<span class="block text-[10px] uppercase mb-0.5 opacity-80">--/--</span><span class="block font-medium">--:--</span>';
+        const d = new Date(isoString);
+        const dateStr = d.toLocaleDateString([], { day: '2-digit', month: 'short' });
+        const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return `<span class="block text-[10px] uppercase mb-0.5 opacity-80">${dateStr}</span><span class="block font-medium">${timeStr}</span>`;
+    };
+    
+    const calculateWaitTime = (arr, dep) => {
+        if (!arr || !dep) return null;
+        const diffMs = new Date(dep) - new Date(arr);
+        if (diffMs <= 0) return null;
+        const hours = Math.floor(diffMs / (1000 * 60 * 60));
+        const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        return `${hours}h ${mins}m`;
+    };
+    
+    const renderRoute = (title, flights) => {
+        if (flights.length === 0) return '';
+        
+        flights.sort((a, b) => new Date(a.dep || 0) - new Date(b.dep || 0));
+        
+        let routeHtml = `<div><h5 class="text-xs font-bold text-primary uppercase tracking-wider mb-3">${title}</h5><div class="space-y-0 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-0.5 before:bg-outline-variant/30">`;
+        
+        flights.forEach((f, i) => {
+            let layoverHtml = '';
+            if (i > 0) {
+                const prev = flights[i-1];
+                const waitTime = calculateWaitTime(prev.arr, f.dep);
+                if (waitTime && (prev.type === 'escala' || f.type === 'escala')) {
+                    layoverHtml = `
+                        <div class="ml-6 py-2 text-xs font-medium text-amber-600 flex items-center gap-1 relative z-10 bg-surface-container-lowest w-max pr-2">
+                            <span class="material-symbols-outlined text-[14px]">schedule</span>
+                            Escala: ${waitTime}
+                        </div>
+                    `;
+                }
+            }
+            
+            routeHtml += `
+                ${layoverHtml}
+                <div class="relative pl-8 py-2">
+                    <div class="absolute left-[7px] top-4 w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-surface-container-lowest z-10"></div>
+                    <div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/30">
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="font-bold text-sm text-on-surface">${f.airline || 'Aerolínea'} ${f.flight || ''}</span>
+                            <span class="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full">${f.type === 'final' ? 'Final' : 'Escala'}</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-2 text-xs">
+                            <div class="text-center">
+                                <span class="block font-bold text-on-surface">${f.origin || 'Origen'}</span>
+                                <span class="text-on-surface-variant">${formatTime(f.dep)}</span>
+                            </div>
+                            <span class="material-symbols-outlined text-outline-variant text-sm mx-2">flight_takeoff</span>
+                            <div class="text-center">
+                                <span class="block font-bold text-on-surface">${f.dest || 'Destino'}</span>
+                                <span class="text-on-surface-variant">${formatTime(f.arr)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        routeHtml += `</div></div>`;
+        return routeHtml;
+    };
+    
+    html += renderRoute('Vuelos de Ida', ida);
+    html += renderRoute('Vuelos de Vuelta', vuelta);
+    
+    content.innerHTML = html;
+}
+
+function renderRouteMap() {
+    const mapContainer = document.getElementById('widget-map-container');
+    const mapLink = document.getElementById('widget-map-link');
+    
+    if (!destinations || destinations.length === 0 || !window.google || !google.maps) return;
+    
+    // Create map directions URL
+    const dirUrl = `https://www.google.com/maps/dir/${destinations.map(d => encodeURIComponent(d.city + ', ' + d.country)).join('/')}`;
+    mapLink.href = dirUrl;
+    
+    // Initialize map
+    const map = new google.maps.Map(mapContainer, {
+        zoom: 4,
+        center: { lat: 0, lng: 0 },
+        disableDefaultUI: true,
+        gestureHandling: 'none' // Prevent interactions to let click pass to link
+    });
+    
+    const bounds = new google.maps.LatLngBounds();
+    const geocoder = new google.maps.Geocoder();
+    
+    const path = [];
+    let processed = 0;
+    
+    destinations.forEach((dest, index) => {
+        geocoder.geocode({ address: `${dest.city}, ${dest.country}` }, (results, status) => {
+            if (status === 'OK' && results[0]) {
+                const location = results[0].geometry.location;
+                
+                // Add Marker
+                new google.maps.Marker({
+                    map: map,
+                    position: location,
+                    label: {
+                        text: (index + 1).toString(),
+                        color: 'white',
+                        fontWeight: 'bold'
+                    },
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 14,
+                        fillColor: '#0b57d0',
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: '#ffffff'
+                    }
+                });
+                
+                bounds.extend(location);
+                path[index] = location;
+            }
+            
+            processed++;
+            if (processed === destinations.length) {
+                map.fitBounds(bounds);
+                
+                const validPath = path.filter(p => p);
+                if (validPath.length > 1) {
+                    new google.maps.Polyline({
+                        map: map,
+                        path: validPath,
+                        geodesic: true,
+                        strokeColor: '#0b57d0',
+                        strokeOpacity: 0.5,
+                        strokeWeight: 3,
+                        icons: [{
+                            icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
+                            offset: '50%',
+                            repeat: '100px'
+                        }]
+                    });
+                }
+                
+                if (destinations.length === 1) {
+                    map.setZoom(10);
+                }
+            }
+        });
+    });
+}
+
+let transitMap = null;
+let transitDirectionsService = null;
+let transitDirectionsRenderer = null;
+let transitPlacesService = null;
+
+function calculateTransitRoute() {
+    const origin = document.getElementById('transit-origin').value;
+    const dest = document.getElementById('transit-dest').value;
+
+    if (!origin || !dest) {
+        alert("Por favor ingresa un origen y un destino.");
+        return;
+    }
+
+    if (!window.google || !google.maps) {
+        alert("Google Maps no está disponible.");
+        return;
+    }
+
+    document.getElementById('transit-results-container').classList.remove('hidden');
+    
+    document.getElementById('transit-directions-panel').innerHTML = '<div class="text-center p-4 text-on-surface-variant"><span class="material-symbols-outlined animate-spin block text-3xl mx-auto mb-2">refresh</span> Calculando ruta...</div>';
+
+    if (!transitMap) {
+        transitMap = new google.maps.Map(document.getElementById('transit-map'), {
+            zoom: 12,
+            center: { lat: 0, lng: 0 },
+            mapTypeControl: false,
+            streetViewControl: false
+        });
+        transitDirectionsService = new google.maps.DirectionsService();
+        transitDirectionsRenderer = new google.maps.DirectionsRenderer({
+            map: transitMap,
+            suppressMarkers: false,
+            polylineOptions: {
+                strokeColor: '#0b57d0',
+                strokeOpacity: 0.8,
+                strokeWeight: 5
+            }
+        });
+        transitPlacesService = new google.maps.places.PlacesService(transitMap);
+    }
+
+    const request = {
+        origin: origin,
+        destination: dest,
+        travelMode: google.maps.TravelMode[document.getElementById('transit-mode').value || 'TRANSIT'],
+        provideRouteAlternatives: true
+    };
+
+    transitDirectionsService.route(request, (result, status) => {
+        if (status == google.maps.DirectionsStatus.OK) {
+            transitDirectionsRenderer.setDirections(result);
+            const leg = result.routes[0].legs[0];
+            
+            // Guardar para cuando se haga click en Guardar Logistica
+            currentRouteCalculated = {
+                duration: leg.duration.text,
+                distance: leg.distance.text,
+                mode: document.getElementById('transit-mode').value || 'TRANSIT'
+            };
+            
+            renderTransitInstructions(leg);
+        } else {
+            currentRouteCalculated = null;
+            document.getElementById('transit-directions-panel').innerHTML = `
+                <div class="text-center p-4 text-error">
+                    <span class="material-symbols-outlined block text-3xl mx-auto mb-2">error</span>
+                    No se pudo encontrar una ruta de transporte público. (Estado: ${status})
+                </div>`;
+        }
+    });
+}
+
+function renderTransitInstructions(leg) {
+    const panel = document.getElementById('transit-directions-panel');
+    let html = `
+        <div class="mb-4 pb-4 border-b border-outline-variant/20">
+            <h4 class="font-bold text-lg text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined">schedule</span>
+                Tiempo estimado: ${leg.duration.text}
+            </h4>
+            <p class="text-sm text-on-surface-variant mt-1">Distancia: ${leg.distance.text}</p>
+        </div>
+        <div class="space-y-4">
+    `;
+
+    leg.steps.forEach((step, index) => {
+        let icon = 'directions_walk';
+        let color = 'text-on-surface-variant';
+        let bg = 'bg-surface-container-high';
+        
+        if (step.travel_mode === 'TRANSIT') {
+            const transitType = step.transit.line.vehicle.type;
+            if (transitType === 'BUS') { icon = 'directions_bus'; color = 'text-white'; bg = 'bg-blue-600'; }
+            else if (transitType === 'SUBWAY') { icon = 'subway'; color = 'text-white'; bg = 'bg-orange-500'; }
+            else if (transitType === 'TRAIN') { icon = 'train'; color = 'text-white'; bg = 'bg-green-600'; }
+            else if (transitType === 'TRAM') { icon = 'tram'; color = 'text-white'; bg = 'bg-purple-600'; }
+            else { icon = 'directions_transit'; color = 'text-white'; bg = 'bg-primary'; }
+        }
+
+        html += `
+            <div class="flex items-start gap-4">
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full ${bg} ${color} flex items-center justify-center shrink-0 z-10 shadow-sm">
+                        <span class="material-symbols-outlined text-[18px]">${icon}</span>
+                    </div>
+                    ${index < leg.steps.length - 1 ? '<div class="w-0.5 h-full bg-outline-variant/30 min-h-[30px] my-1"></div>' : ''}
+                </div>
+                <div class="pt-1 pb-2 flex-1">
+                    <div class="text-sm font-medium text-on-surface">${step.instructions}</div>
+                    ${step.distance && step.distance.text ? `<div class="text-xs text-on-surface-variant mt-1">${step.distance.text} • ${step.duration.text}</div>` : ''}
+                    ${step.transit ? `
+                        <div class="mt-2 p-2 bg-surface-container-low rounded-lg text-xs border border-outline-variant/20">
+                            <strong>Línea:</strong> ${step.transit.line.short_name || step.transit.line.name} <br>
+                            <strong>Hacia:</strong> ${step.transit.headsign || 'N/A'} <br>
+                            <strong>Paradas:</strong> ${step.transit.num_stops}
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+    });
+
+    html += `</div>`;
+    panel.innerHTML = html;
+}
+
+
+
+async function finalizeItinerary() {
+    if (!currentTripId) return;
+    
+    const btn = document.getElementById('btn-finalizar');
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">refresh</span> Finalizando...';
+
+    try {
+        const resp = await fetch(`http://localhost:8000/api/viajes/${currentTripId}/status`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ estado: 'Confirmado' })
+        });
+
+        if (resp.ok) {
+            btn.innerHTML = '<span class="material-symbols-outlined text-sm">check_circle</span> ¡Listo!';
+            setTimeout(() => {
+                window.location.href = '../dashboard/index.html?t=confirmados';
+            }, 1000);
+        } else {
+            throw new Error('Error al actualizar estado');
+        }
+    } catch (e) {
+        console.error(e);
+        // Fallback: Redirigir de todos modos si el backend falla pero queremos que el usuario sienta que terminó
+        window.location.href = '../dashboard/index.html?t=confirmados';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    init();
+    const btnFin = document.getElementById('btn-finalizar');
+    if (btnFin) btnFin.onclick = finalizeItinerary;
+});
+</script>
+
+<!-- Non-aggressive Delete Confirmation Modal -->
+<div id="delete-confirm-modal" class="fixed inset-0 bg-slate-900/40 z-[120] hidden items-center justify-center p-4 backdrop-blur-md transition-all duration-300">
+    <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in slide-in-from-bottom-4 duration-300">
+        <div class="p-8 text-center">
+            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <span class="material-symbols-outlined text-3xl">delete_sweep</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">¿Quitar destino?</h3>
+            <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-8">
+                Estás a punto de eliminar <span id="delete-dest-name" class="font-bold text-slate-900 dark:text-white"></span>. Se borrarán todas las actividades planeadas para este lugar.
+            </p>
+            <div class="flex flex-col gap-3">
+                <button onclick="confirmDeleteAction()" class="w-full py-4 bg-red-600 text-white rounded-2xl font-bold shadow-lg shadow-red-600/20 hover:scale-[1.02] active:scale-95 transition-all">
+                    Sí, eliminar destino
+                </button>
+                <button onclick="closeDeleteModal()" class="w-full py-4 text-slate-500 dark:text-slate-400 font-bold hover:bg-slate-100 dark:hover:bg-slate-700 rounded-2xl transition-all">
+                    Mantener destino
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../shared/utils/auto-translator.js"></script>
+<script src="../../shared/utils/avatar-loader.js"></script>
+
+<!-- Quick Add Destination Modal -->
+<div id="quick-add-dest-modal" class="fixed inset-0 bg-black/60 z-[110] hidden items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden p-8 animate-in fade-in zoom-in duration-300">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold font-headline text-on-surface">Añadir Destino</h3>
+            <button onclick="closeQuickAddDestModal()" class="text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        
+        <p class="text-sm text-on-surface-variant mb-6 leading-relaxed">
+            Escribe el nombre de una ciudad, provincia o país para añadirlo a tu itinerario.
+        </p>
+        
+        <div class="relative mb-8">
+            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary">search</span>
+            <input type="text" id="quick-dest-search" class="w-full bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-700 rounded-xl py-4 pl-12 pr-4 focus:border-primary focus:ring-0 outline-none transition-all text-lg" placeholder="Ej: Barcelona, España">
+        </div>
+        
+        <div class="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-700">
+            <button onclick="closeQuickAddDestModal()" class="px-6 py-3 text-on-surface-variant font-bold hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openQuickAddDestModal() {
+        const modal = document.getElementById('quick-add-dest-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        
+        const input = document.getElementById('quick-dest-search');
+        input.value = '';
+        input.focus();
+        
+        if (window.google && google.maps && google.maps.places && !window.quickAddAutocomplete) {
+            window.quickAddAutocomplete = new google.maps.places.Autocomplete(input, {
+                types: ['(regions)']
+            });
+            
+            window.quickAddAutocomplete.addListener('place_changed', onQuickPlaceSelected);
+        }
+    }
+
+    function closeQuickAddDestModal() {
+        const modal = document.getElementById('quick-add-dest-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    async function onQuickPlaceSelected() {
+        const place = window.quickAddAutocomplete.getPlace();
+        if (!place.geometry) return;
+
+        let countryName = "";
+        if (place.address_components) {
+            const countryComp = place.address_components.find(c => c.types.includes('country'));
+            if (countryComp) countryName = countryComp.long_name;
+        }
+
+        let photoUrl = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=80';
+        if (place.photos && place.photos.length > 0) {
+        if (place.place_id) {
+            photoUrl = `/api/places/${place.place_id}/photo?max_width=800`;
+        }
+        }
+
+        const newDest = {
+            id: Date.now().toString(),
+            city: place.name,
+            country: countryName || "Destino",
+            nights: 3,
+            photoUrl: photoUrl,
+            isCountry: place.types && place.types.includes('country')
+        };
+
+        destinations.push(newDest);
+        
+        if (!itineraries[newDest.id]) {
+            itineraries[newDest.id] = {};
+            for(let i=1; i<=newDest.nights; i++) {
+                itineraries[newDest.id][i] = [];
+            }
+        }
+
+        localStorage.setItem(DEST_KEY, JSON.stringify(destinations));
+        localStorage.setItem(ITIN_KEY, JSON.stringify(itineraries));
+
+        if (currentTripId) {
+            try {
+                const payload = destinations.map((d, i) => ({
+                    city: d.city,
+                    country: d.country,
+                    nights: d.nights,
+                    photo_url: d.photoUrl,
+                    orden: i
+                }));
+                
+                await fetch(`http://localhost:8000/api/viajes/${currentTripId}/destinos`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch(e) { console.warn("Error syncing new destination", e); }
+        }
+
+        closeQuickAddDestModal();
+        renderTabs();
+        selectDestination(destinations.length - 1);
+    }
+</script>
+
+</body>
+</html>
+
+
+
+

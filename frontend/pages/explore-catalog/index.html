@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Catálogo de Exploración - ITERA</title>
+<meta name="description" content="Catálogo completo de destinos y experiencias ITERA."/>
+<script>
+// Redirect to unified explore page preserving params
+const p = new URLSearchParams(window.location.search);
+let url = '../destinations/index.html';
+const parts = [];
+if (p.get('pid')) parts.push('pid=' + p.get('pid'));
+if (p.get('cat')) parts.push('cat=' + p.get('cat'));
+if (p.get('s'))   parts.push('s=' + p.get('s'));
+if (parts.length) url += '?' + parts.join('&');
+window.location.replace(url);
+</script>
+</head>
+<body>
+<div id="navbar-container"></div>
+<script src="../../shared/components/navbar/navbar.js"></script>
+<p>Redirigiendo a <a href="../destinations/index.html">Explorar</a>...</p>
+</body>
+</html>
+

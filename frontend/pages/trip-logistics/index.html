@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ITERA | Asistente de Viaje - Logística de Transporte</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Montserrat:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;family=Montserrat:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#f8f9fa",
+                    "surface-container-highest": "#e1e3e4",
+                    "outline-variant": "#c1c6d7",
+                    "tertiary-container": "#c84d00",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#2e3132",
+                    "on-surface": "#191c1d",
+                    "surface-tint": "#005ac4",
+                    "secondary-container": "#a1beff",
+                    "on-secondary-fixed": "#001a42",
+                    "primary": "#0058bf",
+                    "primary-fixed-dim": "#aec6ff",
+                    "on-tertiary-container": "#fffbff",
+                    "surface-dim": "#d9dadb",
+                    "on-secondary-container": "#2e4c85",
+                    "on-primary-container": "#fefcff",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#aec6ff",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "on-error": "#ffffff",
+                    "surface-container": "#edeeef",
+                    "surface-variant": "#e1e3e4",
+                    "inverse-on-surface": "#f0f1f2",
+                    "outline": "#727786",
+                    "tertiary-fixed": "#ffdbcd",
+                    "on-surface-variant": "#414755",
+                    "error-container": "#ffdad6",
+                    "primary-container": "#006fef",
+                    "on-primary-fixed-variant": "#004396",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "tertiary": "#9f3c00",
+                    "on-background": "#191c1d",
+                    "secondary-fixed": "#d8e2ff",
+                    "surface-container-low": "#f3f4f5",
+                    "on-primary-fixed": "#001a42",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "surface-container-high": "#e7e8e9",
+                    "surface": "#f8f9fa",
+                    "primary-fixed": "#d8e2ff",
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#aec6ff",
+                    "secondary": "#405d98",
+                    "on-tertiary-fixed": "#360f00",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed-variant": "#27457e",
+                    "background": "#f8f9fa"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<div id="navbar-container"></div>
+<script src="../../shared/components/navbar/navbar.js"></script>
+<!-- TopNavBar (Shared Component) -->
+
+<!-- SideNavBar (Shared Component) -->
+<aside class="h-screen w-64 fixed left-0 top-0 pt-28 bg-slate-50 dark:bg-slate-950 flex flex-col p-6 gap-2">
+<div class="mb-8 px-3">
+<div class="text-lg font-bold text-slate-900 dark:text-white">Asistente de Viaje</div>
+<div class="text-sm text-slate-400">Paso 3 de 4</div>
+<div class="mt-4 h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-3/4 rounded-full"></div>
+</div>
+</div>
+<nav class="space-y-1">
+<div class="flex items-center gap-3 text-slate-400 dark:text-slate-500 p-3 hover:text-slate-600 dark:hover:text-slate-300 transition-all duration-300 ease-in-out hover:bg-slate-200/30 dark:hover:bg-slate-800/50 rounded-xl cursor-pointer" onclick="window.location.href='../create-trip/index.html'">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-medium">Concepto</span>
+</div>
+<div class="flex items-center gap-3 text-slate-400 dark:text-slate-500 p-3 hover:text-slate-600 dark:hover:text-slate-300 transition-all duration-300 ease-in-out hover:bg-slate-200/30 dark:hover:bg-slate-800/50 rounded-xl cursor-pointer" onclick="window.location.href='../trip-route/index.html'">
+<span class="material-symbols-outlined">map</span>
+<span class="font-medium">Ruta</span>
+</div>
+<div class="flex items-center gap-3 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 rounded-xl p-3 shadow-sm shadow-blue-100/20 transition-all duration-300 ease-in-out cursor-default">
+<span class="material-symbols-outlined">flight_takeoff</span>
+<span class="font-medium">Logística</span>
+</div>
+<div class="flex items-center gap-3 text-slate-400 dark:text-slate-500 p-3 hover:text-slate-600 dark:hover:text-slate-300 transition-all duration-300 ease-in-out hover:bg-slate-200/30 dark:hover:bg-slate-800/50 rounded-xl cursor-pointer" onclick="window.location.href='../trip-detail/index.html'">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-medium">Itinerario</span>
+</div>
+</nav>
+<div class="mt-auto px-3">
+<button class="w-full py-3 px-4 rounded-xl border border-outline-variant text-on-surface-variant hover:bg-white transition-all font-medium">
+            Guardar Borrador
+        </button>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 pt-28 min-h-screen flex-1 p-10 bg-surface pb-32 max-w-6xl">
+
+<!-- Accordion Container -->
+<div class="space-y-6">
+<!-- Section 1: Flights (Expanded) -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_32px_48px_rgba(25,28,29,0.04)] overflow-hidden transition-all border border-white">
+<div class="p-8 flex items-center justify-between cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">flight</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-on-surface">Vuelos</h3>
+<p class="text-sm text-on-surface-variant">Detalles de llegadas y salidas globales</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">expand_less</span>
+</div>
+<div class="px-8 pb-10">
+<div class="grid grid-cols-12 gap-6">
+<!-- Flight Entry 1 -->
+<div class="col-span-12 p-6 rounded-xl bg-surface-container-low grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Aerolínea</label>
+<input id="log-airline" class="w-full bg-surface-container-lowest border-none rounded-lg focus:ring-2 focus:ring-surface-tint text-sm py-3 px-4" placeholder="Nombre de aerolínea" type="text" value="Emirates"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Número de Vuelo</label>
+<input id="log-flight" class="w-full bg-surface-container-lowest border-none rounded-lg focus:ring-2 focus:ring-surface-tint text-sm py-3 px-4" placeholder="ej. AA123" type="text" value="EK 202"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Origen</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-lg">flight_takeoff</span>
+<input id="log-origin" class="w-full bg-surface-container-lowest border-none rounded-lg focus:ring-2 focus:ring-surface-tint text-sm py-3 pl-10 pr-4" placeholder="Código de aeropuerto" type="text" value="DXB - Dubai"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Destino</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-lg">flight_land</span>
+<input id="log-dest" class="w-full bg-surface-container-lowest border-none rounded-lg focus:ring-2 focus:ring-surface-tint text-sm py-3 pl-10 pr-4" placeholder="Código de aeropuerto" type="text" value="JFK - Nueva York"/>
+</div>
+</div>
+<div class="col-span-1 md:col-span-2 space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Fecha y Hora de Salida</label>
+<input id="log-dep" class="w-full bg-surface-container-lowest border-none rounded-lg focus:ring-2 focus:ring-surface-tint text-sm py-3 px-4" type="datetime-local"/>
+</div>
+<div class="col-span-1 md:col-span-2 space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Fecha y Hora de Llegada</label>
+<input id="log-arr" class="w-full bg-surface-container-lowest border-none rounded-lg focus:ring-2 focus:ring-surface-tint text-sm py-3 px-4" type="datetime-local"/>
+</div>
+</div>
+<!-- Action Bar for Section -->
+<div class="col-span-12 flex justify-end">
+<button class="flex items-center gap-2 text-primary font-semibold text-sm hover:underline">
+<span class="material-symbols-outlined text-lg">add_circle</span>
+                            Añadir Regreso o Conexión
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Internal Transport (Collapsed) -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_8px_24px_rgba(25,28,29,0.02)] overflow-hidden transition-all border border-white/50">
+<div class="p-8 flex items-center justify-between cursor-pointer group hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined">directions_transit</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-on-surface">Transporte Interno</h3>
+<p class="text-sm text-on-surface-variant">Movilidad entre ciudades y puntos de interés</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-on-surface transition-colors">expand_more</span>
+</div>
+</section>
+<!-- Section 3: Car Rental & Private Hire (Collapsed) -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_8px_24px_rgba(25,28,29,0.02)] overflow-hidden transition-all border border-white/50">
+<div class="p-8 flex items-center justify-between cursor-pointer group hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined">directions_car</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-on-surface">Alquiler de Coches</h3>
+<p class="text-sm text-on-surface-variant">Arreglos de conducción propia o chofer privado</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-on-surface transition-colors">expand_more</span>
+</div>
+</section>
+<!-- Quick Selection Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-12">
+<div class="p-6 bg-surface-container-low rounded-xl flex flex-col gap-4">
+<span class="material-symbols-outlined text-3xl text-primary">train</span>
+<h4 class="font-bold text-lg">Eurail Pass</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Viajes en tren integrados en 33 países europeos. Ideal para itinerarios flexibles.</p>
+<button class="mt-auto py-2 px-4 bg-primary text-white rounded-full text-sm font-medium w-fit">Explorar Opciones</button>
+</div>
+<div class="p-6 bg-surface-container-low rounded-xl flex flex-col gap-4">
+<span class="material-symbols-outlined text-3xl text-primary">airport_shuttle</span>
+<h4 class="font-bold text-lg">Traslados Privados</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Transporte de lujo puerta a puerta con conductores profesionales y bienvenida.</p>
+<button class="mt-auto py-2 px-4 bg-surface-container-lowest text-primary rounded-full text-sm font-medium w-fit">Solicitar Presupuesto</button>
+</div>
+<div class="p-6 bg-surface-container-low rounded-xl flex flex-col gap-4">
+<span class="material-symbols-outlined text-3xl text-primary">map</span>
+<h4 class="font-bold text-lg">Logística Local</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Consulta tarjetas de tránsito y mapas de metro local para tus ciudades seleccionadas.</p>
+<button class="mt-auto py-2 px-4 bg-surface-container-lowest text-primary rounded-full text-sm font-medium w-fit">Ver Mapas</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Fixed Bottom Bar -->
+<footer class="fixed bottom-0 w-full glass-nav z-40 py-6 px-12 shadow-[0_-12px_40px_rgba(0,0,0,0.03)] flex items-center justify-between">
+<div class="ml-64 flex-1 flex items-center justify-between">
+<button class="flex items-center gap-2 py-3 px-8 rounded-full border border-outline-variant text-on-surface font-semibold hover:bg-surface-container-low transition-all" onclick="window.location.href='../trip-route/index.html'">
+<span class="material-symbols-outlined">arrow_back</span>
+            Anterior
+        </button>
+<div class="flex items-center gap-6">
+<span class="hidden md:block text-sm font-medium text-on-surface-variant">Tus cambios se guardan automáticamente</span>
+<button class="flex items-center gap-2 py-3 px-10 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all" onclick="saveAndContinue()">
+            Siguiente Paso
+            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const currentTripId = localStorage.getItem('current_trip_id');
+        const LOGISTICS_KEY = currentTripId ? 'itera_trip_logistics_' + currentTripId : 'itera_trip_logistics';
+        
+        const savedData = localStorage.getItem(LOGISTICS_KEY);
+        if (savedData) {
+            const data = JSON.parse(savedData);
+            if (data.airline) document.getElementById('log-airline').value = data.airline;
+            if (data.flight) document.getElementById('log-flight').value = data.flight;
+            if (data.origin) document.getElementById('log-origin').value = data.origin;
+            if (data.dest) document.getElementById('log-dest').value = data.dest;
+            if (data.dep) document.getElementById('log-dep').value = data.dep;
+            if (data.arr) document.getElementById('log-arr').value = data.arr;
+        }
+
+        window.saveAndContinue = function() {
+            const data = {
+                airline: document.getElementById('log-airline').value,
+                flight: document.getElementById('log-flight').value,
+                origin: document.getElementById('log-origin').value,
+                dest: document.getElementById('log-dest').value,
+                dep: document.getElementById('log-dep').value,
+                arr: document.getElementById('log-arr').value
+            };
+            localStorage.setItem(LOGISTICS_KEY, JSON.stringify(data));
+            window.location.href = '../trip-detail/index.html';
+        };
+    });
+</script>
+
+<script src="../../shared/utils/auto-translator.js"></script>
+<script src="../../shared/utils/avatar-loader.js"></script>
+<script>
+function changeSystemLanguage(lang) {
+    localStorage.setItem('itera_lang', lang);
+    const dd = document.getElementById('lang-dropdown');
+    if (dd) dd.classList.add('hidden');
+    const display = document.getElementById('current-lang-display');
+    if (display) display.textContent = lang.toUpperCase();
+    const flagImg = document.getElementById('current-lang-flag');
+    if (flagImg) {
+        const codeMap = { 'en': 'us', 'pt': 'br', 'zh': 'cn', 'ja': 'jp' };
+        const flagCode = codeMap[lang.toLowerCase()] || lang.toLowerCase();
+        flagImg.src = `https://flagcdn.com/w20/${flagCode}.png`;
+    }
+    if (window.autoTranslatePage) {
+        window.autoTranslatePage(lang);
+    } else {
+        window.location.reload();
+    }
+}
+document.addEventListener('DOMContentLoaded', function() {
+    var savedLang = localStorage.getItem('itera_lang') || 'es';
+    var el = document.getElementById('current-lang-display');
+    if (el) el.textContent = savedLang.toUpperCase();
+});
+document.addEventListener('click', function(e) {
+    var btn = e.target.closest('button[onclick*="lang-dropdown"]');
+    var dd = document.getElementById('lang-dropdown');
+    if (!btn && dd && !dd.classList.contains('hidden')) dd.classList.add('hidden');
+});
+</script>
+</body></html>
+
+
+
+
+

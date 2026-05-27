@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ITERA | SereneNavigator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Outfit:wght@400;500;600;700;800;900&amp;family=Inter:wght@400;500;600&amp;family=Caveat:wght@400;700&amp;family=Montserrat:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-container": "#fefcff",
+                    "on-background": "#191c1d",
+                    "surface-tint": "#005ac4",
+                    "on-surface": "#191c1d",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#414755",
+                    "on-primary-fixed": "#001a42",
+                    "primary-container": "#006fef",
+                    "outline-variant": "#c1c6d7",
+                    "primary": "#0058bf",
+                    "on-primary": "#ffffff",
+                    "on-secondary-container": "#2e4c85",
+                    "inverse-primary": "#aec6ff",
+                    "surface-bright": "#f8f9fa",
+                    "on-secondary-fixed-variant": "#27457e",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "tertiary-container": "#c84d00",
+                    "inverse-surface": "#2e3132",
+                    "on-primary-fixed-variant": "#004396",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "on-secondary": "#ffffff",
+                    "background": "#f8f9fa",
+                    "tertiary": "#9f3c00",
+                    "outline": "#727786",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#f8f9fa",
+                    "on-secondary-fixed": "#001a42",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#ffdbcd",
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface-variant": "#e1e3e4",
+                    "primary-fixed": "#d8e2ff",
+                    "surface-dim": "#d9dadb",
+                    "primary-fixed-dim": "#aec6ff",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#e1e3e4",
+                    "on-tertiary-container": "#fffbff",
+                    "on-tertiary-fixed": "#360f00",
+                    "surface-container-low": "#f3f4f5",
+                    "surface-container-high": "#e7e8e9",
+                    "secondary": "#405d98",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#d8e2ff",
+                    "secondary-fixed-dim": "#aec6ff",
+                    "error-container": "#ffdad6",
+                    "surface-container": "#edeeef",
+                    "secondary-container": "#a1beff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Outfit", "Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"],
+                    "handwritten": ["Caveat"]
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      /* Ocultar banner de canal alfa de Google Maps */
+      .gm-banner, 
+      .gm-style-banner,
+      div[style*="z-index: 1000000"],
+      div:has(> button[aria-label="Descartar"]),
+      div:has(> button[aria-label="Dismiss"]) {
+        display: none !important;
+      }
+      @keyframes moveBackground {
+        from { background-position: 0% 0%; }
+        to { background-position: 0% -1000%; }
+      }
+      
+      .glass-button-container {
+        transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 2.2);
+      }
+      
+      .glass-button-content {
+        transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 2.2);
+      }
+      body { 
+        font-family: 'Inter', sans-serif; 
+        background-color: #fde8d0;
+        margin: 0;
+        position: relative;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        z-index: -999;
+        background-image: 
+          linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 80%),
+          url('https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96?q=80&w=2000&auto=format&fit=crop');
+        background-size: cover;
+        background-position: top center;
+        background-blend-mode: normal;
+        pointer-events: none;
+      }
+      .skeleton-shimmer { background: linear-gradient(90deg,#e2e8f0 25%,#cbd5e1 50%,#e2e8f0 75%); background-size: 600px 100%; animation: shimmer 1.5s infinite; }
+      h1, h2, h3, .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+      .no-line { border: none !important; }
+      .tonal-transition { transition: background-color 0.3s ease; }
+      .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      
+      /* Google Places styling override si es necesario */
+      /* Estilos para el Autocomplete de Google (pac-container) */
+      .pac-container {
+        z-index: 100000 !important;
+        border-radius: 1.5rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        background-color: rgba(255, 255, 255, 0.85) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        font-family: 'Inter', sans-serif !important;
+        box-shadow: 0 20px 40px -10px rgba(0,0,0,0.15) !important;
+        margin-top: 10px !important;
+        overflow: hidden !important;
+        padding: 8px 0 !important;
+      }
+
+      .pac-item {
+        padding: 12px 20px !important;
+        border-top: 1px solid rgba(0, 0, 0, 0.03) !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        transition: all 0.2s ease !important;
+        color: #475569 !important;
+        line-height: 1.4 !important;
+      }
+
+      .pac-item:first-child { border-top: none !important; }
+
+      .pac-item:hover {
+        background-color: rgba(255, 255, 255, 0.5) !important;
+      }
+
+      .pac-item-selected {
+        background-color: rgba(0, 88, 191, 0.05) !important;
+      }
+
+      .pac-icon {
+        display: none !important; /* Quitamos el icono feo por defecto */
+      }
+
+      /* Añadimos un icono personalizado antes de cada item */
+      .pac-item::before {
+        content: 'location_on';
+        font-family: 'Material Symbols Outlined';
+        font-size: 20px;
+        color: #0058bf;
+        opacity: 0.7;
+      }
+
+      .pac-item-query {
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        color: #1e293b !important;
+        padding-right: 0 !important;
+      }
+
+      .pac-matched {
+        color: #0058bf !important;
+      }
+
+      .hdpi.pac-logo::after {
+        display: none !important; /* Quitar logo de Google para limpieza visual */
+      }
+      
+      .polaroid-shadow {
+          box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 5px 15px -8px rgba(0, 0, 0, 0.1);
+      }
+      .canvas-bg {
+          background-color: #f8f9fa;
+          background-image: radial-gradient(#e1e3e4 0.5px, transparent 0.5px);
+          background-size: 24px 24px;
+      }
+      
+      @keyframes toss-from-right {
+        0% { translate: 25vw 20vh; scale: 0.8; opacity: 0; }
+        100% { translate: 0 0; scale: 1; opacity: 1; }
+      }
+      @keyframes toss-from-left {
+        0% { translate: -25vw 20vh; scale: 0.8; opacity: 0; }
+        100% { translate: 0 0; scale: 1; opacity: 1; }
+      }
+      .polaroid-photo { opacity: 0; }
+      /* Left Group */
+      .gallery-in-view .animate-toss-1 { animation: toss-from-left 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0s both; }
+      .gallery-in-view .animate-toss-3 { animation: toss-from-left 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
+      .gallery-in-view .animate-toss-4 { animation: toss-from-left 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+      .gallery-in-view .animate-toss-8 { animation: toss-from-left 2.0s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; }
+      /* Right Group */
+      .gallery-in-view .animate-toss-2 { animation: toss-from-right 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+      .gallery-in-view .animate-toss-5 { animation: toss-from-right 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+      .gallery-in-view .animate-toss-6 { animation: toss-from-right 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
+      .gallery-in-view .animate-toss-7 { animation: toss-from-right 1.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both; }
+      .gallery-in-view .animate-toss-9 { animation: toss-from-right 1.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both; }
+      .gallery-in-view .animate-toss-10 { animation: toss-from-right 2.1s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both; }
+      .gallery-in-view .animate-toss-11 { animation: toss-from-left 2.2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both; }
+      
+
+      
+       @keyframes fly-plane {
+        0% { transform: translate(-120vw, 0px); opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { transform: translate(120vw, 0px); opacity: 0; }
+      }
+        @keyframes wing-bank {
+        0%, 100% { transform: rotate(90deg) rotateX(0deg); }
+        25% { transform: rotate(90deg) rotateX(35deg); }
+        50% { transform: rotate(90deg) rotateX(-35deg); }
+        75% { transform: rotate(90deg) rotateX(35deg); }
+      }
+      @keyframes trail-puff {
+        0% { transform: scale(0.6) translateX(0); opacity: 0; }
+        10% { opacity: 0.8; }
+        100% { transform: scale(2.5) translateX(-250px); opacity: 0; }
+      }
+      @keyframes fly-plane-straight {
+        0% { transform: translate(-120vw, -50%); opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { transform: translate(120vw, -50%); opacity: 0; }
+      }
+      @keyframes wing-bank-straight {
+        0%, 100% { transform: rotate(90deg) rotateX(0deg); }
+        25% { transform: rotate(90deg) rotateX(30deg); }
+        50% { transform: rotate(90deg) rotateX(-30deg); }
+        75% { transform: rotate(90deg) rotateX(30deg); }
+      }
+      @keyframes reveal-hero-sync {
+        0%, 35% { clip-path: inset(0 100% 0 0); opacity: 0; }
+        36% { opacity: 1; }
+        55%, 100% { clip-path: inset(0 0 0 0); opacity: 1; }
+      }
+      @keyframes reveal-gallery-sync {
+        0%, 42% { clip-path: inset(0 100% 0 0); opacity: 0; }
+        43% { opacity: 1; }
+        53%, 100% { clip-path: inset(0 0 0 0); opacity: 1; }
+      }
+      .animate-airplane {
+        position: absolute;
+        animation: fly-plane 2.2s linear forwards;
+        perspective: 1000px;
+        z-index: 30;
+      }
+      .animate-airplane-straight {
+        position: absolute;
+        perspective: 1000px;
+        z-index: 30;
+        top: 50%;
+        left: 0;
+        opacity: 0;
+      }
+      .gallery-in-view .animate-airplane-straight {
+        animation: fly-plane-straight 2.2s linear forwards;
+      }
+      .plane-icon-wrap {
+        animation: wing-bank 1.5s ease-in-out infinite;
+        display: flex;
+        align-items: center;
+      }
+      .plane-icon-wrap-straight {
+        animation: wing-bank-straight 1.5s ease-in-out infinite;
+        display: flex;
+        align-items: center;
+      }
+      .cloud-trail {
+          position: absolute;
+          right: 80px;
+          display: flex;
+          gap: -20px;
+      }
+      .cloud-puff {
+          width: 100px;
+          height: 40px;
+          background: rgba(255, 255, 255, 0.9);
+          filter: blur(15px);
+          border-radius: 100%;
+          animation: trail-puff 0.6s ease-out infinite;
+      }
+      .cloud-puff:nth-child(2) { animation-delay: 0.15s; height: 30px; width: 120px; }
+      .cloud-puff:nth-child(3) { animation-delay: 0.3s; height: 50px; width: 140px; }
+      .animate-reveal-title {
+        animation: reveal-hero-sync 2.2s linear forwards;
+        clip-path: inset(0 100% 0 0);
+        opacity: 0;
+      }
+      .reveal-title-straight {
+        clip-path: inset(0 100% 0 0);
+        opacity: 0;
+      }
+      .gallery-in-view .reveal-title-straight {
+        animation: reveal-gallery-sync 2.2s linear forwards;
+      }
+      @keyframes reveal-up {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .reveal-up { opacity: 0; }
+      .gallery-in-view .reveal-up {
+        animation: reveal-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .reveal-char {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      .gallery-in-view .reveal-char {
+        animation: reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      /* ===== PREMIUM REVEAL ANIMATIONS ===== */
+      @keyframes slide-in-left-premium {
+        from { transform: translateX(-100px); opacity: 0; filter: blur(10px); }
+        to { transform: translateX(0); opacity: 1; filter: blur(0); }
+      }
+      @keyframes pop-in-premium {
+        0% { transform: scale(0.8) translateY(40px); opacity: 0; }
+        60% { transform: scale(1.05) translateY(-10px); opacity: 1; }
+        100% { transform: scale(1) translateY(0); opacity: 1; }
+      }
+      .premium-slide-in { opacity: 0; }
+      .gallery-in-view .premium-slide-in {
+        animation: slide-in-left-premium 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .premium-pop-in { opacity: 0; }
+      .gallery-in-view .premium-pop-in {
+        animation: pop-in-premium 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      }
+
+      /* ===== DESTINATION MODAL — Expande sobre la card ===== */
+      #dest-modal-overlay {
+        position: fixed; inset: 0;
+        background: transparent;
+        pointer-events: none;
+        z-index: 100; /* Por encima de todo */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease;
+      }
+      #dest-modal-overlay.active {
+        pointer-events: all;
+        background: rgba(0,0,0,0.15);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+      }
+      #dest-modal {
+        position: absolute;
+        width: 320px;
+        height: 450px;
+        border-radius: 2.5rem;
+        overflow: visible; /* Permitir que los elementos 3D sobresalgan si es necesario */
+        display: flex;
+        flex-direction: row;
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 40px 80px -15px rgba(0,0,0,0.3);
+        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transform: scale(0.9);
+        opacity: 0;
+        visibility: hidden;
+        z-index: 101;
+        transform-style: preserve-3d; /* Habilitar 3D */
+      }
+      #dest-modal-overlay.active #dest-modal {
+        transform: scale(1);
+        visibility: visible;
+        opacity: 1;
+        position: fixed;
+        width: min(500px, 90vw) !important;
+        height: min(650px, 80vh) !important;
+        left: 50% !important;
+        top: 50% !important;
+        translate: -50% -50% !important;
+      }
+      /* Efecto de profundidad para el contenido */
+      #dest-sidebar, #dest-modal-panel {
+        transform: translateZ(40px); /* El contenido flota sobre el fondo */
+      }
+      /* Sidebar en el nuevo diseño */
+      #dest-sidebar {
+        width: 54px; flex-shrink: 0;
+        background: rgba(255,255,255,0.3);
+        border-right: 1px solid rgba(255,255,255,0.2);
+        display: flex; flex-direction: column;
+        align-items: center; padding-top: 20px; gap: 8px;
+        border-radius: 2.5rem 0 0 2.5rem; /* Solo izquierda */
+      }
+      #dest-modal-panel {
+        flex: 1; overflow-y: auto;
+        background: rgba(255,255,255,0.92);
+        backdrop-filter: blur(32px);
+        -webkit-backdrop-filter: blur(32px);
+        scrollbar-width: none;
+        border-radius: 0 2.5rem 2.5rem 0; /* Solo derecha */
+      }
+      #dest-modal.from-right #dest-sidebar {
+        order: 1;
+        border-radius: 0 0 20px 0;
+        border-left: 1px solid rgba(0,0,0,0.07);
+      }
+      #dest-modal.from-left #dest-sidebar {
+        order: 0;
+        border-radius: 0 0 0 20px;
+        border-right: 1px solid rgba(0,0,0,0.07);
+      }
+      .dest-sidebar-btn {
+        width: 34px; height: 34px; border-radius: 9px;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; border: none;
+        background: transparent; color: #64748b;
+        transition: all 0.2s;
+      }
+      .dest-sidebar-btn:hover, .dest-sidebar-btn.active {
+        background: rgba(0,88,191,0.1); color: #0058bf;
+      }
+      /* Panel principal */
+      #dest-modal-panel {
+        flex: 1; overflow-y: auto;
+        background: rgba(255,255,255,0.92);
+        backdrop-filter: blur(32px);
+        -webkit-backdrop-filter: blur(32px);
+        scrollbar-width: none;
+        box-shadow: 0 20px 60px -8px rgba(0,0,0,0.22);
+      }
+      #dest-modal-panel::-webkit-scrollbar { display: none; }
+      #dest-modal.from-right #dest-modal-panel { border-radius: 0 0 0 20px; }
+      #dest-modal.from-left  #dest-modal-panel { border-radius: 0 0 20px 0; }
+      /* Panel de atracciones */
+      #dest-attractions-panel { display: none; }
+      #dest-attractions-panel.visible { display: block; }
+      .attraction-card {
+        display: flex; align-items: center; gap: 12px;
+        padding: 11px 14px; border-radius: 12px;
+        background: rgba(248,249,250,0.9); margin-bottom: 8px;
+        transition: background 0.15s;
+      }
+      .attraction-card:hover { background: #eef2ff; }
+      .attraction-thumb {
+        width: 64px; height: 64px; border-radius: 9px;
+        object-fit: cover; flex-shrink: 0; background: #e2e8f0;
+      }
+      .attraction-info { flex: 1; min-width: 0; }
+      .attraction-name {
+        font-size: 12px; font-weight: 700; color: #1e293b;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .attraction-rating { font-size: 11px; color: #f59e0b; font-weight: 600; }
+      .attraction-type { font-size: 11px; color: #64748b; }
+      .dest-photo-thumb {
+        width: 100px; height: 100px; object-fit: cover;
+        border-radius: 12px; cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.2s;
+        flex-shrink: 0;
+      }
+      .dest-photo-thumb.active, .dest-photo-thumb:hover {
+        border-color: #0058bf;
+        transform: scale(1.05);
+      }
+      .dest-badge {
+        display: inline-flex; align-items: center; gap: 4px;
+        background: rgba(0,88,191,0.08);
+        color: #0058bf;
+        border-radius: 999px;
+        padding: 4px 12px;
+        font-size: 12px; font-weight: 600;
+        text-transform: capitalize;
+      }
+      .star-rating { color: #f59e0b; }
+      @keyframes modal-spin {
+        to { transform: rotate(360deg); }
+      }
+      .modal-spinner {
+        width: 36px; height: 36px;
+        border: 3px solid rgba(0,88,191,0.15);
+        border-top-color: #0058bf;
+        border-radius: 50%;
+        animation: modal-spin 0.8s linear infinite;
+        margin: 40px auto;
+      }
+      /* Scrollbar Personalizado Premium */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+        transition: background 0.3s;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+      .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: #cbd5e1 transparent;
+      }
+</style>
+</head>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8b4X4Be-V-hYXJhGPzMyt-pMZ5QU0z40&v=alpha&libraries=places,maps3d,marker" async defer></script>
+<body class="text-on-surface min-h-screen pb-24 md:pb-0">
+
+<!-- TopNavBar provisto en el prompt -->
+<header id="main-header" class="fixed top-0 w-full z-50 transition-all duration-500 bg-transparent py-2 border-b border-white/10">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto transition-all duration-500" id="header-container">
+<div class="flex items-center gap-8">
+<span id="header-logo" class="text-3xl font-medium uppercase tracking-widest text-white transition-colors duration-300 drop-shadow-md" style="font-family: 'Montserrat', sans-serif;">ITER<span style="letter-spacing: -2px;">Λ</span></span>
+<nav class="hidden md:flex items-center gap-6">
+<a id="nav-link-1" class="text-white font-bold border-b-2 border-white pb-1 text-base transition-colors duration-300 drop-shadow-md" href="#">Inicio</a>
+<a class="nav-link text-white/95 hover:text-white transition-colors text-base font-bold duration-300 drop-shadow-md" href="../dashboard/index.html">Mis Viajes</a>
+<a class="nav-link text-white/95 hover:text-white transition-colors text-base font-bold duration-300 drop-shadow-md" href="../destinations/index.html">Explorar Destinos</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group hidden sm:block">
+<button onclick="document.getElementById('lang-dropdown').classList.toggle('hidden')" id="lang-btn" class="flex items-center gap-2 text-sm font-bold text-white bg-white/20 px-4 py-2 rounded-full hover:bg-white/30 transition-colors focus:outline-none backdrop-blur-sm border border-white/20 drop-shadow-md">
+<img id="current-lang-flag" src="https://flagcdn.com/w20/es.png" class="w-4 h-3 object-cover rounded-sm" alt="flag">
+<span id="current-lang-display" class="font-bold">ES</span>
+<span class="material-symbols-outlined text-sm">language</span>
+</button>
+<div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-36 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden z-50">
+                        <div class="py-1">
+                            <button onclick="changeSystemLanguage('es')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">es</span>
+                                    <img src="https://flagcdn.com/w20/es.png" class="w-4 h-3 object-cover rounded-sm" alt="es">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Español</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('en')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">en</span>
+                                    <img src="https://flagcdn.com/w20/us.png" class="w-4 h-3 object-cover rounded-sm" alt="en">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">English</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('pt')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">pt</span>
+                                    <img src="https://flagcdn.com/w20/br.png" class="w-4 h-3 object-cover rounded-sm" alt="pt">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Português</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('it')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">it</span>
+                                    <img src="https://flagcdn.com/w20/it.png" class="w-4 h-3 object-cover rounded-sm" alt="it">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Italiano</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('fr')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">fr</span>
+                                    <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-3 object-cover rounded-sm" alt="fr">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Français</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('de')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">de</span>
+                                    <img src="https://flagcdn.com/w20/de.png" class="w-4 h-3 object-cover rounded-sm" alt="de">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Deutsch</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('zh')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">zh</span>
+                                    <img src="https://flagcdn.com/w20/cn.png" class="w-4 h-3 object-cover rounded-sm" alt="zh">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">中文</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('ja')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">ja</span>
+                                    <img src="https://flagcdn.com/w20/jp.png" class="w-4 h-3 object-cover rounded-sm" alt="ja">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">日本語</span>
+                            </button>
+</div>
+                    </div>
+</div>
+<!-- Search Profile Button -->
+<button id="btn-buscar-perfil" onclick="window.openSearchUserModal()" class="p-2 hover:bg-white/20 rounded-lg transition-all active:scale-95 duration-150 text-white drop-shadow-md flex items-center justify-center animate-fade-in" title="Buscar Perfiles">
+    <span class="material-symbols-outlined">search</span>
+</button>
+<button id="notif-btn" class="p-2 hover:bg-white/20 rounded-lg transition-all active:scale-95 duration-150 text-white drop-shadow-md">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="relative group">
+<button id="avatar-btn" class="h-11 w-11 rounded-full overflow-hidden border-2 border-white/50 shadow-sm bg-white/20 focus:outline-none transition-all duration-300 hover:border-white" onclick="this.nextElementSibling.classList.toggle('hidden')">
+<img alt="User profile avatar" id="header-avatar" class="h-full w-full object-cover" data-alt="close-up portrait of a professional man with a friendly expression in bright studio lighting" src="https://cdn-icons-png.flaticon.com/512/149/149071.png"/>
+</button>
+<div class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700 overflow-hidden z-50">
+<div class="py-1">
+<a href="../profile/index.html" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-base">person</span>
+Perfil
+</a>
+<a href="#" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-base">settings</span>
+Configuración
+</a>
+<div class="border-t border-slate-100 dark:border-slate-700 my-1"></div>
+<a href="../auth/index.html" class="px-4 py-2 text-sm text-error hover:bg-error/5 flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-base">logout</span>
+Cerrar sesión
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+<script>
+// Manejo del scroll para el header
+window.addEventListener('scroll', () => {
+    const header = document.getElementById('main-header');
+    const container = document.getElementById('header-container');
+    const logo = document.getElementById('header-logo');
+    const navLink1 = document.getElementById('nav-link-1');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const langBtn = document.getElementById('lang-btn');
+    const notifBtn = document.getElementById('notif-btn');
+    const avatarBtn = document.getElementById('avatar-btn');
+
+    if (window.scrollY > 50) {
+        header.classList.remove('bg-transparent', 'py-2', 'border-white/10');
+        header.classList.add('bg-white/85', 'backdrop-blur-xl', 'shadow-sm', 'dark:bg-slate-900/85', 'py-0', 'border-slate-200/60', 'dark:border-slate-700/50');
+        
+        logo.classList.remove('text-white', 'drop-shadow-md');
+        logo.classList.add('text-slate-900', 'dark:text-white');
+        
+        if (navLink1) {
+            navLink1.classList.remove('text-white', 'border-white', 'drop-shadow-md');
+            navLink1.classList.add('text-blue-600', 'border-blue-600', 'dark:text-blue-400');
+        }
+        
+        navLinks.forEach(link => {
+            link.classList.remove('text-white/95', 'hover:text-white', 'drop-shadow-md');
+            link.classList.add('text-slate-600', 'hover:text-slate-900', 'dark:text-slate-400', 'dark:hover:text-white');
+        });
+        
+        if (langBtn) {
+            langBtn.classList.remove('text-white', 'bg-white/20', 'border-white/20', 'drop-shadow-md');
+            langBtn.classList.add('text-slate-700', 'dark:text-slate-200', 'bg-slate-100', 'dark:bg-slate-800', 'border-slate-200', 'dark:border-slate-700');
+        }
+        if (notifBtn) {
+            notifBtn.classList.remove('text-white', 'drop-shadow-md', 'hover:bg-white/20');
+            notifBtn.classList.add('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        }
+        const searchBtn = document.getElementById('btn-buscar-perfil');
+        if (searchBtn) {
+            searchBtn.classList.remove('text-white', 'drop-shadow-md', 'hover:bg-white/20');
+            searchBtn.classList.add('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        }
+        if (avatarBtn) {
+            avatarBtn.classList.remove('border-white/50', 'bg-white/20');
+            avatarBtn.classList.add('border-slate-200', 'dark:border-slate-700', 'bg-slate-100', 'dark:bg-slate-800');
+        }
+    } else {
+        header.classList.add('bg-transparent', 'py-2', 'border-white/10');
+        header.classList.remove('bg-white/85', 'backdrop-blur-xl', 'shadow-sm', 'dark:bg-slate-900/85', 'py-0', 'border-slate-200/60', 'dark:border-slate-700/50');
+        
+        logo.classList.add('text-white', 'drop-shadow-md');
+        logo.classList.remove('text-slate-900', 'dark:text-white');
+        
+        if (navLink1) {
+            navLink1.classList.add('text-white', 'border-white', 'drop-shadow-md');
+            navLink1.classList.remove('text-blue-600', 'border-blue-600', 'dark:text-blue-400');
+        }
+        
+        navLinks.forEach(link => {
+            link.classList.add('text-white/95', 'hover:text-white', 'drop-shadow-md');
+            link.classList.remove('text-slate-600', 'hover:text-slate-900', 'dark:text-slate-400', 'dark:hover:text-white');
+        });
+        
+        if (langBtn) {
+            langBtn.classList.add('text-white', 'bg-white/20', 'border-white/20', 'drop-shadow-md');
+            langBtn.classList.remove('text-slate-700', 'dark:text-slate-200', 'bg-slate-100', 'dark:bg-slate-800', 'border-slate-200', 'dark:border-slate-700');
+        }
+        if (notifBtn) {
+            notifBtn.classList.add('text-white', 'drop-shadow-md', 'hover:bg-white/20');
+            notifBtn.classList.remove('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        }
+        const searchBtn = document.getElementById('btn-buscar-perfil');
+        if (searchBtn) {
+            searchBtn.classList.add('text-white', 'drop-shadow-md', 'hover:bg-white/20');
+            searchBtn.classList.remove('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        }
+        if (avatarBtn) {
+            avatarBtn.classList.add('border-white/50', 'bg-white/20');
+            avatarBtn.classList.remove('border-slate-200', 'dark:border-slate-700', 'bg-slate-100', 'dark:bg-slate-800');
+        }
+    }
+});
+</script>
+<main>
+<!-- Hero Section: Redesigned Premium State -->
+<section class="relative w-full min-h-[700px] flex items-center justify-center text-center overflow-hidden pt-16">
+<div class="absolute inset-0 z-0">
+    <img alt="Fondo Hero" class="w-full h-full object-cover scale-105" 
+         src="../../shared/img/fondo10.jpeg" 
+         style="-webkit-mask-image: linear-gradient(to top, transparent 0%, black 40%); mask-image: linear-gradient(to top, transparent 0%, black 40%);"/>
+</div>
+
+<!-- Shape Divider Premium -->
+<div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-20">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-[calc(120%+1.3px)] h-[80px] fill-white/40 backdrop-blur-sm">
+        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5,73.84-4.36,147.54,16.88,218.2,35.26,69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path>
+        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path>
+        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.46C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"></path>
+    </svg>
+</div>
+
+<div class="relative z-10 max-w-4xl px-6">
+
+<div class="relative w-full">
+    <div class="absolute inset-0 pointer-events-none z-20 flex justify-center items-center overflow-visible">
+        <div class="animate-airplane">
+            <div class="flex items-center relative">
+                <!-- Cloud Trail -->
+                <div class="cloud-trail">
+                    <div class="cloud-puff"></div>
+                    <div class="cloud-puff"></div>
+                    <div class="cloud-puff"></div>
+                    <div class="cloud-puff"></div>
+                </div>
+                <!-- Plane Wrapper for Banking -->
+                <div class="plane-icon-wrap">
+                    <span class="material-symbols-outlined text-white text-[240px] drop-shadow-[0_15px_30px_rgba(0,0,0,0.3)]" style="font-variation-settings: 'FILL' 1;">flight</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h1 class="text-xl sm:text-2xl md:text-6xl font-black font-headline tracking-tighter text-white drop-shadow-2xl mb-8 animate-reveal-title relative z-10 uppercase leading-tight max-w-7xl mx-auto">
+        Tu próxima gran aventura comienza aquí
+    </h1>
+</div>
+<!-- Search bar in hero with Liquid Glass (Rectangular/Rounded-3xl) -->
+<div class="mt-8 mb-16 w-full max-w-2xl z-30 mx-auto relative group">
+    <div class="relative w-full flex font-semibold overflow-hidden text-black transition-all duration-700 rounded-3xl group-focus-within:rounded-[2rem]" style="box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);">
+        <!-- Glass Layers -->
+        <div class="absolute inset-0 z-0 overflow-hidden rounded-3xl group-focus-within:rounded-[2rem] transition-all duration-700" style="backdrop-filter: blur(4px); filter: url(#glass-distortion); isolation: isolate;"></div>
+        <div class="absolute inset-0 z-10" style="background: rgba(255, 255, 255, 0.2);"></div>
+        <div class="absolute inset-0 z-20 rounded-3xl group-focus-within:rounded-[2rem] overflow-hidden transition-all duration-700" style="box-shadow: inset 2px 2px 1px 0 rgba(255, 255, 255, 0.4), inset -1px -1px 1px 1px rgba(255, 255, 255, 0.3);"></div>
+
+        <!-- Input Content -->
+        <div class="relative z-30 w-full flex items-center transition-all duration-700 group-focus-within:scale-[0.99]">
+            <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                <svg class="h-6 w-6 text-slate-900 drop-shadow-sm" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                </svg>
+            </div>
+            <input 
+                id="google-places-search"
+                type="text" 
+                placeholder="Busca una ciudad o punto de interés..." 
+                class="w-full text-lg md:text-xl py-6 pl-16 pr-8 bg-transparent border-none focus:ring-0 text-slate-900 placeholder-slate-900/60 font-bold outline-none"
+                style="background: transparent;"
+            />
+        </div>
+    </div>
+</div>
+
+<div onclick="localStorage.removeItem('current_trip_id'); window.location.href='../create-trip/index.html'" class="relative flex font-semibold overflow-hidden text-black cursor-pointer transition-all duration-700 rounded-3xl px-10 py-6 hover:px-11 hover:py-7 hover:rounded-[2rem] mx-auto w-fit group glass-button-container" style="box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);">
+    <!-- Glass Layers -->
+    <div class="absolute inset-0 z-0 overflow-hidden rounded-3xl group-hover:rounded-[2rem] transition-all duration-700" style="backdrop-filter: blur(3px); filter: url(#glass-distortion); isolation: isolate;"></div>
+    <div class="absolute inset-0 z-10" style="background: rgba(255, 255, 255, 0.25);"></div>
+    <div class="absolute inset-0 z-20 rounded-3xl group-hover:rounded-[2rem] overflow-hidden transition-all duration-700" style="box-shadow: inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5);"></div>
+
+    <!-- Content -->
+    <div class="relative z-30 transition-all duration-700 group-hover:scale-95 flex items-center gap-3 glass-button-content">
+        <span class="material-symbols-outlined text-2xl">add</span>
+        <span class="text-xl font-bold tracking-wide">Crear Mi Primer Viaje</span>
+    </div>
+</div>
+</div>
+</section>
+<!-- Section 1: Destinos Destacados — Polaroid Gallery -->
+<section id="polaroid-gallery" class="w-full pt-20 pb-12 relative overflow-hidden bg-transparent -mt-20 z-30">
+    <!-- Header Text (Editorial Style) -->
+    <div class="w-full bg-black/15 backdrop-blur-md border-l-[12px] border-primary relative z-10 my-16 shadow-2xl">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 py-12 relative">
+            <!-- Airplane Straight Animation -->
+            <div class="absolute inset-0 pointer-events-none z-20 flex items-center overflow-visible">
+                <div class="animate-airplane-straight">
+                    <div class="flex items-center relative">
+                        <div class="cloud-trail">
+                            <div class="cloud-puff"></div>
+                            <div class="cloud-puff"></div>
+                            <div class="cloud-puff"></div>
+                        </div>
+                        <div class="plane-icon-wrap-straight">
+                            <span class="material-symbols-outlined text-sky-600/40 text-[160px] drop-shadow-[0_5px_10px_rgba(0,0,0,0.1)]" style="font-variation-settings: 'FILL' 1;">flight</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h2 id="gallery-title" class="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-2 font-headline reveal-title-straight drop-shadow-2xl">Próximos <span>Destinos</span></h2>
+        </div>
+    </div>
+    <!-- Polaroid Gallery (Asymmetric Layout) -->
+    <div class="relative w-full h-[1100px] mt-12 flex justify-center items-center">
+
+
+        <!-- Santorini -->
+        <div class="absolute top-[0%] left-[5%] md:left-[8%] transform -rotate-12 hover:rotate-0 hover:z-50 hover:scale-105 transition-all duration-500 cursor-pointer z-10 polaroid-photo animate-toss-1 dest-card" data-place-query="Santorini Greece" data-place-name="Santorini, Grecia">
+            <div class="bg-white p-3 pb-10 polaroid-shadow w-44 md:w-64">
+                <div class="aspect-square overflow-hidden mb-6">
+                    <img class="w-full h-full object-cover" data-alt="A breathtaking view of Oia, Santorini, during the golden hour." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoY4Csxp_Ia2BHmFC814KYkDuoK9Bgp6W2S_7Rp0e-kJVPwVPT8xu4LIXChkeeT6nRvQUntYLy5v6jBcHQ3DaJLM09KWlMGFLdB38wHdooF1F9G8YLJUeYnJpRYVmowvPKgT8W-bgodGQpwnn0-KGSCufd1Vc3ePeajq7t2upTc-j-LB3LlQOkNNUdPkSByK3tvZpUYglUmMCbifg9QV7vsax0RDRxFX4RZ2kozeM1Di6LaD7f_nRqv2EQEZ2NczURMmf3pFMlIfQF"/>
+                </div>
+                <p class="font-handwritten text-3xl text-on-surface text-center">Santorini, Grecia</p>
+            </div>
+        </div>
+        <!-- Kyoto -->
+        <div class="absolute top-[0%] right-[15%] md:right-[25%] transform rotate-12 hover:rotate-0 hover:z-50 hover:scale-105 transition-all duration-500 cursor-pointer z-10 polaroid-photo animate-toss-2 dest-card" data-place-query="Kyoto Japan" data-place-name="Kyoto, Japón">
+            <div class="bg-white p-3 pb-10 polaroid-shadow w-44 md:w-64">
+                <div class="aspect-square overflow-hidden mb-6">
+                    <img class="w-full h-full object-cover" data-alt="A serene traditional Japanese pagoda in Kyoto surrounded by vibrant autumn maple leaves." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBk_Y_vImLTx2DGmNWqzutdLUg6SUstpzfckAVSNAKV-HHPmU42ei5y3q-BBE1rbqCOcyUFMSBD59JrPumx7Edk4JLU7ahL3rVNGoirFInASrpEhuWrJ9EyrXVfIEf1el-elyKSURc_ta-ZdchXX8b_5km4-rniBigKXJIsCPdDJT-zmKjfZTHSsxNp1Kn86aVtNzObrl2tXcFXh-mb-889YFPV0PAmYS8f2YnclJOy3ZWphSToYjwoFrgjWbMQpwTk2ktn9wy9vgVr"/>
+                </div>
+                <p class="font-handwritten text-3xl text-on-surface text-center">Kyoto, Japón</p>
+            </div>
+        </div>
+
+
+        <!-- Paris -->
+        <div class="absolute top-[5%] left-[35%] md:left-[30%] transform -rotate-2 hover:rotate-0 hover:z-50 hover:scale-105 transition-all duration-500 cursor-pointer z-20 polaroid-photo animate-toss-3 dest-card" data-place-query="Paris France" data-place-name="París, Francia">
+            <div class="bg-white p-3 pb-10 polaroid-shadow w-44 md:w-64">
+                <div class="aspect-square overflow-hidden mb-6">
+                    <img class="w-full h-full object-cover" data-alt="The Eiffel Tower standing tall against a soft lavender and pink twilight sky in Paris." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkhI2LGxF5wP7NOALn0TJX8PLgqguHNo7I6hID_FKC2NQO5BzCaHT6abXOG8XYxwoa5Dck7zOP-7BjTm4kK08E6GchbOXfdH-4f-4Y0SHbKX3RKlFO9Xy8Og6CPGSR3w01SEAJ2FnhygbUMxGAgKP1r4xZVu-xV3quT844oF5wu9VMW3cfL8JVz3JY3U6A447_5Hriw_qREB7NJhL44KN4m9D2d6bFQjBqMP625lo9awcBt3utPPjJAqAtfVsw8pvDa1wKJ5LP8csL"/>
+                </div>
+                <p class="font-handwritten text-3xl text-on-surface text-center">París, Francia</p>
+            </div>
+        </div>
+        <!-- Machu Picchu -->
+        <div class="absolute top-[35%] left-[0%] md:left-[4%] transform rotate-6 hover:rotate-0 hover:z-50 hover:scale-105 transition-all duration-500 cursor-pointer z-30 polaroid-photo animate-toss-4 dest-card" data-place-query="Machu Picchu Peru" data-place-name="Machu Picchu, Perú">
+            <div class="bg-white p-3 pb-10 polaroid-shadow w-44 md:w-64">
+                <div class="aspect-square overflow-hidden mb-6">
+                    <img class="w-full h-full object-cover" data-alt="The ancient Incan citadel of Machu Picchu perched high in the Andes mountains of Peru." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWsh8sbyMKDGaMNiZhDHfuG0skGIB-7F06QSoFamtdIIrKPzU5yEO5qy6Nyk0OUvcRhuuSPJr0o3g6P3pe-SZOdra8KvkPLwYJOMLr9jhYSr_u5lGElg9_vjmwgF598O_Sfq6NOaEjJG94JNjO7PzaMSUVDfX9D4Lo4vpkgmdm24xhxqNdbgiF2lss4UD2FC7HMt2fk6eg3I1iU0-LZyoMZ-tJ4c6uF_dnk9g714sxR-AKIxX4e0-sA31TDRhc3HnkERiAjhTTvsXd"/>
+                </div>
+                <p class="font-handwritten text-3xl text-on-surface text-center">Machu Picchu, Perú</p>
+            </div>
+        </div>
+
+        <!-- Amalfi Coast -->
+        <div class="absolute top-[30%] right-[25%] md:right-[35%] transform rotate-3 hover:rotate-0 hover:z-50 hover:scale-105 transition-all duration-500 cursor-pointer z-40 polaroid-photo animate-toss-5 dest-card" data-place-query="Amalfi Coast Italy" data-place-name="Amalfi, Italia">
+            <div class="bg-white p-3 pb-10 polaroid-shadow w-44 md:w-64">
+                <div class="aspect-square overflow-hidden mb-6">
+                    <img class="w-full h-full object-cover" data-alt="The colorful coastal village of Positano on the Amalfi Coast, Italy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfITWBFz1spPeFYjaaupR62jCjkM8EsExhLBOH3gqGfeWVfmt2E67VqMslJXTevz7JLdhZ33Lid_ADnCE942PEC4y4aAXdHwyJFh5V8M3sIQSMFu8HlsNk9E4CE61Bm3tog6IOUu7W8d0M3Au9iGsKdEMDLiMHdmGi_T2C0fbhFgS7uo19uX9TPKJ6mC5bJsqFrok9Az62eEZhCWUTFz_yeROTU6su3vwv6qZ2V6bujCmHFsyYqXsBfFAo5JbGPqoMkYl7AyMZI3rq"/>
+                </div>
+                <p class="font-handwritten text-3xl text-on-surface text-center">Amalfi, Italia</p>
+            </div>
+        </div>
+
+        <!-- New York -->
+        <div class="absolute top-[15%] right-[2%] md:right-[6%] transform -rotate-6 hover:rotate-0 hover:z-50 hover:scale-105 transition-all duration-500 cursor-pointer z-[25] polaroid-photo animate-toss-6 dest-card" data-place-query="New York City USA" data-place-name="Nueva York, EE.UU.">
+            <div class="bg-white p-3 pb-10 polaroid-shadow w-44 md:w-64">
+                <div class="aspect-square overflow-hidden mb-6">
+                    <img class="w-full h-full object-cover" data-alt="New York city skyline" src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&q=80&w=600"/>
+                </div>
+                <p class="font-handwritten text-3xl text-on-surface text-center">Nueva York, EE.UU.</p>
+            </div>
+        </div>
+
+        <!-- Bali -->
+        <div class="absolute top-[45%] right-[0%] md:right-[4%] transform rotate-12 hover:rotate-0 hover:z-50 hover:scale-105 transition-all duration-500 cursor-pointer z-50 polaroid-photo animate-toss-7 dest-card" data-place-query="Bali Indonesia" data-place-name="Bali, Indonesia">
+            <div class="bg-white p-3 pb-10 polaroid-shadow w-44 md:w-64">
+                <div class="aspect-square overflow-hidden mb-6">
+                    <img class="w-full h-full object-cover" data-alt="Bali temple" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80&w=600"/>
+                </div>
+                <p class="font-handwritten text-3xl text-on-surface text-center">Bali, Indonesia</p>
+            </div>
+        </div>
+
+        <!-- Rome -->
+        <div class="absolute top-[25%] left-[20%] md:left-[25%] transform -rotate-12 hover:rotate-0 hover:z-50 hover:scale-105 transition-all duration-500 cursor-pointer z-60 polaroid-photo animate-toss-8 dest-card" data-place-query="Rome Italy" data-place-name="Roma, Italia">
+            <div class="bg-white p-3 pb-10 polaroid-shadow w-44 md:w-64">
+                <div class="aspect-square overflow-hidden mb-6">
+                    <img class="w-full h-full object-cover" data-alt="Colosseum in Rome" src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&q=80&w=600"/>
+                </div>
+                <p class="font-handwritten text-3xl text-on-surface text-center">Roma, Italia</p>
+            </div>
+        </div>
+
+        <!-- Rio -->
+        <div class="absolute top-[60%] left-[55%] md:left-[50%] transform rotate-6 hover:rotate-0 hover:z-50 hover:scale-105 transition-all duration-500 cursor-pointer z-70 polaroid-photo animate-toss-9 dest-card" data-place-query="Rio de Janeiro Brazil" data-place-name="Río de Janeiro, Brasil">
+            <div class="bg-white p-3 pb-10 polaroid-shadow w-44 md:w-64">
+                <div class="aspect-square overflow-hidden mb-6">
+                    <img class="w-full h-full object-cover" data-alt="Christ the Redeemer in Rio" src="https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&q=80&w=600"/>
+                </div>
+                <p class="font-handwritten text-3xl text-on-surface text-center">Río, Brasil</p>
+            </div>
+        </div>
+
+        <!-- Cairo -->
+        <div class="absolute top-[55%] right-[5%] md:right-[15%] transform -rotate-12 hover:rotate-0 hover:z-50 hover:scale-105 transition-all duration-500 cursor-pointer z-20 polaroid-photo animate-toss-10 dest-card" data-place-query="Cairo Egypt pyramids" data-place-name="El Cairo, Egipto">
+            <div class="bg-white p-3 pb-10 polaroid-shadow w-44 md:w-64">
+                <div class="aspect-square overflow-hidden mb-6">
+                    <img class="w-full h-full object-cover" data-alt="Pyramids of Giza" src="https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&q=80&w=600"/>
+                </div>
+                <p class="font-handwritten text-3xl text-on-surface text-center">El Cairo, Egipto</p>
+            </div>
+        </div>
+
+        <!-- Sydney -->
+        <div class="absolute top-[60%] left-[10%] md:left-[20%] transform rotate-12 hover:rotate-0 hover:z-50 hover:scale-105 transition-all duration-500 cursor-pointer z-30 polaroid-photo animate-toss-11 dest-card" data-place-query="Sydney Opera House Australia" data-place-name="Sídney, Australia">
+            <div class="bg-white p-3 pb-10 polaroid-shadow w-44 md:w-64">
+                <div class="aspect-square overflow-hidden mb-6">
+                    <img class="w-full h-full object-cover" data-alt="Sydney Opera House" src="https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&q=80&w=600"/>
+                </div>
+                <p class="font-handwritten text-3xl text-on-surface text-center">Sídney, Australia</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Section: Mapa Global Interactivo -->
+<section id="global-map-section" class="mb-24 relative group overflow-hidden">
+    <div class="w-full bg-black/15 backdrop-blur-md border-l-[12px] border-primary mb-12 shadow-xl">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 py-10 flex justify-between items-end">
+            <!-- Airplane Straight Animation -->
+            <div class="absolute inset-0 pointer-events-none z-20 flex items-center overflow-visible">
+                <div class="animate-airplane-straight">
+                    <div class="flex items-center relative">
+                        <div class="cloud-trail">
+                            <div class="cloud-puff"></div>
+                            <div class="cloud-puff"></div>
+                            <div class="cloud-puff"></div>
+                            <div class="cloud-puff"></div>
+                        </div>
+                        <div class="plane-icon-wrap-straight">
+                            <span class="material-symbols-outlined text-white/20 text-[160px] drop-shadow-[0_5px_10px_rgba(0,0,0,0.1)]" style="font-variation-settings: 'FILL' 1;">flight</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col relative z-30">
+                <h2 id="global-map-title" class="text-4xl md:text-5xl font-extrabold font-headline text-white mb-2 drop-shadow-md reveal-title-straight">Explora el <span>Mundo</span></h2>
+                <p class="text-white/90 text-lg md:text-xl drop-shadow-sm">Descubre los destinos más emblemáticos del planeta en nuestro mapa interactivo.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+        <div class="w-full h-[500px] md:h-[650px] shadow-2xl border border-white/10 relative" style="background: #0a0a0a;">
+            <!-- Globo Terráqueo 3D Fotorealista -->
+            <gmp-map-3d
+                id="home-globe-3d"
+                center="48,10,5000000"
+                tilt="0"
+                heading="0"
+                style="width: 100%; height: 100%;"
+                default-labels-disabled
+            ></gmp-map-3d>
+
+            <!-- Legend -->
+            <div class="absolute bottom-10 left-10 z-10 flex items-center gap-3 pointer-events-none">
+                <div class="flex items-center gap-2 bg-black/50 backdrop-blur-xl rounded-full px-5 py-2.5 border border-white/10">
+                    <span class="material-symbols-outlined text-xl text-white/80">public</span>
+                    <span class="text-sm tracking-tight text-white/80 font-medium" style="font-family: 'Montserrat', sans-serif;">Globo Interactivo 3D</span>
+                </div>
+            </div>
+
+            <!-- Fullscreen -->
+            <div class="absolute top-6 right-6 z-10 flex flex-col gap-2">
+                <button onclick="document.querySelector('#home-globe-3d').requestFullscreen()" class="w-10 h-10 bg-black/40 backdrop-blur-xl shadow-lg rounded-xl flex items-center justify-center text-white/80 hover:bg-black/60 transition-all border border-white/10">
+                    <span class="material-symbols-outlined">fullscreen</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Section 2: Planes rápidos para ti (Full Width Header) -->
+<section id="fast-plans-section" class="mb-16 relative group overflow-hidden">
+  <div class="w-full bg-black/15 backdrop-blur-md border-l-[12px] border-primary mb-12 shadow-xl premium-slide-in">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 py-10 flex justify-between items-end">
+      <!-- Airplane Straight Animation -->
+      <div class="absolute inset-0 pointer-events-none z-20 flex items-center overflow-visible">
+          <div class="animate-airplane-straight">
+              <div class="flex items-center relative">
+                  <div class="cloud-trail">
+                      <div class="cloud-puff"></div>
+                      <div class="cloud-puff"></div>
+                      <div class="cloud-puff"></div>
+                  </div>
+                  <div class="plane-icon-wrap-straight">
+                      <span class="material-symbols-outlined text-white/20 text-[160px] drop-shadow-[0_5px_10px_rgba(0,0,0,0.1)]" style="font-variation-settings: 'FILL' 1;">flight</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="flex flex-col relative z-30">
+        <h2 id="fast-plans-title" class="text-4xl md:text-5xl font-extrabold font-headline text-white mb-2 drop-shadow-md reveal-title-straight">Planes rápidos <span>para ti</span></h2>
+        <p class="text-white/90 text-lg md:text-xl drop-shadow-sm">Inicia tu aventura al instante con estas opciones pre-armadas.</p>
+      </div>
+      <div class="hidden md:flex gap-2 mb-2">
+        <button id="fast-plans-prev" class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors shadow-sm active:scale-95 z-10 border border-white/20">
+          <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <button id="fast-plans-next" class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors shadow-sm active:scale-95 z-10 border border-white/20">
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="max-w-7xl mx-auto px-6 md:px-12 premium-pop-in" style="animation-delay: 0.3s;">
+    <div class="relative -mx-4 px-4 overflow-hidden" style="mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
+      <div id="fast-plans" class="flex gap-6 overflow-x-auto custom-scrollbar cursor-grab active:cursor-grabbing select-none pb-4" style="scroll-behavior: auto;">
+          <!-- Skeletons while loading -->
+          <div class="flex-none w-[320px] animate-pulse">
+              <div class="bg-surface-container-lowest rounded-none overflow-hidden shadow-sm h-[360px] bg-slate-200"></div>
+          </div>
+          <div class="flex-none w-[320px] animate-pulse">
+              <div class="bg-surface-container-lowest rounded-none overflow-hidden shadow-sm h-[360px] bg-slate-200"></div>
+          </div>
+          <div class="flex-none w-[320px] animate-pulse">
+              <div class="bg-surface-container-lowest rounded-none overflow-hidden shadow-sm h-[360px] bg-slate-200"></div>
+          </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: Tus viajes en progreso -->
+<section id="user-trips-section" class="mb-24 relative group overflow-hidden">
+  <div class="w-full bg-black/15 backdrop-blur-md border-l-[12px] border-primary mb-12 shadow-xl premium-slide-in">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 py-10 flex justify-between items-end">
+      <!-- Airplane Straight Animation -->
+      <div class="absolute inset-0 pointer-events-none z-20 flex items-center overflow-visible">
+          <div class="animate-airplane-straight">
+              <div class="flex items-center relative">
+                  <div class="cloud-trail">
+                      <div class="cloud-puff"></div>
+                      <div class="cloud-puff"></div>
+                      <div class="cloud-puff"></div>
+                  </div>
+                  <div class="plane-icon-wrap-straight">
+                      <span class="material-symbols-outlined text-white/20 text-[160px] drop-shadow-[0_5px_10px_rgba(0,0,0,0.1)]" style="font-variation-settings: 'FILL' 1;">flight</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="flex flex-col relative z-30">
+        <h2 id="user-trips-title" class="text-4xl md:text-5xl font-extrabold font-headline text-white mb-2 drop-shadow-md reveal-title-straight">Tus viajes <span>en progreso</span></h2>
+        <p class="text-white/90 text-lg md:text-xl drop-shadow-sm">Continúa planificando tus próximas aventuras.</p>
+      </div>
+      <div class="hidden md:flex gap-2 mb-2">
+        <button id="user-trips-prev" class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors shadow-sm active:scale-95 z-10 border border-white/20">
+          <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <button id="user-trips-next" class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors shadow-sm active:scale-95 z-10 border border-white/20">
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 md:px-12 premium-pop-in" style="animation-delay: 0.3s;">
+    <div class="relative -mx-4 px-4 overflow-hidden" style="mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
+      <div id="user-trips" class="flex gap-8 overflow-x-auto pb-8 custom-scrollbar -mx-4 px-4 snap-x">
+          <!-- Skeletons while loading -->
+          <div class="flex-none w-[350px] snap-start animate-pulse">
+              <div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm h-72 border border-outline-variant/10 bg-slate-200"></div>
+          </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-6 pb-6 pt-3 md:hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)] z-50 rounded-t-3xl">
+<a class="flex flex-col items-center justify-center bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl px-5 py-2 group" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-[10px] font-medium Inter">Inicio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-blue-500 transition-all" href="../dashboard/index.html">
+<span class="material-symbols-outlined mb-1">luggage</span>
+<span class="text-[10px] font-medium Inter">Viajes</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-blue-500 transition-all" href="../destinations/index.html">
+<span class="material-symbols-outlined mb-1">explore</span>
+<span class="text-[10px] font-medium Inter">Explorar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-blue-500 transition-all" href="../profile/index.html">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="text-[10px] font-medium Inter">Perfil</span>
+</a>
+</nav>
+
+<script src="../../shared/utils/translations.js"></script>
+<script src="../../shared/utils/auto-translator.js"></script>
+<script src="../../shared/utils/avatar-loader.js"></script>
+<script src="home.js"></script>
+<script>
+// --- Funciones de Idioma ---
+function changeSystemLanguage(lang) {
+    localStorage.setItem('itera_lang', lang);
+    const dd = document.getElementById('lang-dropdown');
+    if (dd) dd.classList.add('hidden');
+    const display = document.getElementById('current-lang-display');
+    if (display) display.textContent = lang.toUpperCase();
+    const flagImg = document.getElementById('current-lang-flag');
+    if (flagImg) {
+        const codeMap = { 'en': 'us', 'pt': 'br', 'zh': 'cn', 'ja': 'jp' };
+        const flagCode = codeMap[lang.toLowerCase()] || lang.toLowerCase();
+        flagImg.src = `https://flagcdn.com/w20/${flagCode}.png`;
+    }
+    if (window.autoTranslatePage) {
+        window.autoTranslatePage(lang);
+    } else {
+        window.location.reload();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('itera_lang') || 'es';
+    const display = document.getElementById('current-lang-display');
+    if (display) display.textContent = savedLang.toUpperCase();
+});
+
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[onclick*="lang-dropdown"]');
+    const dropdown = document.getElementById('lang-dropdown');
+    if (!btn && dropdown && !dropdown.classList.contains('hidden')) {
+        dropdown.classList.add('hidden');
+    }
+});
+</script>
+<script>
+// --- Animación al hacer scroll ---
+document.addEventListener('DOMContentLoaded', () => {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('gallery-in-view');
+            }
+        });
+    }, { threshold: 0.15 });
+    
+    const elementsToObserve = ['polaroid-gallery', 'fast-plans-section', 'user-trips-section'];
+    elementsToObserve.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+    });
+});
+
+// --- Animación de letras una a una ---
+document.addEventListener('DOMContentLoaded', () => {
+    const titleIds = ['gallery-title', 'global-map-title', 'fast-plans-title', 'user-trips-title'];
+    
+    titleIds.forEach(id => {
+        const title = document.getElementById(id);
+        if (!title) return;
+
+        const whiteSpan = title.querySelector('span');
+        if (!whiteSpan) return;
+
+        const textPart1 = title.childNodes[0].textContent; 
+        const textPart2 = whiteSpan.textContent; 
+
+        title.innerHTML = ''; 
+
+        function createCharSpan(char, index) {
+            const span = document.createElement('span');
+            span.innerText = char === ' ' ? '\u00A0' : char;
+            span.className = 'reveal-char';
+            span.style.animationDelay = `${index * 0.04}s`;
+            return span;
+        }
+
+        // Parte 1
+        textPart1.split('').forEach((char, i) => {
+            title.appendChild(createCharSpan(char, i));
+        });
+
+        // Parte 2
+        const colorWrapper = document.createElement('span');
+        // Si es el de la galería usamos celeste, si no blanco (o el que corresponda)
+        if (id === 'gallery-title') colorWrapper.className = 'text-sky-600';
+        
+        textPart2.split('').forEach((char, i) => {
+            colorWrapper.appendChild(createCharSpan(char, textPart1.length + i));
+        });
+        title.appendChild(colorWrapper);
+    });
+});
+</script>
+<div id="footer-container" class="hidden md:block"></div>
+<script src="../../shared/components/footer/footer.js"></script>
+
+<!-- ===== DESTINATION MODAL ===== -->
+<div id="dest-modal-overlay" role="dialog" aria-modal="true" aria-label="Información del destino">
+  <div id="dest-modal">
+
+    <!-- Sidebar de iconos (siempre mirando adentro) -->
+    <nav id="dest-sidebar" aria-label="Secciones del destino">
+      <button class="dest-sidebar-btn active" id="sidebar-btn-info" title="Información" onclick="destShowSection('info')">
+        <span class="material-symbols-outlined text-[20px]">info</span>
+      </button>
+      <button class="dest-sidebar-btn" id="sidebar-btn-attractions" title="Atracciones" onclick="destShowSection('attractions')">
+        <span class="material-symbols-outlined text-[20px]">attractions</span>
+      </button>
+      <button class="dest-sidebar-btn" id="sidebar-btn-add" title="Agregar a viaje" onclick="destShowSection('add')">
+        <span class="material-symbols-outlined text-[20px]">add_circle</span>
+      </button>
+    </nav>
+
+    <!-- Panel principal con scroll -->
+    <div id="dest-modal-panel" class="flex-1 overflow-y-auto custom-scrollbar">
+
+      <!-- Hero Carousel -->
+      <div class="relative w-full overflow-hidden bg-slate-200 group/modal" style="height:320px;flex-shrink:0;">
+        <div id="dest-modal-carousel-track" class="flex h-full transition-transform duration-500 ease-out">
+          <!-- Slides loaded via JS -->
+        </div>
+        
+        <!-- Controles Carousel -->
+        <button id="dest-modal-prev" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/20 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover/modal:opacity-100 transition-opacity hover:bg-black/40 z-10">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <button id="dest-modal-next" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/20 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover/modal:opacity-100 transition-opacity hover:bg-black/40 z-10">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+        
+        <div id="dest-modal-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10"></div>
+
+        <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none"></div>
+        <button id="dest-modal-close" aria-label="Cerrar" class="absolute top-3 right-3 bg-black/40 backdrop-blur-sm text-white rounded-full w-9 h-9 flex items-center justify-center hover:bg-black/60 transition-all" style="z-index:2;">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+        <div class="absolute bottom-0 left-0 w-full p-4 bg-black/30 backdrop-blur-md border-l-[6px] border-primary" style="z-index:1;">
+          <h2 id="dest-modal-title" class="text-white text-lg font-extrabold font-headline drop-shadow-lg leading-tight"></h2>
+          <p id="dest-modal-address" class="text-white/90 text-[10px] mt-1 flex items-center gap-1">
+            <span class="material-symbols-outlined text-xs">location_on</span>
+            <span id="dest-modal-address-text"></span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Sección: Info general -->
+      <div id="dest-info-section" class="p-5">
+        <div id="dest-modal-spinner" class="modal-spinner"></div>
+        <div id="dest-modal-content" class="hidden">
+
+          <!-- Rating -->
+          <div class="flex flex-wrap items-center gap-3 mb-5">
+            <div class="flex items-center gap-1">
+              <div id="dest-modal-stars" class="star-rating text-base flex"></div>
+              <span id="dest-modal-rating" class="font-bold text-slate-800"></span>
+              <span id="dest-modal-reviews" class="text-slate-400 text-xs ml-1"></span>
+            </div>
+            <div id="dest-modal-open"></div>
+          </div>
+
+          <!-- Tipos -->
+          <div id="dest-modal-types" class="flex flex-wrap gap-2 mb-5"></div>
+
+          <!-- Descripción -->
+          <div id="dest-modal-desc-wrap" class="mb-5 hidden">
+            <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Sobre el destino</h3>
+            <p id="dest-modal-desc" class="text-slate-600 text-sm leading-relaxed"></p>
+          </div>
+
+          <!-- Info extra -->
+          <div id="dest-modal-extra" class="grid grid-cols-1 gap-2 mb-5"></div>
+
+          <!-- CTA -->
+          <button id="dest-modal-cta" class="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-3 rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 text-sm shadow-lg shadow-blue-200">
+            <span class="material-symbols-outlined">add_circle</span>
+            Agregar a mi viaje
+          </button>
+        </div>
+      </div>
+
+      <!-- Sección: Atracciones -->
+      <div id="dest-attractions-panel" class="p-5">
+        <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-4">Atracciones cercanas</h3>
+        <div id="dest-modal-spinner-attr" class="modal-spinner hidden"></div>
+        <div id="dest-attractions-list"></div>
+      </div>
+
+      <!-- Sección: Agregar a viaje -->
+      <div id="dest-add-panel" class="p-5 hidden">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest">Guardar en uno o más viajes</h3>
+          <button id="dest-btn-save-modal" class="bg-white hover:bg-blue-600 border-2 border-blue-600 text-blue-600 hover:text-white disabled:bg-slate-100 disabled:border-slate-200 disabled:text-slate-400 px-6 py-2 rounded-xl text-sm font-extrabold transition-all active:scale-95 shadow-lg shadow-blue-500/10" disabled>
+            Guardar
+          </button>
+        </div>
+        
+        <div id="dest-add-trips-list" class="space-y-2 mb-6 max-h-[220px] overflow-y-auto pr-1 custom-scrollbar">
+          <!-- Trips loaded via JS -->
+        </div>
+
+        <div class="border-t border-slate-100 pt-6">
+          <h4 class="text-slate-800 text-sm font-bold mb-3">O crea un viaje nuevo</h4>
+          <div class="flex gap-2">
+            <input type="text" id="dest-new-trip-name" placeholder="Nombre del viaje..." class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all">
+            <button id="dest-quick-create-btn" class="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-5 py-2.5 text-sm font-bold transition-all active:scale-95">Crear</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /dest-modal-panel -->
+  </div><!-- /dest-modal -->
+</div><!-- /overlay -->
+
+<script>
+// ===== DESTINATION MODAL LOGIC =====
+(function() {
+  const HOVER_DELAY = 1200;
+
+  const overlay   = document.getElementById('dest-modal-overlay');
+  const modal     = document.getElementById('dest-modal');
+  const closeBtn  = document.getElementById('dest-modal-close');
+  const track     = document.getElementById('dest-modal-carousel-track');
+  const prevBtn   = document.getElementById('dest-modal-prev');
+  const nextBtn   = document.getElementById('dest-modal-next');
+  const dotsEl    = document.getElementById('dest-modal-dots');
+  const titleEl   = document.getElementById('dest-modal-title');
+  const addrEl    = document.getElementById('dest-modal-address-text');
+  const spinner   = document.getElementById('dest-modal-spinner');
+  const content   = document.getElementById('dest-modal-content');
+  const starsEl   = document.getElementById('dest-modal-stars');
+  const ratingEl  = document.getElementById('dest-modal-rating');
+  const reviewEl  = document.getElementById('dest-modal-reviews');
+  const openEl    = document.getElementById('dest-modal-open');
+  const typesEl   = document.getElementById('dest-modal-types');
+  const descWrap  = document.getElementById('dest-modal-desc-wrap');
+  const descEl    = document.getElementById('dest-modal-desc');
+  const extraEl   = document.getElementById('dest-modal-extra');
+  const ctaBtn    = document.getElementById('dest-modal-cta');
+  const attrPanel = document.getElementById('dest-attractions-panel');
+  const attrList  = document.getElementById('dest-attractions-list');
+  const attrSpinner = document.getElementById('dest-modal-spinner-attr');
+  const infoSection = document.getElementById('dest-info-section');
+  const addPanel    = document.getElementById('dest-add-panel');
+  const tripsList   = document.getElementById('dest-add-trips-list');
+  const newTripInput = document.getElementById('dest-new-trip-name');
+  const createBtn   = document.getElementById('dest-quick-create-btn');
+
+  let placesService = null;
+  let cache = {};
+  let attrCache = {};
+  let currentPlaceGeometry = null;
+  let currentPlaceData = null; 
+  let currentSection = 'info';
+  let carouselIdx = 0;
+  let totalSlides = 0;
+  let autoplayTimer = null;
+
+  function startAutoplay() {
+    stopAutoplay();
+    if (totalSlides <= 1) return;
+    autoplayTimer = setInterval(() => {
+      carouselIdx = (carouselIdx + 1) % totalSlides;
+      updateCarousel();
+    }, 3000);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) clearInterval(autoplayTimer);
+  }
+
+  // Sidebar section toggle - expuesto globalmente
+  window.destShowSection = function(section) {
+    currentSection = section;
+    document.querySelectorAll('.dest-sidebar-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('sidebar-btn-' + section);
+    if (btn) btn.classList.add('active');
+
+    if (section === 'info') {
+      infoSection.style.display = '';
+      attrPanel.classList.remove('visible');
+      addPanel.classList.add('hidden');
+    } else if (section === 'attractions') {
+      infoSection.style.display = 'none';
+      attrPanel.classList.add('visible');
+      addPanel.classList.add('hidden');
+      loadAttractions();
+    } else if (section === 'add') {
+      infoSection.style.display = 'none';
+      attrPanel.classList.remove('visible');
+      addPanel.classList.remove('hidden');
+      loadTripsForAdding();
+    }
+  };
+
+  function initPlaces() {
+    const mapDiv = document.createElement('div');
+    const map = new google.maps.Map(mapDiv, { center: { lat: 0, lng: 0 }, zoom: 1 });
+    placesService = new google.maps.places.PlacesService(map);
+  }
+
+  function waitForGoogleMaps(cb) {
+    if (window.google && window.google.maps && window.google.maps.places) cb();
+    else setTimeout(() => waitForGoogleMaps(cb), 300);
+  }
+
+  waitForGoogleMaps(initPlaces);
+
+  // Abrir modal
+  function openModal(query, name, card) {
+    const rect = card.getBoundingClientRect();
+    
+    // Posicionamos el modal exactamente donde está la card inicialmente
+    modal.style.top = (rect.top + window.scrollY) + 'px';
+    modal.style.left = rect.left + 'px';
+    modal.style.width = rect.width + 'px';
+    modal.style.height = rect.height + 'px';
+    modal.style.margin = '0'; // Reset margin
+
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Reset UI
+    titleEl.textContent = name;
+    addrEl.textContent = '';
+    track.innerHTML = ''; 
+    dotsEl.innerHTML = '';
+    carouselIdx = 0;
+    
+    starsEl.innerHTML = ''; ratingEl.textContent = '';
+    reviewEl.textContent = ''; openEl.innerHTML = '';
+    typesEl.innerHTML = ''; 
+    descWrap.classList.add('hidden'); extraEl.innerHTML = '';
+    spinner.style.display = 'block'; content.classList.add('hidden');
+    attrList.innerHTML = ''; attrPanel.classList.remove('visible');
+    addPanel.classList.add('hidden');
+    infoSection.style.display = '';
+    currentPlaceGeometry = null;
+    currentPlaceData = null;
+    window.destShowSection('info');
+
+    if (cache[query]) {
+      currentPlaceData = cache[query];
+      renderPlace(cache[query]);
+    } else {
+      fetchPlace(query);
+    }
+  }
+
+  // --- LOGICA DE AGREGAR A VIAJE ---
+  const btnSaveModal = document.getElementById('dest-btn-save-modal');
+
+  async function loadTripsForAdding() {
+    tripsList.innerHTML = '<div class="modal-spinner"></div>';
+    btnSaveModal.disabled = true;
+    const user = JSON.parse(localStorage.getItem('itera_user'));
+    if (!user) return;
+
+    try {
+      const resp = await fetch(`http://localhost:8000/api/viajes?creador_id=${user.id}`);
+      if (!resp.ok) throw new Error();
+      const trips = await resp.json();
+
+      if (!trips.length) {
+        tripsList.innerHTML = '<p class="text-slate-400 text-sm text-center py-4">No tienes viajes creados aún.</p>';
+        return;
+      }
+
+      tripsList.innerHTML = trips.map(t => `
+        <label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-all group">
+          <div class="flex items-center gap-3">
+            <div class="relative flex items-center">
+              <input type="checkbox" value="${t.id}" class="dest-trip-cb peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-slate-300 bg-white checked:bg-blue-600 checked:border-blue-600 transition-all">
+              <span class="material-symbols-outlined absolute text-white opacity-0 peer-checked:opacity-100 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm pointer-events-none" style="font-variation-settings:'FILL' 1;">check</span>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-slate-800">${t.nombre}</p>
+              <p class="text-[10px] text-slate-400 uppercase font-medium">${t.destino_principal || 'Varios'}</p>
+            </div>
+          </div>
+          <div class="w-14 h-14 rounded-xl bg-slate-200 overflow-hidden ml-auto shadow-sm">
+             <img src="${t.foto_url || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=200'}" class="w-full h-full object-cover">
+          </div>
+        </label>
+      `).join('');
+
+      // Listener para activar botón
+      tripsList.querySelectorAll('.dest-trip-cb').forEach(cb => {
+        cb.onchange = () => {
+          const checked = tripsList.querySelectorAll('.dest-trip-cb:checked').length;
+          btnSaveModal.disabled = checked === 0;
+        };
+      });
+
+    } catch (e) {
+      tripsList.innerHTML = '<p class="text-red-400 text-sm text-center py-4">Error al cargar viajes.</p>';
+    }
+  }
+
+  btnSaveModal.onclick = async () => {
+    if (!currentPlaceData) return;
+    const checkedCbs = tripsList.querySelectorAll('.dest-trip-cb:checked');
+    if (!checkedCbs.length) return;
+
+    btnSaveModal.disabled = true;
+    const originalText = btnSaveModal.innerText;
+    btnSaveModal.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">refresh</span>';
+
+    const city = currentPlaceData.name || 'Destino';
+    const country = currentPlaceData.formatted_address ? currentPlaceData.formatted_address.split(',').pop().trim() : '';
+    let heroSrc = hero.src;
+    if (!heroSrc || heroSrc === window.location.href) {
+       heroSrc = 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=600';
+    }
+
+    let successCount = 0;
+    for (const cb of checkedCbs) {
+      const viajeId = cb.value;
+      try {
+        const resp = await fetch(`http://localhost:8000/api/viajes/${viajeId}/destinos`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            city: city,
+            country: country,
+            photo_url: heroSrc,
+            orden: 99,
+            google_place_id: currentPlaceData.place_id
+          })
+        });
+
+        if (resp.ok) {
+          localStorage.removeItem('itera_trip_destinations_' + viajeId);
+          successCount++;
+        }
+      } catch (e) {
+        console.error('Error saving to trip', viajeId, e);
+      }
+    }
+
+    if (successCount > 0) {
+      btnSaveModal.innerHTML = '<span class="material-symbols-outlined text-sm">check</span>';
+      setTimeout(() => {
+        destShowSection('info');
+        closeModal();
+        btnSaveModal.innerText = originalText;
+      }, 1000);
+    } else {
+      alert('No se pudo guardar el destino en los viajes seleccionados.');
+      btnSaveModal.disabled = false;
+      btnSaveModal.innerText = originalText;
+    }
+  };
+
+  createBtn.onclick = async () => {
+    const name = newTripInput.value.trim();
+    if (!name) return;
+    
+    createBtn.disabled = true;
+    createBtn.innerText = 'Creando...';
+    
+    const user = JSON.parse(localStorage.getItem('itera_user'));
+    
+    // Fechas por defecto (hoy y +7 días) ya que son obligatorias en el backend
+    const today = new Date();
+    const nextWeek = new Date();
+    nextWeek.setDate(today.getDate() + 7);
+    
+    const formatDate = (d) => d.toISOString().split('T')[0];
+
+    try {
+      const resp = await fetch('http://localhost:8000/api/viajes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: name,
+          creador_id: user.id,
+          destino_principal: currentPlaceData.name,
+          foto_url: hero.src,
+          fecha_inicio: formatDate(today),
+          fecha_fin: formatDate(nextWeek)
+        })
+      });
+      
+      if (resp.ok) {
+        const newTrip = await resp.json();
+        // El backend ya crea el destino principal automáticamente si se pasa en el Create?
+        // En ViajeService.java:188 no parece que lo haga, solo guarda el viaje.
+        // Pero en ViajeService.java:216 actualiza el viaje tras REEMPLAZAR destinos.
+        // El crearViaje (line 47) NO agrega el destino a la tabla destinos.
+        
+        let heroSrc = hero.src;
+        if (!heroSrc || heroSrc === window.location.href) {
+           heroSrc = 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=600';
+        }
+
+        const city = currentPlaceData.name || 'Destino';
+        const country = currentPlaceData.formatted_address ? currentPlaceData.formatted_address.split(',').pop().trim() : '';
+
+        // Guardamos el destino
+        await fetch(`http://localhost:8000/api/viajes/${newTrip.id}/destinos`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            city: city,
+            country: country,
+            photo_url: heroSrc,
+            orden: 99,
+            google_place_id: currentPlaceData.place_id
+          })
+        });
+        
+        // Invalidar caché
+        localStorage.removeItem('itera_trip_destinations_' + newTrip.id);
+
+        createBtn.innerHTML = '<span class="material-symbols-outlined text-sm">check</span>';
+        setTimeout(() => {
+          destShowSection('info');
+          closeModal();
+          newTripInput.value = '';
+          createBtn.innerHTML = 'Crear';
+        }, 1000);
+      } else {
+        throw new Error('Create failed');
+      }
+    } catch (e) {
+      console.error('[Quick Create]', e);
+      alert('Error al crear el viaje. Inténtalo de nuevo.');
+    } finally {
+      createBtn.disabled = false;
+      createBtn.innerText = 'Crear';
+    }
+  };
+
+  function closeModal() {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    stopAutoplay();
+    
+    // Esperamos a que termine la animación para resetear estilos
+    setTimeout(() => {
+      if (!overlay.classList.contains('active')) {
+        modal.style.top = '';
+        modal.style.left = '';
+        modal.style.width = '';
+        modal.style.height = '';
+      }
+    }, 600);
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // Fetch Google Places
+  function fetchPlace(query) {
+    if (!placesService) { setTimeout(() => fetchPlace(query), 400); return; }
+    placesService.findPlaceFromQuery({
+      query,
+      fields: ['place_id', 'name', 'geometry']
+    }, (results, status) => {
+      if (status !== google.maps.places.PlacesServiceStatus.OK || !results.length) {
+        showFallback(query);
+        return;
+      }
+      placesService.getDetails({
+        placeId: results[0].place_id,
+        fields: [
+          'place_id', 'name', 'formatted_address', 'rating', 'user_ratings_total',
+          'photos', 'types', 'opening_hours', 'formatted_phone_number',
+          'website', 'editorial_summary', 'price_level', 'url', 'geometry'
+        ]
+      }, (place, detailStatus) => {
+        if (detailStatus !== google.maps.places.PlacesServiceStatus.OK) {
+          showFallback(query);
+          return;
+        }
+        place.place_id = place.place_id || results[0].place_id;
+        cache[query] = place;
+        currentPlaceData = place;
+        renderPlace(place);
+      });
+    });
+  }
+
+  function renderPlace(place) {
+    spinner.style.display = 'none';
+    content.classList.remove('hidden');
+
+    // Guardar geometría para búsqueda de atracciones
+    if (place.geometry && place.geometry.location) {
+      currentPlaceGeometry = place.geometry.location;
+    }
+
+    // Fotos (Carousel)
+    const currentPhotos = place.photos || [];
+    if (currentPhotos.length > 0) {
+      totalSlides = Math.min(currentPhotos.length, 8);
+      track.innerHTML = currentPhotos.slice(0, 8).map((photo, i) => `
+        <div class="flex-none w-full h-full">
+          <img src="${photo.getUrl({ maxWidth: 1200, maxHeight: 800 })}" class="w-full h-full object-cover" alt="Foto ${i+1}">
+        </div>
+      `).join('');
+
+      dotsEl.innerHTML = Array.from({length: totalSlides}).map((_, i) => `
+        <button class="w-2 h-2 rounded-full bg-white/40 transition-all ${i === 0 ? 'bg-white w-4' : ''}" data-idx="${i}"></button>
+      `).join('');
+
+      updateCarousel();
+      startAutoplay();
+    }
+
+    // Dirección
+    addrEl.textContent = place.formatted_address || '';
+
+    // Rating
+    if (place.rating) {
+      const full = Math.floor(place.rating);
+      const half = place.rating - full >= 0.5;
+      let starsHtml = '';
+      for (let i = 0; i < 5; i++) {
+        if (i < full) starsHtml += '<span class="material-symbols-outlined text-base" style="font-variation-settings:\'FILL\' 1">star</span>';
+        else if (i === full && half) starsHtml += '<span class="material-symbols-outlined text-base" style="font-variation-settings:\'FILL\' 1">star_half</span>';
+        else starsHtml += '<span class="material-symbols-outlined text-base text-slate-300" style="font-variation-settings:\'FILL\' 1">star</span>';
+      }
+      starsEl.innerHTML = starsHtml;
+      ratingEl.textContent = place.rating.toFixed(1);
+      if (place.user_ratings_total) reviewEl.textContent = `(${place.user_ratings_total.toLocaleString()} reseñas)`;
+    }
+
+    // Abierto ahora
+    if (place.opening_hours) {
+      const isOpen = place.opening_hours.isOpen ? place.opening_hours.isOpen() : null;
+      if (isOpen !== null) {
+        openEl.innerHTML = isOpen
+          ? '<span class="dest-badge" style="background:rgba(16,185,129,0.1);color:#059669;"><span class="material-symbols-outlined text-sm">check_circle</span>Abierto ahora</span>'
+          : '<span class="dest-badge" style="background:rgba(239,68,68,0.1);color:#dc2626;"><span class="material-symbols-outlined text-sm">cancel</span>Cerrado ahora</span>';
+      }
+    }
+
+    // Tipos
+    const skipTypes = new Set(['point_of_interest','establishment','natural_feature','political','country','locality','administrative_area_level_1']);
+    const typeLabels = {
+      tourist_attraction: '🗺️ Atracción turística', lodging: '🏨 Alojamiento',
+      restaurant: '🍽️ Restaurante', museum: '🏛️ Museo', park: '🌿 Parque',
+      airport: '✈️ Aeropuerto', beach: '🏖️ Playa', amusement_park: '🎡 Parque temático',
+      art_gallery: '🎨 Galería de arte', church: '⛪ Iglesia', zoo: '🦁 Zoológico',
+      shopping_mall: '🛍️ Centro comercial', spa: '💆 Spa', stadium: '🏟️ Estadio',
+      aquarium: '🐠 Acuario', casino: '🎰 Casino', campground: '⛺ Camping'
+    };
+    if (place.types) {
+      typesEl.innerHTML = '';
+      place.types.filter(t => !skipTypes.has(t)).slice(0, 5).forEach(type => {
+        const label = typeLabels[type] || type.replace(/_/g, ' ');
+        const badge = document.createElement('span');
+        badge.className = 'dest-badge';
+        badge.textContent = label;
+        typesEl.appendChild(badge);
+      });
+    }
+
+    // Editorial summary
+    if (place.editorial_summary && place.editorial_summary.overview) {
+      descEl.textContent = place.editorial_summary.overview;
+      descWrap.classList.remove('hidden');
+    }
+
+    // Info extra
+    extraEl.innerHTML = '';
+    if (place.formatted_phone_number) {
+      extraEl.innerHTML += `<a href="tel:${place.formatted_phone_number}" class="flex items-center gap-2 text-sm text-slate-600 bg-slate-50 rounded-xl px-4 py-3 hover:bg-slate-100 transition-colors"><span class="material-symbols-outlined text-base text-blue-500">call</span>${place.formatted_phone_number}</a>`;
+    }
+    if (place.website) {
+      const domain = new URL(place.website).hostname.replace('www.','');
+      extraEl.innerHTML += `<a href="${place.website}" target="_blank" rel="noopener" class="flex items-center gap-2 text-sm text-slate-600 bg-slate-50 rounded-xl px-4 py-3 hover:bg-slate-100 transition-colors"><span class="material-symbols-outlined text-base text-blue-500">language</span>${domain}</a>`;
+    }
+    if (place.url) {
+      extraEl.innerHTML += `<a href="${place.url}" target="_blank" rel="noopener" class="flex items-center gap-2 text-sm text-slate-600 bg-slate-50 rounded-xl px-4 py-3 hover:bg-slate-100 transition-colors"><span class="material-symbols-outlined text-base text-red-500">map</span>Ver en Google Maps</a>`;
+    }
+
+    // CTA
+    ctaBtn.onclick = () => {
+      destShowSection('add');
+    };
+  }
+
+  function updateCarousel() {
+    track.style.transform = `translateX(-${carouselIdx * 100}%)`;
+    document.querySelectorAll('#dest-modal-dots button').forEach((btn, i) => {
+      btn.className = `w-2 h-2 rounded-full bg-white/40 transition-all ${i === carouselIdx ? 'bg-white w-4' : ''}`;
+    });
+  }
+
+  // --- 3D TILT EFFECT (Card Physics) ---
+  modal.addEventListener('mousemove', (e) => {
+    const { left, top, width, height } = modal.getBoundingClientRect();
+    const x = e.clientX - left;
+    const y = e.clientY - top;
+
+    const rotateX = ((y - height / 2) / (height / 2)) * -5; // Max 5deg for comfort
+    const rotateY = ((x - width / 2) / (width / 2)) * 5;
+
+    modal.style.transform = `scale(1) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    modal.style.transition = "transform 0.1s ease-out, opacity 0.3s ease";
+  });
+
+  modal.addEventListener('mouseleave', () => {
+    modal.style.transform = `scale(1) perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+    modal.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease";
+  });
+
+  prevBtn.onclick = () => {
+    carouselIdx = (carouselIdx - 1 + totalSlides) % totalSlides;
+    updateCarousel();
+    startAutoplay(); // Reset timer
+  };
+
+  nextBtn.onclick = () => {
+    carouselIdx = (carouselIdx + 1) % totalSlides;
+    updateCarousel();
+    startAutoplay(); // Reset timer
+  };
+
+  dotsEl.onclick = (e) => {
+    if (e.target.dataset.idx) {
+      carouselIdx = parseInt(e.target.dataset.idx);
+      updateCarousel();
+      startAutoplay(); // Reset timer
+    }
+  };
+
+  function showFallback(query) {
+    spinner.style.display = 'none';
+    content.classList.remove('hidden');
+    descEl.textContent = 'No se pudo cargar información adicional de este destino.';
+    descWrap.classList.remove('hidden');
+  }
+
+  // ===== CARGA DE ATRACCIONES =====
+  function loadAttractions() {
+    if (!currentPlaceGeometry) {
+      attrList.innerHTML = '<p class="text-slate-400 text-sm text-center py-8">Información de ubicación no disponible.</p>';
+      return;
+    }
+    const cacheKey = currentPlaceGeometry.lat() + ',' + currentPlaceGeometry.lng();
+    if (attrCache[cacheKey]) {
+      renderAttractions(attrCache[cacheKey]);
+      return;
+    }
+    attrList.innerHTML = '';
+    attrSpinner.classList.remove('hidden');
+    placesService.nearbySearch({
+      location: currentPlaceGeometry,
+      radius: 15000,
+      type: 'tourist_attraction'
+    }, (results, status) => {
+      attrSpinner.classList.add('hidden');
+      if (status !== google.maps.places.PlacesServiceStatus.OK || !results.length) {
+        attrList.innerHTML = '<p class="text-slate-400 text-sm text-center py-8">No se encontraron atracciones cercanas.</p>';
+        return;
+      }
+      attrCache[cacheKey] = results;
+      renderAttractions(results);
+    });
+  }
+
+  function renderAttractions(results) {
+    attrList.innerHTML = '';
+    results.slice(0, 15).forEach(place => {
+      const card = document.createElement('div');
+      card.className = 'attraction-card';
+
+      // Thumbnail
+      const img = document.createElement('img');
+      img.className = 'attraction-thumb';
+      img.alt = place.name;
+      if (place.photos && place.photos.length > 0) {
+        img.src = place.photos[0].getUrl({ maxWidth: 400, maxHeight: 400 });
+      } else {
+        img.src = 'https://via.placeholder.com/52x52/e2e8f0/94a3b8?text=📍';
+      }
+
+      // Info
+      const info = document.createElement('div');
+      info.className = 'attraction-info';
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'attraction-name';
+      nameEl.textContent = place.name;
+
+      const metaEl = document.createElement('div');
+      metaEl.style.display = 'flex'; metaEl.style.gap = '8px'; metaEl.style.alignItems = 'center'; metaEl.style.marginTop = '2px';
+
+      if (place.rating) {
+        const rEl = document.createElement('span');
+        rEl.className = 'attraction-rating';
+        rEl.textContent = '⭐ ' + place.rating.toFixed(1);
+        metaEl.appendChild(rEl);
+      }
+      if (place.types && place.types[0]) {
+        const tEl = document.createElement('span');
+        tEl.className = 'attraction-type';
+        tEl.textContent = place.types[0].replace(/_/g, ' ');
+        metaEl.appendChild(tEl);
+      }
+
+      info.appendChild(nameEl);
+      info.appendChild(metaEl);
+      card.appendChild(img);
+      card.appendChild(info);
+      attrList.appendChild(card);
+    });
+  }
+
+  // ===== HOVER TIMER + TOUCH =====
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.dest-card').forEach(card => {
+      let hoverTimer = null;
+
+      card.addEventListener('click', () => {
+        const query = card.dataset.placeQuery;
+        const name  = card.dataset.placeName;
+        if (query && name) openModal(query, name, card);
+      });
+
+      card.addEventListener('mouseenter', () => {
+        hoverTimer = setTimeout(() => {
+          const query = card.dataset.placeQuery;
+          const name  = card.dataset.placeName;
+          if (query && name) openModal(query, name, card);
+        }, HOVER_DELAY);
+      });
+
+      card.addEventListener('mouseleave', () => {
+        clearTimeout(hoverTimer);
+      });
+
+      // Touch: abrir al tocar
+      card.addEventListener('touchstart', (e) => {
+        const query = card.dataset.placeQuery;
+        const name  = card.dataset.placeName;
+        if (query && name) openModal(query, name, card);
+      }, { passive: true });
+    });
+  });
+  // --- SVG Filter for Liquid Glass ---
+  const svgFilter = `
+    <svg style="display: none;">
+      <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox">
+        <feTurbulence type="fractalNoise" baseFrequency="0.001 0.005" numOctaves="1" seed="17" result="turbulence" />
+        <feComponentTransfer in="turbulence" result="mapped">
+          <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5" />
+          <feFuncG type="gamma" amplitude="0" exponent="1" offset="0" />
+          <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5" />
+        </feComponentTransfer>
+        <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap" />
+        <feSpecularLighting in="softMap" surfaceScale="5" specularConstant="1" specularExponent="100" lightingColor="white" result="specLight">
+          <fePointLight x="-200" y="-200" z="300" />
+        </feSpecularLighting>
+        <feComposite in="specLight" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litImage" />
+        <feDisplacementMap in="SourceGraphic" in2="softMap" scale="200" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
+  `;
+  document.body.insertAdjacentHTML('beforeend', svgFilter);
+})();
+</script>
+
+<script>
+// --- NUCLEAR OPTION: ELIMINAR BANNER DE CANAL ALFA ---
+(function() {
+  const killBanner = () => {
+    document.querySelectorAll('div, span, p').forEach(el => {
+      if (el.innerText && (el.innerText.includes('canal alfa') || el.innerText.includes('alpha channel'))) {
+        let p = el;
+        while (p && p !== document.body) {
+          const style = window.getComputedStyle(p);
+          if (style.position === 'fixed' || style.position === 'absolute') {
+            p.style.display = 'none';
+            p.remove();
+            break;
+          }
+          p = p.parentElement;
+        }
+      }
+    });
+  };
+  setInterval(killBanner, 500);
+})();
+</script>
+<script src="../../shared/components/navbar/navbar.js"></script>
+</body>
+</html>

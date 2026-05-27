@@ -1,0 +1,1 @@
+ALTER TABLE atracciones MODIFY id VARCHAR(100); ALTER TABLE itinerario_items MODIFY atraccion_id VARCHAR(100);
