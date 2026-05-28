@@ -1,3 +1,4 @@
+```mermaid
 erDiagram
     usuarios {
         VARCHAR id PK
@@ -101,3 +102,4 @@ erDiagram
     usuarios ||--o{ seguidores : "es_seguido"
     usuarios ||--o{ resenias : "escribe"
     atracciones ||--o{ resenias : "recibe"
+```
