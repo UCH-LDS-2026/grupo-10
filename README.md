@@ -46,12 +46,15 @@ El proyecto utiliza **GitFlow** adaptado:
 1.  **Usuario Registrado:** Persona que utiliza la plataforma para planificar viajes.
 2.  **Sistema (API Externa):** Actor que provee datos e imágenes de atracciones (ej. Google Places API).
 
-**Casos de Uso (Mínimo 5):**
+**Casos de Uso:**
 1.  **Registrarse / Iniciar Sesión:** El usuario crea una cuenta y accede al sistema.
 2.  **Crear Viaje:** El usuario genera un nuevo viaje con fecha de inicio, fin y destino principal.
 3.  **Añadir Destino al Viaje:** El usuario agrega múltiples ciudades al viaje creado. *(<<extend>> desde Crear Viaje)*
 4.  **Armar Itinerario:** El usuario asigna atracciones a días y horarios específicos. *(<<include>> Buscar Atracción)*
 5.  **Buscar Atracción:** El sistema consulta la base de datos o la API externa para obtener lugares turísticos.
+6.  **Añadir Vuelo:** El usuario agrega detalles de vuelos a su viaje. *(<<extend>> desde Crear Viaje)*
+7.  **Dejar Reseña:** El usuario califica y comenta una atracción visitada.
+8.  **Seguir Usuario:** El usuario sigue a otros usuarios en la plataforma.
 
 ```mermaid
 flowchart LR
@@ -65,15 +68,22 @@ flowchart LR
     UC3([Añadir Destino])
     UC4([Armar Itinerario])
     UC5([Buscar Atracción])
+    UC6([Añadir Vuelo])
+    UC7([Dejar Reseña])
+    UC8([Seguir Usuario])
 
     %% Relaciones
     Usuario --- UC1
     Usuario --- UC2
     Usuario --- UC3
     Usuario --- UC4
+    Usuario --- UC6
+    Usuario --- UC7
+    Usuario --- UC8
     
     UC4 -. "<<include>>" .-> UC5
     UC3 -. "<<extend>>" .-> UC2
+    UC6 -. "<<extend>>" .-> UC2
     
     UC5 --- API
 ```
@@ -111,6 +121,20 @@ classDiagram
         +Integer orden
     }
 
+    class ViajeVuelo {
+        +String id
+        +String viajeId
+        +String direction
+        +String airline
+        +String flight
+        +String origin
+        +String dest
+        +String dep
+        +String arr
+        +String flightType
+        +Integer orden
+    }
+
     class ItemItinerario {
         +String id
         +LocalDate fechaAsignada
@@ -129,8 +153,27 @@ classDiagram
         +String googlePlaceId
     }
 
+    class Resena {
+        +String id
+        +String atraccionId
+        +String usuarioId
+        +Integer rating
+        +String comentario
+        +LocalDateTime fecha
+    }
+
+    class Seguidor {
+        +String seguidorId
+        +String seguidoId
+        +LocalDateTime fechaSeguimiento
+    }
+
     Usuario "1" -- "0..*" Viaje : crea >
+    Usuario "1" -- "0..*" Resena : escribe >
+    Usuario "1" -- "0..*" Seguidor : sigue >
+    Atraccion "1" -- "0..*" Resena : tiene >
     Viaje "1" *-- "1..*" ViajeDestino : tiene >
+    Viaje "1" *-- "0..*" ViajeVuelo : incluye >
     Viaje "1" *-- "0..*" ItemItinerario : contiene >
     ItemItinerario "0..*" -- "1" Atraccion : asocia >
 ```
