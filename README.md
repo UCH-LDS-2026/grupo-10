@@ -17,7 +17,7 @@ Itera es una plataforma integral diseñada para facilitar la planificación, ges
     cd itera
     ```
 2.  **Configurar Base de Datos:**
-    *   Crear una base de datos MySQL llamada `itera_db`.
+    *   Crear una base de datos MySQL llamada `itera_mvp`.
     *   Actualizar las credenciales en `backend-java/src/main/resources/application.properties`.
 3.  **Ejecutar Backend (Java/Spring Boot):**
     ```bash
