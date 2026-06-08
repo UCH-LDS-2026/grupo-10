@@ -45,7 +45,12 @@ CREATE TABLE IF NOT EXISTS atracciones (
     longitud DECIMAL(11, 8),
     costo DECIMAL(10, 2) DEFAULT 0.00,
     necesita_turno BOOLEAN DEFAULT FALSE,
-    es_oficial BOOLEAN DEFAULT FALSE
+    es_oficial BOOLEAN DEFAULT FALSE,
+    foto_url TEXT,
+    direccion VARCHAR(255),
+    rating DOUBLE,
+    categoria VARCHAR(100),
+    google_place_id VARCHAR(150)
 );
 
 CREATE TABLE IF NOT EXISTS itinerario_items (
