@@ -1,7 +1,5 @@
 # Instrucciones para la Ejecución de Pruebas Unitarias y Reporte de Cobertura
 
-Este documento explica de forma rápida cómo ejecutar los tests unitarios y visualizar el reporte de cobertura de código (JaCoCo) para la entrega del TP.
-
 ## Prerrequisitos
 Asegurarse de tener el motor de base de datos MySQL (por ejemplo, mediante XAMPP) activo y corriendo, ya que el contexto de Spring Boot se inicializa al arrancar las pruebas.
 
