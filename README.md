@@ -11,38 +11,26 @@ Itera es una plataforma integral diseñada para facilitar la planificación, ges
 *   **Maven:** Versión 3.8.x o superior.
 
 ### Pasos de Instalación
+1.  **Clonar el repositorio:**
+    ```bash
+    git clone https://github.com/tu-usuario/itera.git
+    cd itera
+    ```
+2.  **Configurar Base de Datos:**
+    *   Crear una base de datos MySQL llamada `itera_mvp`.
+    *   Actualizar las credenciales en `backend-java/src/main/resources/application.properties`.
+3.  **Ejecutar Backend (Java/Spring Boot):**
+    ```bash
+    cd backend-java
+    mvn spring-boot:run
+    ```
+4.  **Ejecutar Frontend:**
+    ```bash
+    cd frontend
+    # Abrir index.html o usar un servidor de desarrollo si está configurado
+    ```
 
-1. **Clonar el repositorio:**
-   ```bash
-   git clone https://github.com/tu-usuario/itera.git
-   cd itera
-   ```
-
-2. **Configurar Base de Datos:**
-   * Crear una base de datos MySQL llamada `itera_mvp`.
-   * El sistema está configurado en `backend-java/src/main/resources/application.properties` con `createDatabaseIfNotExist=true` para crearla automáticamente si no existiera al arrancar, apuntando a `localhost:3306` con usuario `root` y contraseña vacía (configuración estándar de XAMPP / MariaDB).
-   * Si tienes credenciales distintas, actualízalas en `backend-java/src/main/resources/application.properties`.
-
-3. **Configurar APIs de Google:**
-   * Crea un archivo llamado `.env` dentro de la carpeta `backend-java/` con el siguiente contenido:
-     ```env
-     GOOGLE_PLACES_API_KEY=TU_API_KEY
-     GOOGLE_TRANSLATION_API_KEY=TU_API_KEY
-     ```
-
-4. **Ejecutar Backend (Java/Spring Boot):**
-   ```bash
-   cd backend-java
-   .\mvnw.cmd spring-boot:run
-   ```
-
-5. **Acceder a la Plataforma:**
-   * El backend de Spring Boot está configurado para servir los archivos del frontend automáticamente. Una vez iniciado el servidor, abre tu navegador e ingresa a:
-     [http://localhost:8000](http://localhost:8000)
-
-*El sistema se instala y ejecuta exitosamente en los entornos de desarrollo, validando el correcto funcionamiento del frontend conectado a la API de Spring Boot y la persistencia en MySQL a través de migraciones automáticas controladas por Flyway.*
-
----
+*El sistema se ha instalado y ejecutado exitosamente en los entornos de prueba, validando el correcto funcionamiento del frontend conectado a la API de Spring Boot y la persistencia en MySQL.*
 
 ## 🌿 Estrategia de Ramas Definida
 
@@ -51,8 +39,6 @@ El proyecto utiliza **GitFlow** adaptado:
 *   `develop`: Rama de integración. Aquí convergen las nuevas funcionalidades en desarrollo.
 *   `feature/*`: Ramas efímeras creadas desde `develop` para desarrollar nuevas características (ej. `feature/login`, `feature/crear-viaje`). Al finalizar, se hace merge a `develop`.
 *   `hotfix/*`: Para correcciones de errores urgentes en producción.
-
----
 
 ## 👥 Diagrama de Casos de Uso
 
@@ -102,11 +88,9 @@ flowchart LR
     UC5 --- API
 ```
 
----
-
 ## 🏗️ Diagrama de Clases
 
-**Clases del dominio:**
+**Mínimo 5 clases del dominio:**
 
 ```mermaid
 classDiagram
@@ -194,8 +178,6 @@ classDiagram
     ItemItinerario "0..*" -- "1" Atraccion : asocia >
 ```
 
----
-
 ## 🛠️ Justificación del Stack Tecnológico
 
-La elección de **Java con Spring Boot** para el backend se fundamenta en su robustez, seguridad y escalabilidad, características esenciales para un sistema de planificación de viajes que maneja relaciones complejas (itinerarios, múltiples destinos, atracciones) y requiere alta disponibilidad. Spring Data JPA facilita el mapeo objeto-relacional con **MySQL**, una base de datos relacional elegida por la estructura altamente interconectada del dominio del problema (`Usuarios -> Viajes -> Destinos -> Itinerarios`), garantizando la integridad referencial y las transacciones seguras (ACID). Para el frontend, el uso de **JavaScript** (combinado de HTML y CSS nativo) permite un control total sobre el DOM y una rápida iteración para consumir las APIs RESTful del backend de forma eficiente, brindando una experiencia de usuario interactiva y fluida al armar visualmente los itinerarios.
+La elección de **Java con Spring Boot** para el backend se fundamenta en su robustez, seguridad y escalabilidad, características esenciales para un sistema de planificación de viajes que maneja relaciones complejas (itinerarios, múltiples destinos, atracciones) y requiere alta disponibilidad. Spring Data JPA facilita el mapeo objeto-relacional con **MySQL**, una base de datos relacional elegida por la estructura altamente interconectada del dominio del problema (`Usuarios -> Viajes -> Destinos -> Itinerarios`), garantizando la integridad referencial y las transacciones seguras (ACID). Para el frontend, el uso de **JavaScript** (combinado de HTML y CSS) permite un control total sobre el DOM y una rápida iteración para consumir las APIs RESTful del backend de forma eficiente, brindando una experiencia de usuario interactiva y fluida al armar visualmente los itinerarios.
