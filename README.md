@@ -16,10 +16,10 @@ Itera es una plataforma integral diseñada para facilitar la planificación, ges
    - [Paso 6: Acceder a la Aplicación](#paso-6-acceder-a-la-aplicación)
 3. [Estructura del Proyecto](#-estructura-del-proyecto)
 4. [Solución de Problemas](#-solución-de-problemas)
-5. [Diagrama de Casos de Uso](#-diagrama-de-casos-de-uso)
-6. [Diagrama de Clases](#-diagrama-de-clases)
-7. [Stack Tecnológico](#-justificación-del-stack-tecnológico)
-8. [Estrategia de Ramas](#-estrategia-de-ramas)
+5. [Diagrama de Casos de Uso](#diagrama-de-casos-de-uso)
+6. [Diagrama de Clases](#diagrama-de-clases)
+7. [Stack Tecnológico](#stack-tecnologico)
+8. [Estrategia de Ramas](#estrategia-de-ramas)
 
 ---
 
@@ -353,6 +353,7 @@ flowchart LR
     UC5 --- API
 ```
 
+<a id="diagrama-de-clases"></a>
 ## 🏗️ Diagrama de Clases
 
 **Mínimo 5 clases del dominio:**
@@ -443,6 +444,7 @@ classDiagram
     ItemItinerario "0..*" -- "1" Atraccion : asocia >
 ```
 
+<a id="stack-tecnologico"></a>
 ## 🛠️ Justificación del Stack Tecnológico
 
 | Capa | Tecnología | Justificación |
