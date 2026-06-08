@@ -304,7 +304,7 @@ Para dejar el sistema 100% funcional, sigue estos pasos en orden:
 - [ ] ¡Listo! 🎉
 
 ---
-
+<a id="diagrama-de-casos-de-uso"></a>
 ## 👥 Diagrama de Casos de Uso
 
 **Actores Identificados:**
@@ -456,6 +456,7 @@ classDiagram
 | **API Externa** | Google Places API | Provee datos de atracciones, fotos e información turística en tiempo real. |
 | **Build Tool** | Maven (con Wrapper) | Gestión de dependencias estándar en el ecosistema Java. No requiere instalación. |
 
+<a id="estrategia-de-ramas">
 ## 🌿 Estrategia de Ramas
 
 El proyecto utiliza **GitFlow** adaptado:
