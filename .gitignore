@@ -1,74 +1,36 @@
-# =========================
-# Backend: Java / Spring Boot / Maven
-# =========================
+# Java
 target/
 *.class
 *.jar
 *.war
-*.ear
-*.log
-.mvn/wrapper/maven-wrapper.jar
 
-# =========================
-# Frontend: Node / Vite / React / Vanilla
-# =========================
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Environment
+.env
+.DS_Store
+
+# Frontend
 node_modules/
 dist/
 build/
-.npm/
-.eslintcache
-*.log
+.npm
 
-# =========================
-# Entornos de Desarrollo (IDEs)
-# =========================
-# IntelliJ IDEA
-.idea/
-*.iml
-*.iws
+# Backend Go (if any)
+bin/
+*.exe
 
-# VS Code
-.vscode/
-
-# Eclipse
-.project
-.classpath
-.settings/
-
-# =========================
-# Archivos del Sistema Operativo
-# =========================
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-
-# =========================
-# Variables de Entorno y Secretos
-# =========================
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-application-secret.properties
-
-# =========================
-# Archivos Propios del Proyecto Itera (Temporales / Subidas)
-# =========================
-# Carpetas de imágenes subidas o dinámicas
+# Uploads
 uploads/
 imagenes_joyas_ocultas/
 
-# Archivos temporales de pruebas o de descarte
+# Junk / temporary files
 borrar.html
 payload.json
 test_photo.png
 demo.tsx
 index.css
+
