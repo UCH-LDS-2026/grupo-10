@@ -110,11 +110,11 @@
 <span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
 <span class="font-semibold plus-jakarta-sans leading-relaxed">Concepto</span>
 </div>
-<div class="flex items-center gap-3 text-slate-400 dark:text-slate-500 p-3 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-200/30 dark:hover:bg-slate-800/50 rounded-xl transition-all duration-300 ease-in-out cursor-pointer" onclick="window.location.href='../trip-route/index.html'">
+<div class="flex items-center gap-3 text-slate-400 dark:text-slate-500 p-3 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-200/30 dark:hover:bg-slate-800/50 rounded-xl transition-all duration-300 ease-in-out cursor-pointer" onclick="checkTripAndNavigate('../trip-route/index.html')">
 <span class="material-symbols-outlined" data-icon="map">map</span>
 <span class="plus-jakarta-sans leading-relaxed">Ruta</span>
 </div>
-<div class="flex items-center gap-3 text-slate-400 dark:text-slate-500 p-3 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-200/30 dark:hover:bg-slate-800/50 rounded-xl transition-all duration-300 ease-in-out cursor-pointer" onclick="window.location.href='../trip-detail/index.html'">
+<div class="flex items-center gap-3 text-slate-400 dark:text-slate-500 p-3 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-200/30 dark:hover:bg-slate-800/50 rounded-xl transition-all duration-300 ease-in-out cursor-pointer" onclick="checkTripAndNavigate('../trip-detail/index.html')">
 <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
 <span class="plus-jakarta-sans leading-relaxed">Itinerario</span>
 </div>
@@ -217,13 +217,44 @@
                 Atrás
             </button>
 <button id="next-section-btn" class="px-12 py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
-                Siguiente Sección
+                Pasar al paso 2
                 <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
 </button>
 </div>
 </div>
 </footer>
+
+<!-- Alert Modal -->
+<div id="alert-modal" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden p-8 text-center animate-in fade-in zoom-in duration-300">
+        <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="material-symbols-outlined text-3xl text-red-600">warning</span>
+        </div>
+        <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Paso requerido</h3>
+        <p class="text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">
+            Para ir a la página de ruta o itinerario, primero tienes que crear este viaje guardando los datos con el botón <b class="text-slate-700 dark:text-slate-300">Pasar al paso 2</b>.
+        </p>
+        <button onclick="closeAlertModal()" class="w-full py-3 px-6 bg-primary text-white rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+            Entendido
+        </button>
+    </div>
+</div>
+
 <script>
+    function checkTripAndNavigate(url) {
+        if (!localStorage.getItem('current_trip_id')) {
+            document.getElementById('alert-modal').classList.remove('hidden');
+            document.getElementById('alert-modal').classList.add('flex');
+        } else {
+            window.location.href = url;
+        }
+    }
+    
+    function closeAlertModal() {
+        document.getElementById('alert-modal').classList.add('hidden');
+        document.getElementById('alert-modal').classList.remove('flex');
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
         // Privacy Toggle Logic
         const privacyToggle = document.getElementById('privacy-toggle');
@@ -381,8 +412,8 @@
                         } catch (e) { console.warn("Error fetching main trip photo from Google:", e); }
                     }
 
-                    let startDate = "";
-                    let endDate = "";
+                    let startDate = null;
+                    let endDate = null;
                     
                     if (fp.selectedDates.length === 2) {
                         startDate = fp.formatDate(fp.selectedDates[0], "Y-m-d");
@@ -390,13 +421,6 @@
                     } else if (savedConcept && savedConcept.startDate) {
                         startDate = savedConcept.startDate;
                         endDate = savedConcept.endDate;
-                    }
-                    
-                    if (!startDate || !endDate) {
-                        alert("Por favor selecciona un rango de fechas para tu viaje.");
-                        nextBtn.innerHTML = prevText;
-                        nextBtn.disabled = false;
-                        return;
                     }
 
                     const payload = {
