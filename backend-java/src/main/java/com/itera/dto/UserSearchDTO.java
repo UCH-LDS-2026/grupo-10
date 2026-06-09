@@ -16,6 +16,7 @@ public class UserSearchDTO {
     private String username;
     private String fotoPerfil;
     private String nacionalidad;
+    private Integer edad;
     private boolean siguiendo;
     private long seguidoresCount;
     private long seguidosCount;
