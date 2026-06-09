@@ -102,10 +102,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const followersCountEl = document.getElementById('profile-followers-count');
                 const followingCountEl = document.getElementById('profile-following-count');
+                const followersCountLargeEl = document.getElementById('profile-followers-count-large');
+                const followingCountLargeEl = document.getElementById('profile-following-count-large');
                 const btnFollow = document.getElementById('btn-follow');
                 
                 if (followersCountEl) followersCountEl.textContent = data.seguidores_count;
                 if (followingCountEl) followingCountEl.textContent = data.seguidos_count;
+                if (followersCountLargeEl) followersCountLargeEl.textContent = data.seguidores_count;
+                if (followingCountLargeEl) followingCountLargeEl.textContent = data.seguidos_count;
                 
                 if (btnFollow) {
                     if (data.siguiendo) {
