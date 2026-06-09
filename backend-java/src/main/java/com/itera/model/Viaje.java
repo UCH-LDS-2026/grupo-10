@@ -32,10 +32,10 @@ public class Viaje {
     @Column(name = "destino_principal", nullable = false, length = 100)
     private String destinoPrincipal;
 
-    @Column(name = "fecha_inicio", nullable = false)
+    @Column(name = "fecha_inicio")
     private LocalDate fechaInicio;
 
-    @Column(name = "fecha_fin", nullable = false)
+    @Column(name = "fecha_fin")
     private LocalDate fechaFin;
 
     @Column(name = "estado", length = 50)
