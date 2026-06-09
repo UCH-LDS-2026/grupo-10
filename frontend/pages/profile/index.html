@@ -451,34 +451,7 @@
                     </div>
                 </section>
 
-                <section class="glass-panel rounded-[32px] p-8 bento-item">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="font-headline-sm text-on-surface tracking-tight">Compañeros</h3>
-                        <span class="text-primary text-[12px] font-bold uppercase tracking-widest cursor-pointer hover:underline">Ver Todos</span>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="flex items-center justify-between group cursor-pointer p-2 -m-2 rounded-2xl hover:bg-white/40 transition-all">
-                            <div class="flex items-center gap-4">
-                                <img alt="Companion 1" class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMQSgFg1WUXaESjceoaKnSJTOCCtXuLFIXu81Nxt2PZiR4JFVMD8zVJkxedcsLvRDr3OaxXf-SFe8vhAwwbNyprQQsFKq4bCKD8zszpgPXduJI5b2Pglp9ua8x6sjJaTB6Ke5p5Jgrz6e2h4Qh35EFTbGp-4zVugU-g2qz4_BEMVz8KrFkPBLYeMcE8T1ShTzg817xJHWcJbqyZhPOGLTNeNPpM76x7iS7OjTRkqfyqvMt-Yq2vzW2M8r7CDtZREcaMIFrSHngp1YK">
-                                <div>
-                                    <p class="font-bold text-on-surface">Marco Polo</p>
-                                    <p class="text-[12px] text-on-surface-variant/60 uppercase font-bold">Amante de la Historia</p>
-                                </div>
-                            </div>
-                            <span class="material-symbols-outlined text-outline-variant/50 group-hover:text-primary transition-all">arrow_forward</span>
-                        </div>
-                        <div class="flex items-center justify-between group cursor-pointer p-2 -m-2 rounded-2xl hover:bg-white/40 transition-all">
-                            <div class="flex items-center gap-4">
-                                <img alt="Companion 2" class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1HlaM24BwD1MQGBt213conc9FGEdoDEI3AcLiHhLUgw4nKrn1ZHugU91qBGf00zZq5jnM2-14HyqWUGp4WeH02Y2AQSW0_MPVLFjsYzGKpZq2rFfp6eqLWiZp915xrVuwQX7EMv9pvjIma_4xO6gMgR0YIM_N3le-ELXbTv-B2FN7z2o4o3_-MNYidRtydXP4ruEXosAeLIx6nlP8xhWuLIAnu-gw1KKtR8VLe0ZR6mR1qKtVZQ4UMzAa9hiLwMezLXj3og6mr1w7">
-                                <div>
-                                    <p class="font-bold text-on-surface">Sofia Chen</p>
-                                    <p class="text-[12px] text-on-surface-variant/60 uppercase font-bold">Crítica Gastronómica</p>
-                                </div>
-                            </div>
-                            <span class="material-symbols-outlined text-outline-variant/50 group-hover:text-primary transition-all">arrow_forward</span>
-                        </div>
-                    </div>
-                </section>
+
             </aside>
             
             <!-- Main Content Area (Right) -->
@@ -555,6 +528,8 @@
                     </script>
                 </div>
                 
+
+                
                 <!-- Bento Stats Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
@@ -620,6 +595,19 @@
                     </button>
                 </div>
             </div>
+            
+            <!-- Friends Horizontal Component (Full Width) -->
+            <section id="friends-section" class="hidden glass-panel rounded-[32px] p-8 bento-item w-full lg:col-span-12">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-headline-sm text-on-surface tracking-tight flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">group</span> Viajeros amigos
+                    </h3>
+                    <span class="text-primary text-[12px] font-bold uppercase tracking-widest cursor-pointer hover:underline">Ver Todos</span>
+                </div>
+                <div id="friends-container" class="flex items-center gap-6 overflow-x-auto hide-scrollbar pb-2">
+                    <!-- Friends inserted via JS -->
+                </div>
+            </section>
         </div>
     </main>
 
