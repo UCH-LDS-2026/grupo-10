@@ -107,10 +107,10 @@
 <span class="material-symbols-outlined" data-icon="map">map</span>
 <span class="plus-jakarta-sans font-bold">Ruta</span>
 </a>
-<a class="flex items-center gap-3 text-slate-400 p-3 hover:text-slate-600 hover:bg-slate-200/30 rounded-xl transition-all" href="../trip-detail/index.html">
+<div class="flex items-center gap-3 text-slate-400 p-3 hover:text-slate-600 hover:bg-slate-200/30 rounded-xl transition-all cursor-pointer" onclick="checkDestinationsAndNavigate('../trip-detail/index.html')">
 <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
 <span class="plus-jakarta-sans font-medium">Itinerario</span>
-</a>
+</div>
 </nav>
 </aside>
 <!-- Main Canvas -->
@@ -569,7 +569,7 @@
 
         window.saveAndContinue = async function() {
             if (destinations.length === 0) {
-                alert("Por favor, añade al menos una ciudad como destino antes de continuar.");
+                openEmptyDestModal();
                 return;
             }
             
@@ -590,6 +590,24 @@
         window.closeCustomModal = function() {
             document.getElementById('custom-modal').classList.add('hidden');
             document.getElementById('custom-modal').classList.remove('flex');
+        };
+
+        window.openEmptyDestModal = function() {
+            document.getElementById('empty-dest-modal').classList.remove('hidden');
+            document.getElementById('empty-dest-modal').classList.add('flex');
+        };
+
+        window.closeEmptyDestModal = function() {
+            document.getElementById('empty-dest-modal').classList.add('hidden');
+            document.getElementById('empty-dest-modal').classList.remove('flex');
+        };
+
+        window.checkDestinationsAndNavigate = function(url) {
+            if (destinations.length === 0) {
+                openEmptyDestModal();
+            } else {
+                window.location.href = url;
+            }
         };
 
         window.proceedToItinerary = async function() {
@@ -620,6 +638,22 @@
         };
     });
 </script>
+
+<!-- Empty Destinations Modal -->
+<div id="empty-dest-modal" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden p-8 text-center animate-in fade-in zoom-in duration-300">
+        <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="material-symbols-outlined text-3xl text-red-600">warning</span>
+        </div>
+        <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Paso requerido</h3>
+        <p class="text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">
+            Para ir a la página de itinerario, primero tienes que añadir al menos un destino a tu ruta. ¡No se puede planear un itinerario sin lugares a donde ir!
+        </p>
+        <button onclick="closeEmptyDestModal()" class="w-full py-3 px-6 bg-primary text-white rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+            Entendido
+        </button>
+    </div>
+</div>
 
 <!-- Custom Confirmation Modal -->
 <div id="custom-modal" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm">
