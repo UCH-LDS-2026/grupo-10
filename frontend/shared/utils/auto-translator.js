@@ -194,6 +194,7 @@ window.autoTranslatePage = async function(targetLang) {
         }
 
         console.log(`[auto-translator] Traducción completada.`);
+        document.dispatchEvent(new Event('translationFinished'));
     } catch (err) {
         console.error('[auto-translator] Error al traducir:', err);
     } finally {
