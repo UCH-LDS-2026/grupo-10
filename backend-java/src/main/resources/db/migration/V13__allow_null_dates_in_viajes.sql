@@ -1,0 +1,2 @@
+ALTER TABLE viajes MODIFY COLUMN fecha_inicio DATE NULL;
+ALTER TABLE viajes MODIFY COLUMN fecha_fin DATE NULL;

@@ -10,7 +10,7 @@ function renderNavbar(t) {
   const currentUser = currentUserStr ? JSON.parse(currentUserStr) : null;
   const langCode = localStorage.getItem('itera_lang') || 'ES';
   
-  const flagCodes = { ES: 'es', EN: 'us', PT: 'br', FR: 'fr' };
+  const flagCodes = { ES: 'es', EN: 'us', PT: 'br', FR: 'fr', IT: 'it', DE: 'de', ZH: 'cn', JA: 'jp' };
   const currentFlag = flagCodes[langCode] || 'es';
 
   const getInitials = (name, lastName) => {
@@ -19,7 +19,7 @@ function renderNavbar(t) {
   };
 
   const navHtml = `
-    <header id="main-header" class="fixed top-0 w-full z-50 bg-transparent border-transparent transition-all duration-300">
+    <header id="main-header" class="fixed top-0 w-full z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
       <div id="header-container" class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto transition-all duration-500">
         <!-- Logo & Navigation - Left -->
         <div class="flex items-center gap-8">
@@ -75,6 +75,34 @@ function renderNavbar(t) {
                     <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-3 object-cover rounded-sm" alt="fr">
                   </div>
                   <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Français</span>
+                </button>
+                <button onclick="changeLanguage('IT')" class="w-full text-left px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                  <div class="flex justify-between items-center w-full">
+                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">it</span>
+                    <img src="https://flagcdn.com/w20/it.png" class="w-4 h-3 object-cover rounded-sm" alt="it">
+                  </div>
+                  <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Italiano</span>
+                </button>
+                <button onclick="changeLanguage('DE')" class="w-full text-left px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                  <div class="flex justify-between items-center w-full">
+                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">de</span>
+                    <img src="https://flagcdn.com/w20/de.png" class="w-4 h-3 object-cover rounded-sm" alt="de">
+                  </div>
+                  <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Deutsch</span>
+                </button>
+                <button onclick="changeLanguage('ZH')" class="w-full text-left px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                  <div class="flex justify-between items-center w-full">
+                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">zh</span>
+                    <img src="https://flagcdn.com/w20/cn.png" class="w-4 h-3 object-cover rounded-sm" alt="zh">
+                  </div>
+                  <span class="text-sm font-medium text-slate-700 dark:text-slate-300">中文</span>
+                </button>
+                <button onclick="changeLanguage('JA')" class="w-full text-left px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                  <div class="flex justify-between items-center w-full">
+                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">ja</span>
+                    <img src="https://flagcdn.com/w20/jp.png" class="w-4 h-3 object-cover rounded-sm" alt="ja">
+                  </div>
+                  <span class="text-sm font-medium text-slate-700 dark:text-slate-300">日本語</span>
                 </button>
               </div>
             </div>

@@ -30,11 +30,9 @@ public class ViajeDTO {
         private String destinoPrincipal;
 
         @JsonProperty("fecha_inicio")
-        @NotNull(message = "La fecha de inicio es obligatoria")
         private LocalDate fechaInicio;
 
         @JsonProperty("fecha_fin")
-        @NotNull(message = "La fecha de fin es obligatoria")
         private LocalDate fechaFin;
 
         @JsonProperty("creador_id")

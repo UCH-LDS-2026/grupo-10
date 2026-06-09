@@ -241,6 +241,41 @@
                                 </div>
                                 <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Português</span>
                             </button>
+                            <button onclick="changeSystemLanguage('fr')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">fr</span>
+                                    <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-3 object-cover rounded-sm" alt="fr">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Français</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('it')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">it</span>
+                                    <img src="https://flagcdn.com/w20/it.png" class="w-4 h-3 object-cover rounded-sm" alt="it">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Italiano</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('de')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">de</span>
+                                    <img src="https://flagcdn.com/w20/de.png" class="w-4 h-3 object-cover rounded-sm" alt="de">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Deutsch</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('zh')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">zh</span>
+                                    <img src="https://flagcdn.com/w20/cn.png" class="w-4 h-3 object-cover rounded-sm" alt="zh">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">中文</span>
+                            </button>
+                            <button onclick="changeSystemLanguage('ja')" class="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex flex-col gap-0.5 group">
+                                <div class="flex justify-between items-center w-full">
+                                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors uppercase">ja</span>
+                                    <img src="https://flagcdn.com/w20/jp.png" class="w-4 h-3 object-cover rounded-sm" alt="ja">
+                                </div>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">日本語</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -451,34 +486,7 @@
                     </div>
                 </section>
 
-                <section class="glass-panel rounded-[32px] p-8 bento-item">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="font-headline-sm text-on-surface tracking-tight">Compañeros</h3>
-                        <span class="text-primary text-[12px] font-bold uppercase tracking-widest cursor-pointer hover:underline">Ver Todos</span>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="flex items-center justify-between group cursor-pointer p-2 -m-2 rounded-2xl hover:bg-white/40 transition-all">
-                            <div class="flex items-center gap-4">
-                                <img alt="Companion 1" class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMQSgFg1WUXaESjceoaKnSJTOCCtXuLFIXu81Nxt2PZiR4JFVMD8zVJkxedcsLvRDr3OaxXf-SFe8vhAwwbNyprQQsFKq4bCKD8zszpgPXduJI5b2Pglp9ua8x6sjJaTB6Ke5p5Jgrz6e2h4Qh35EFTbGp-4zVugU-g2qz4_BEMVz8KrFkPBLYeMcE8T1ShTzg817xJHWcJbqyZhPOGLTNeNPpM76x7iS7OjTRkqfyqvMt-Yq2vzW2M8r7CDtZREcaMIFrSHngp1YK">
-                                <div>
-                                    <p class="font-bold text-on-surface">Marco Polo</p>
-                                    <p class="text-[12px] text-on-surface-variant/60 uppercase font-bold">Amante de la Historia</p>
-                                </div>
-                            </div>
-                            <span class="material-symbols-outlined text-outline-variant/50 group-hover:text-primary transition-all">arrow_forward</span>
-                        </div>
-                        <div class="flex items-center justify-between group cursor-pointer p-2 -m-2 rounded-2xl hover:bg-white/40 transition-all">
-                            <div class="flex items-center gap-4">
-                                <img alt="Companion 2" class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1HlaM24BwD1MQGBt213conc9FGEdoDEI3AcLiHhLUgw4nKrn1ZHugU91qBGf00zZq5jnM2-14HyqWUGp4WeH02Y2AQSW0_MPVLFjsYzGKpZq2rFfp6eqLWiZp915xrVuwQX7EMv9pvjIma_4xO6gMgR0YIM_N3le-ELXbTv-B2FN7z2o4o3_-MNYidRtydXP4ruEXosAeLIx6nlP8xhWuLIAnu-gw1KKtR8VLe0ZR6mR1qKtVZQ4UMzAa9hiLwMezLXj3og6mr1w7">
-                                <div>
-                                    <p class="font-bold text-on-surface">Sofia Chen</p>
-                                    <p class="text-[12px] text-on-surface-variant/60 uppercase font-bold">Crítica Gastronómica</p>
-                                </div>
-                            </div>
-                            <span class="material-symbols-outlined text-outline-variant/50 group-hover:text-primary transition-all">arrow_forward</span>
-                        </div>
-                    </div>
-                </section>
+
             </aside>
             
             <!-- Main Content Area (Right) -->
@@ -555,6 +563,8 @@
                     </script>
                 </div>
                 
+
+                
                 <!-- Bento Stats Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
@@ -591,11 +601,11 @@
                             </div>
                             <div class="flex gap-8">
                                 <div>
-                                    <p class="text-headline-lg font-display-lg leading-none" id="profile-followers-count">12.4K</p>
+                                    <p class="text-headline-lg font-display-lg leading-none" id="profile-followers-count-large">0</p>
                                     <p class="text-[10px] font-bold text-on-surface-variant/50 uppercase tracking-widest mt-1">Seguidores</p>
                                 </div>
                                 <div>
-                                    <p class="text-headline-lg font-display-lg leading-none" id="profile-following-count">842</p>
+                                    <p class="text-headline-lg font-display-lg leading-none" id="profile-following-count-large">0</p>
                                     <p class="text-[10px] font-bold text-on-surface-variant/50 uppercase tracking-widest mt-1">Siguiendo</p>
                                 </div>
                             </div>
@@ -620,6 +630,19 @@
                     </button>
                 </div>
             </div>
+            
+            <!-- Friends Horizontal Component (Full Width) -->
+            <section id="friends-section" class="hidden glass-panel rounded-[32px] p-8 bento-item w-full lg:col-span-12">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-headline-sm text-on-surface tracking-tight flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">group</span> Viajeros amigos
+                    </h3>
+                    <span class="text-primary text-[12px] font-bold uppercase tracking-widest cursor-pointer hover:underline">Ver Todos</span>
+                </div>
+                <div id="friends-container" class="flex items-center gap-6 overflow-x-auto hide-scrollbar pb-2">
+                    <!-- Friends inserted via JS -->
+                </div>
+            </section>
         </div>
     </main>
 

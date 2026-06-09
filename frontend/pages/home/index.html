@@ -1183,43 +1183,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Animación de letras una a una ---
 document.addEventListener('DOMContentLoaded', () => {
-    const titleIds = ['gallery-title', 'global-map-title', 'fast-plans-title', 'user-trips-title'];
-    
-    titleIds.forEach(id => {
-        const title = document.getElementById(id);
-        if (!title) return;
-
-        const whiteSpan = title.querySelector('span');
-        if (!whiteSpan) return;
-
-        const textPart1 = title.childNodes[0].textContent; 
-        const textPart2 = whiteSpan.textContent; 
-
-        title.innerHTML = ''; 
-
-        function createCharSpan(char, index) {
-            const span = document.createElement('span');
-            span.innerText = char === ' ' ? '\u00A0' : char;
-            span.className = 'reveal-char';
-            span.style.animationDelay = `${index * 0.04}s`;
-            return span;
-        }
-
-        // Parte 1
-        textPart1.split('').forEach((char, i) => {
-            title.appendChild(createCharSpan(char, i));
-        });
-
-        // Parte 2
-        const colorWrapper = document.createElement('span');
-        // Si es el de la galería usamos celeste, si no blanco (o el que corresponda)
-        if (id === 'gallery-title') colorWrapper.className = 'text-sky-600';
+    function initTitleAnimations() {
+        const titleIds = ['gallery-title', 'global-map-title', 'fast-plans-title', 'user-trips-title'];
         
-        textPart2.split('').forEach((char, i) => {
-            colorWrapper.appendChild(createCharSpan(char, textPart1.length + i));
+        titleIds.forEach(id => {
+            const title = document.getElementById(id);
+            if (!title) return;
+
+            const whiteSpan = title.querySelector('span');
+            if (!whiteSpan) return;
+
+            const textPart1 = title.childNodes[0].textContent; 
+            const textPart2 = whiteSpan.textContent; 
+
+            title.innerHTML = ''; 
+
+            function createCharSpan(char, index) {
+                const span = document.createElement('span');
+                span.innerText = char === ' ' ? '\u00A0' : char;
+                span.className = 'reveal-char';
+                span.style.animationDelay = `${index * 0.04}s`;
+                return span;
+            }
+
+            // Parte 1
+            textPart1.split('').forEach((char, i) => {
+                title.appendChild(createCharSpan(char, i));
+            });
+
+            // Parte 2
+            const colorWrapper = document.createElement('span');
+            // Si es el de la galería usamos celeste, si no blanco (o el que corresponda)
+            if (id === 'gallery-title') colorWrapper.className = 'text-sky-600';
+            
+            textPart2.split('').forEach((char, i) => {
+                colorWrapper.appendChild(createCharSpan(char, textPart1.length + i));
+            });
+            title.appendChild(colorWrapper);
         });
-        title.appendChild(colorWrapper);
-    });
+    }
+
+    const savedLang = localStorage.getItem('itera_lang') || 'es';
+    if (savedLang.toLowerCase() === 'es') {
+        initTitleAnimations();
+    } else {
+        document.addEventListener('translationFinished', initTitleAnimations);
+    }
 });
 </script>
 <div id="footer-container" class="hidden md:block"></div>

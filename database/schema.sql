@@ -1,4 +1,14 @@
+-- File: backend-java/src/main/resources/db/migration\V1__init_schema.sql
+-- ==========================================
+-- ITERA MVP - Base de Datos (MySQL / MariaDB)
+-- Flyway Migration V1
+-- ==========================================
 
+-- Nota: Flyway gestiona si ya existe la DB. Las tablas solo se crean si no existen.
+
+-- ==========================================
+-- 1. CREACIÓN DE TABLAS (DDL)
+-- ==========================================
 
 CREATE TABLE IF NOT EXISTS usuarios (
     id VARCHAR(36) PRIMARY KEY,
@@ -19,8 +29,8 @@ CREATE TABLE IF NOT EXISTS viajes (
     creador_id VARCHAR(36) NOT NULL,
     nombre VARCHAR(150) NOT NULL,
     destino_principal VARCHAR(100) NOT NULL,
-    fecha_inicio DATE NOT NULL,
-    fecha_fin DATE NOT NULL,
+    fecha_inicio DATE,
+    fecha_fin DATE,
     estado VARCHAR(50) DEFAULT 'En Planificación',
 
     CONSTRAINT fk_creador FOREIGN KEY (creador_id)
