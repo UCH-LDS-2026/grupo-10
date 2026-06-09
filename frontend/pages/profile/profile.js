@@ -82,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadPreferences();
         await loadConfirmedTrips();
         await loadFollowInfo();
+        await loadFriends();
     }
 
     async function loadFollowInfo() {
@@ -125,6 +126,144 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error fetching follow info:', err);
         }
     }
+
+    async function loadFriends() {
+        if (!currentUser?.id) return;
+        const section = document.getElementById('friends-section');
+        const container = document.getElementById('friends-container');
+        if (!section || !container) return;
+
+        try {
+            const respSeguidores = await fetch(`http://localhost:8000/api/usuarios/${currentUser.id}/seguidores`);
+            const respSeguidos = await fetch(`http://localhost:8000/api/usuarios/${currentUser.id}/seguidos`);
+            
+            if (respSeguidores.ok && respSeguidos.ok) {
+                const seguidores = await respSeguidores.json();
+                const seguidos = await respSeguidos.json();
+                
+                // intersect by id
+                const seguidosIds = new Set(seguidos.map(u => u.id));
+                const amigos = seguidores.filter(u => seguidosIds.has(u.id));
+                
+                // Get logged in user id
+                let loggedInUserId = '';
+                try {
+                    const loggedInUserStr = localStorage.getItem('itera_user');
+                    if (loggedInUserStr) {
+                        loggedInUserId = JSON.parse(loggedInUserStr).id;
+                    }
+                } catch(e) {}
+                
+                if (amigos.length > 0) {
+                    section.classList.remove('hidden');
+                    container.innerHTML = amigos.map(amigo => {
+                        const img = amigo.foto_perfil || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+                        const nombreCompleto = `${amigo.nombre || 'Usuario'} ${amigo.apellido || ''}`.trim();
+                        const edadTxt = amigo.edad ? `${amigo.edad} años` : 'Edad desconocida';
+                        const username = amigo.username ? `@${amigo.username}` : '@usuario';
+                        
+                        let btnHtml = '';
+                        
+                        if (window.isProfileOwner) {
+                            btnHtml = `
+                            <button class="w-full py-2.5 rounded-xl font-bold transition-all text-sm bg-primary/10 text-primary cursor-default" disabled>
+                                Amigos
+                            </button>`;
+                        } else if (amigo.id === loggedInUserId) {
+                            btnHtml = `
+                            <button class="w-full py-2.5 rounded-xl font-bold transition-all text-sm bg-primary/10 text-primary cursor-default" disabled>
+                                Tú
+                            </button>`;
+                        } else {
+                            // Determinar estado del botón de seguir (si el usuario actual lo está siguiendo)
+                            const isFollowing = amigo.siguiendo;
+                            const btnClass = isFollowing 
+                                ? 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-350 border border-slate-300 dark:border-slate-700 hover:bg-slate-300' 
+                                : 'bg-primary text-white shadow-md shadow-primary/20 hover:scale-[1.02] active:scale-100';
+                            const btnText = isFollowing ? 'Siguiendo' : 'Seguir';
+                            
+                            btnHtml = `
+                            <button id="btn-follow-friend-${amigo.id}" class="w-full py-2.5 rounded-xl font-bold transition-all text-sm ${btnClass}" onclick="toggleFollowFriend('${amigo.id}', this, ${isFollowing})">
+                                ${btnText}
+                            </button>`;
+                        }
+                        
+                        return `
+                        <div class="glass-panel p-5 rounded-[24px] border border-white/50 flex flex-col items-center min-w-[220px] max-w-[220px] hover:bg-white/40 transition-all group relative">
+                            <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md mb-3 cursor-pointer z-10" onclick="window.location.href='../profile/index.html?id=${amigo.id}'">
+                                <img src="${img}" alt="${nombreCompleto}" class="w-full h-full object-cover group-hover:scale-110 transition-transform">
+                            </div>
+                            <h4 class="font-bold text-on-surface text-center cursor-pointer hover:text-primary transition-colors w-full truncate" onclick="window.location.href='../profile/index.html?id=${amigo.id}'" title="${nombreCompleto}">${nombreCompleto}</h4>
+                            <p class="text-primary font-bold text-[10px] tracking-widest uppercase mb-1 truncate w-full text-center" title="${username}">${username}</p>
+                            <p class="text-[12px] text-on-surface-variant/70 mb-4 font-medium">${edadTxt}</p>
+                            
+                            <!-- Placeholder for shared trips -->
+                            <div class="flex items-center justify-center gap-1.5 bg-primary/5 text-primary px-3 py-2 rounded-full mb-4 w-full" title="Han compartido un viaje entre los 2">
+                                <span class="material-symbols-outlined text-[14px]">flight_takeoff</span>
+                                <span class="text-[9px] font-bold uppercase tracking-wider leading-tight text-center">Viajes Compartidos<br><span class="opacity-70">(Próximamente)</span></span>
+                            </div>
+                            
+                            ${btnHtml}
+                        </div>
+                        `;
+                    }).join('');
+                } else {
+                    section.classList.add('hidden');
+                }
+            }
+        } catch (err) {
+            console.error('Error fetching friends:', err);
+        }
+    }
+
+    // Función global para que funcione el onclick de las tarjetas
+    window.toggleFollowFriend = async function(friendId, btnEl, initiallyFollowing) {
+        const loggedInUserStr = localStorage.getItem('itera_user');
+        if (!loggedInUserStr) {
+            alert("Inicia sesión para poder seguir usuarios");
+            return;
+        }
+        let currentUserId = '';
+        try {
+            currentUserId = JSON.parse(loggedInUserStr).id || '';
+        } catch(e) {}
+        
+        if (!currentUserId) return;
+        
+        // Prevent clicking yourself
+        if (currentUserId === friendId) {
+            alert("No puedes seguirte a ti mismo");
+            return;
+        }
+        
+        btnEl.disabled = true;
+        btnEl.classList.add('opacity-50');
+        
+        try {
+            const url = `http://localhost:8000/api/usuarios/${friendId}/seguir?current_user_id=${currentUserId}`;
+            const resp = await fetch(url, { method: 'POST' });
+            if (resp.ok) {
+                const data = await resp.json();
+                const isNowFollowing = data.siguiendo;
+                
+                // Update button UI
+                btnEl.onclick = function() { window.toggleFollowFriend(friendId, btnEl, isNowFollowing); };
+                
+                if (isNowFollowing) {
+                    btnEl.textContent = 'Siguiendo';
+                    btnEl.className = "w-full py-2.5 rounded-xl font-bold transition-all text-sm bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-350 border border-slate-300 dark:border-slate-700 hover:bg-slate-300";
+                } else {
+                    btnEl.textContent = 'Seguir';
+                    btnEl.className = "w-full py-2.5 rounded-xl font-bold transition-all text-sm bg-primary text-white shadow-md shadow-primary/20 hover:scale-[1.02] active:scale-100";
+                }
+            }
+        } catch (err) {
+            console.error('Error toggling friend follow:', err);
+        } finally {
+            btnEl.disabled = false;
+            btnEl.classList.remove('opacity-50');
+        }
+    };
 
     // Setup follow button logic for visitor
     const btnFollow = document.getElementById('btn-follow');
