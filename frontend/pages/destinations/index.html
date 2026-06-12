@@ -586,13 +586,27 @@ window.addEventListener('scroll', () => {
 
 <!-- ========== ADD TO TRIP MODAL ========== -->
 <div id="add-to-trip-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300">
-  <div class="bg-surface rounded-2xl shadow-2xl w-full max-w-md p-6 transform scale-95 transition-transform duration-300 flex flex-col max-h-[80vh]">
+  <div class="bg-surface rounded-2xl shadow-2xl w-full max-w-md p-6 transform scale-95 transition-transform duration-300 flex flex-col max-h-[85vh]">
     <div class="flex justify-between items-center mb-4">
       <h3 class="text-xl font-bold text-on-surface">Agregar a Viaje</h3>
       <button id="btn-close-modal" class="p-2 rounded-full hover:bg-surface-container transition-colors text-on-surface-variant"><span class="material-symbols-outlined">close</span></button>
     </div>
     <p class="text-sm text-on-surface-variant mb-4">Selecciona los viajes a los que deseas agregar <strong id="modal-attraction-name" class="text-primary"></strong>.</p>
-    <div id="modal-trips-container" class="flex-1 overflow-y-auto space-y-2 mb-6 min-h-[150px]"></div>
+    <div id="modal-trips-container" class="flex-1 overflow-y-auto space-y-2 mb-4 min-h-[150px]"></div>
+    
+    <!-- Crear Nuevo Viaje Rápido -->
+    <div class="mb-6 border-t border-outline-variant/30 pt-4">
+      <button id="btn-toggle-new-trip" class="flex items-center gap-2 text-primary font-bold text-sm w-full text-left hover:text-primary-container transition-colors focus:outline-none">
+        <span class="material-symbols-outlined" id="icon-toggle-new-trip">add</span> Crear nuevo viaje rápido
+      </button>
+      <div id="new-trip-form" class="hidden mt-3 flex flex-col gap-3 animate-fade-in">
+        <input type="text" id="new-trip-name" class="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl py-2.5 px-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" placeholder="Nombre del nuevo viaje..." autocomplete="off" />
+        <button id="btn-create-and-save-trip" class="w-full py-2.5 font-semibold rounded-xl bg-secondary text-white hover:bg-secondary-container hover:text-on-secondary-container transition-colors shadow-sm text-sm flex items-center justify-center gap-2">
+            Crear viaje y guardar atracción
+        </button>
+      </div>
+    </div>
+
     <div class="flex gap-4 mt-auto">
       <button id="btn-cancel-modal" class="flex-1 py-3 font-semibold rounded-full border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors">Cancelar</button>
       <button id="btn-save-modal" class="flex-1 py-3 font-semibold rounded-full bg-primary text-on-primary hover:bg-primary-container transition-colors shadow-md">Guardar</button>
