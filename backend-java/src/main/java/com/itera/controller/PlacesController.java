@@ -46,6 +46,12 @@ public class PlacesController {
         return placesService.getPlaceDetails(placeId);
     }
 
+    /** GET /api/places/{placeId}/locality — retorna { city, country } de la atracción */
+    @GetMapping("/{placeId}/locality")
+    public JsonNode getAttractionLocality(@PathVariable String placeId) {
+        return placesService.getAttractionLocality(placeId);
+    }
+
     /** GET /api/places/{placeId}/photo?max_width=1200 */
     @GetMapping("/{placeId}/photo")
     public ResponseEntity<byte[]> getPlacePhoto(
