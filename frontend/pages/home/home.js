@@ -229,28 +229,35 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Search autocomplete (Native Google Places) ---
   const input = document.getElementById('google-places-search');
   if (input) {
-    // Inicializamos el Autocomplete de Google
-    const autocomplete = new google.maps.places.Autocomplete(input, {
-      types: ['(cities)'], // Sugerir principalmente ciudades
-    });
-
-    // Manejar la selección de un destino
-    autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace();
-      if (place && place.place_id) {
-        window.location.href = `../destinations/index.html?pid=${place.place_id}`;
-      } else if (place && place.name) {
-        // Si no hay ID, buscamos por nombre
-        window.location.href = `../destinations/index.html?q=${encodeURIComponent(place.name)}`;
+    function initAutocomplete() {
+      if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
+        setTimeout(initAutocomplete, 200);
+        return;
       }
-    });
+      // Inicializamos el Autocomplete de Google
+      const autocomplete = new google.maps.places.Autocomplete(input, {
+        types: ['(cities)'], // Sugerir principalmente ciudades
+      });
 
-    // Evitar que el formulario se envíe al presionar Enter en el autocomplete
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && document.querySelector('.pac-item-selected')) {
-        e.preventDefault();
-      }
-    });
+      // Manejar la selección de un destino
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (place && place.place_id) {
+          window.location.href = `../destinations/index.html?pid=${place.place_id}`;
+        } else if (place && place.name) {
+          // Si no hay ID, buscamos por nombre
+          window.location.href = `../destinations/index.html?q=${encodeURIComponent(place.name)}`;
+        }
+      });
+
+      // Evitar que el formulario se envíe al presionar Enter en el autocomplete
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && document.querySelector('.pac-item-selected')) {
+          e.preventDefault();
+        }
+      });
+    }
+    initAutocomplete();
   }
 
   // --- Destinos Destacados (Carousel) ---
@@ -305,6 +312,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Viajes en progreso o Planes rápidos ---
   async function loadFeaturedPlans() {
+    if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
+      setTimeout(loadFeaturedPlans, 200);
+      return;
+    }
     const fastPlansContainer = document.getElementById('fast-plans');
     const userTripsContainer = document.getElementById('user-trips');
     
