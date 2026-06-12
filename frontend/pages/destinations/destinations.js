@@ -1,26 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
   // ── Config ──
   const CATEGORIES = [
-    { key:'tourist_attraction', label:'Atracciones', icon:'attractions' },
-    { key:'restaurant', label:'Gastronomía', icon:'restaurant' },
-    { key:'transit_station', label:'Movilidad', icon:'directions_car' }
+    { key: 'tourist_attraction', label: 'Atracciones', icon: 'attractions' },
+    { key: 'restaurant', label: 'Gastronomía', icon: 'restaurant' },
+    { key: 'transit_station', label: 'Movilidad', icon: 'directions_car' }
   ];
   const SUB_CATS = [
-    { key:'all', label:'Todos', icon:'map' },
-    { key:'tourist_attraction', label:'Atracciones', icon:'camera' },
-    { key:'restaurant', label:'Gastronomía', icon:'restaurant' },
-    { key:'lodging', label:'Alojamiento', icon:'hotel' },
-    { key:'transit_station', label:'Transporte', icon:'train' }
+    { key: 'all', label: 'Todos', icon: 'map' },
+    { key: 'tourist_attraction', label: 'Atracciones', icon: 'camera' },
+    { key: 'restaurant', label: 'Gastronomía', icon: 'restaurant' },
+    { key: 'lodging', label: 'Alojamiento', icon: 'hotel' },
+    { key: 'transit_station', label: 'Transporte', icon: 'train' }
   ];
   const PRICES = [
-    { key:'all', label:'Todos' },{ key:'free', label:'Gratis' },
-    { key:'$', label:'$' },{ key:'$$', label:'$$' },{ key:'$$$', label:'$$$' }
+    { key: 'all', label: 'Todos' }, { key: 'free', label: 'Gratis' },
+    { key: '$', label: '$' }, { key: '$$', label: '$$' }, { key: '$$$', label: '$$$' }
   ];
   const RATINGS = [
-    { key:0, label:'Todas' },{ key:3, label:'3★ o más' },
-    { key:4, label:'4★ o más' },{ key:4.5, label:'4.5★ o más' }
+    { key: 0, label: 'Todas' }, { key: 3, label: '3★ o más' },
+    { key: 4, label: '4★ o más' }, { key: 4.5, label: '4.5★ o más' }
   ];
-  const CAT_LABELS = { tourist_attraction:'Atracciones', restaurant:'Gastronomía', transit_station:'Movilidad', lodging:'Alojamiento', all:'Lugar' };
+  const CAT_LABELS = { tourist_attraction: 'Atracciones', restaurant: 'Gastronomía', transit_station: 'Movilidad', lodging: 'Alojamiento', all: 'Lugar' };
 
   // ── State ──
   let state = {
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     subCatsEl.innerHTML = '';
     SUB_CATS.forEach(sc => {
       const isActive = state.subCategory === sc.key;
-      const iconHtml = sc.icon ? `<span class="material-symbols-outlined mb-1" style="font-variation-settings:'FILL' ${isActive?'1':'0'},'wght' 400,'GRAD' 0,'opsz' 24">${sc.icon}</span>` : '';
+      const iconHtml = sc.icon ? `<span class="material-symbols-outlined mb-1" style="font-variation-settings:'FILL' ${isActive ? '1' : '0'},'wght' 400,'GRAD' 0,'opsz' 24">${sc.icon}</span>` : '';
       subCatsEl.insertAdjacentHTML('beforeend', `
         <button data-sub="${sc.key}" class="flex flex-col items-center justify-center p-3 md:p-4 rounded-xl transition-all border border-transparent shadow-sm text-[11px] font-semibold gap-1 ${isActive ? 'bg-primary text-on-primary shadow-md' : 'bg-surface-container-lowest text-on-surface hover:bg-primary hover:text-on-primary'}">${iconHtml} ${sc.label}</button>`);
     });
@@ -154,10 +154,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const value = btn.getAttribute('data-sort');
       state.sortBy = value;
       sortLabel.textContent = btn.querySelector('span').textContent;
-      
+
       sortMenu.querySelectorAll('[data-sort]').forEach(b => b.classList.remove('active', 'bg-primary/5', 'text-primary'));
       btn.classList.add('active', 'bg-primary/5', 'text-primary');
-      
+
       sortMenu.classList.add('hidden');
       sortBtn.setAttribute('aria-expanded', 'false');
       applyFilters();
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const navFav = document.getElementById('nav-favorites');
       navFav.classList.remove('bg-primary/5', 'text-primary', 'font-semibold');
       navFav.classList.add('text-on-surface-variant', 'font-medium', 'hover:bg-surface-container-high');
-      
+
       const navExplore = document.getElementById('nav-explore');
       if (navExplore) {
         navExplore.classList.add('bg-primary/5', 'text-primary', 'font-semibold');
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         state.favorites.push({ ...item });
       }
     }
-    saveFavorites(); 
+    saveFavorites();
     applyFilters();
   }
   window._toggleFav = toggleFavorite;
@@ -216,20 +216,20 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('nav-favorites').addEventListener('click', (e) => {
     e.preventDefault();
     state.showFavoritesOnly = true; // Always set to true when clicking favorites explicitly
-    
+
     const navFav = document.getElementById('nav-favorites');
     navFav.classList.add('bg-primary/5', 'text-primary', 'font-semibold');
     navFav.classList.remove('text-on-surface-variant', 'font-medium', 'hover:bg-surface-container-high');
-    
+
     const navExplore = document.getElementById('nav-explore');
     if (navExplore) {
       navExplore.classList.remove('bg-primary/5', 'text-primary', 'font-semibold');
       navExplore.classList.add('text-on-surface-variant', 'font-medium', 'hover:bg-surface-container-high');
     }
-    
+
     applyFilters();
   });
-  
+
   const navExplore = document.getElementById('nav-explore');
   if (navExplore) {
     navExplore.addEventListener('click', (e) => {
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-  
+
   updateFavBadge();
 
   // ── Search Logic ──
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const heroSpinner = document.getElementById('hero-search-spinner');
 
   async function doSearch(query, dropdown, resultsList, onSelect, spinner) {
-    if (!query) { dropdown.classList.add('hidden'); if(spinner) spinner.classList.add('hidden'); return; }
+    if (!query) { dropdown.classList.add('hidden'); if (spinner) spinner.classList.add('hidden'); return; }
     if (spinner) spinner.classList.remove('hidden');
     try {
       // Fetch Google Places and community attractions in parallel
@@ -269,12 +269,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Sort Google Places by administrative priority
       places.sort((a, b) => {
-        const p = place => { 
-          const t = place.types || []; 
-          if (t.includes('country')) return 4; 
-          if (t.some(type => type.startsWith('administrative_area') || type === 'locality')) return 3; 
+        const p = place => {
+          const t = place.types || [];
+          if (t.includes('country')) return 4;
+          if (t.some(type => type.startsWith('administrative_area') || type === 'locality')) return 3;
           if (t.includes('sublocality') || t.includes('neighborhood') || t.includes('colloquial_area')) return 2;
-          return 1; 
+          return 1;
         };
         return p(b) - p(a);
       });
@@ -284,10 +284,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const hasPlaces = places.length > 0;
       const hasCommunity = communityAttractions.length > 0;
 
-      if (!hasPlaces && !hasCommunity) { 
-        dropdown.classList.add('hidden'); 
-        if(spinner) spinner.classList.add('hidden'); 
-        return; 
+      if (!hasPlaces && !hasCommunity) {
+        dropdown.classList.add('hidden');
+        if (spinner) spinner.classList.add('hidden');
+        return;
       }
 
       dropdown.classList.remove('hidden');
@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
           resultsList.appendChild(li);
         });
       }
-    } catch(e) { console.error(e); }
+    } catch (e) { console.error(e); }
     finally {
       if (spinner) spinner.classList.add('hidden');
     }
@@ -369,23 +369,23 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('hero-search-btn').addEventListener('click', () => { if (heroInput.value.trim()) { clearTimeout(searchTimeout); doSearch(heroInput.value, heroDropdown, heroResults, (place, name) => { heroInput.value = name; if (place._isCommunity) { applyFilters(); } else { state.placeId = place.id; state.locationName = name; fetchData(); } }, heroSpinner); } });
 
   let sidebarTimeout;
-  sidebarLocInput.addEventListener('input', e => { 
-    clearTimeout(sidebarTimeout); 
+  sidebarLocInput.addEventListener('input', e => {
+    clearTimeout(sidebarTimeout);
     sidebarTimeout = setTimeout(() => {
       const resultsList = document.getElementById('sidebar-location-results');
-      doSearch(e.target.value, sidebarLocDropdown, resultsList, (place, name) => { 
-        sidebarLocInput.value = ''; 
-        sidebarLocInput.placeholder = name; 
-        heroInput.value = name; 
-        if (place._isCommunity) { 
-          applyFilters(); 
-        } else { 
-          state.placeId = place.id; 
-          state.locationName = name; 
-          fetchData(); 
+      doSearch(e.target.value, sidebarLocDropdown, resultsList, (place, name) => {
+        sidebarLocInput.value = '';
+        sidebarLocInput.placeholder = name;
+        heroInput.value = name;
+        if (place._isCommunity) {
+          applyFilters();
+        } else {
+          state.placeId = place.id;
+          state.locationName = name;
+          fetchData();
         }
       });
-    }, 400); 
+    }, 400);
   });
 
   document.addEventListener('click', e => {
@@ -475,7 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Filter & Render ──
   function applyFilters() {
     let items = state.showFavoritesOnly ? [...state.favorites] : [...state.results];
-    
+
     if (state.showFavoritesOnly) {
       // When in favorites mode, we can still allow filtering by category if we want,
       // but let's stick to the user request of showing "all favorites".
@@ -496,7 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const totalItems = items.length;
     const totalPages = Math.ceil(totalItems / state.pageSize);
-    
+
     // Ensure currentPage is within bounds
     if (state.currentPage > totalPages && totalPages > 0) state.currentPage = totalPages;
     if (state.currentPage < 1) state.currentPage = 1;
@@ -564,7 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const imgSrc = p.image || 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=600&auto=format&fit=crop';
       const catLabel = p.categoryLabel || 'Lugar';
       const btnLabel = catLabel === 'Gastronomía' ? 'Reservar' : catLabel === 'Movilidad' ? 'Comprar' : 'Ver Detalles';
-      
+
       const safeAddress = p.address ? String(p.address) : '';
       const addressDisplay = safeAddress.split(',')[0] || '';
       const safeName = p.name ? String(p.name) : 'Lugar';
@@ -644,25 +644,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const dLoading = document.getElementById('details-loading');
   const dFavBtn = document.getElementById('details-modal-fav-btn');
   const dFavIcon = document.getElementById('details-modal-fav-icon');
-  
+
   let currentDetailsId = null;
 
   // Helper maps for community attraction labels
   const ACC_LABELS = { todo_publico: 'Todo público', silla_ruedas: 'Silla de ruedas', cochecitos: 'Apto cochecitos', personas_mayores: 'Personas mayores' };
-  const ACC_ICONS  = { todo_publico: 'groups', silla_ruedas: 'accessible', cochecitos: 'child_friendly', personas_mayores: 'elderly' };
+  const ACC_ICONS = { todo_publico: 'groups', silla_ruedas: 'accessible', cochecitos: 'child_friendly', personas_mayores: 'elderly' };
   const CAT_LABELS_COMM = { naturaleza: 'Naturaleza', cultura: 'Cultura e Historia', aventura: 'Aventura', gastronomia: 'Gastronomía', entretenimiento: 'Entretenimiento' };
-  const CAT_ICONS_COMM  = { naturaleza: 'forest', cultura: 'museum', aventura: 'explore', gastronomia: 'restaurant', entretenimiento: 'theater_comedy' };
+  const CAT_ICONS_COMM = { naturaleza: 'forest', cultura: 'museum', aventura: 'explore', gastronomia: 'restaurant', entretenimiento: 'theater_comedy' };
 
   // New DOM refs for community fields
-  const dPrice      = document.getElementById('details-modal-price');
-  const dPriceCont  = document.getElementById('details-modal-price-container');
-  const dCatsCont   = document.getElementById('details-modal-categories-container');
-  const dCats       = document.getElementById('details-modal-categories');
-  const dAccCont    = document.getElementById('details-modal-accessibility-container');
-  const dAcc        = document.getElementById('details-modal-accessibility');
+  const dPrice = document.getElementById('details-modal-price');
+  const dPriceCont = document.getElementById('details-modal-price-container');
+  const dCatsCont = document.getElementById('details-modal-categories-container');
+  const dCats = document.getElementById('details-modal-categories');
+  const dAccCont = document.getElementById('details-modal-accessibility-container');
+  const dAcc = document.getElementById('details-modal-accessibility');
   const dPhotosCont = document.getElementById('details-modal-photos-container');
-  const dPhotos     = document.getElementById('details-modal-photos');
-  const dBadge      = document.getElementById('details-modal-source-badge');
+  const dPhotos = document.getElementById('details-modal-photos');
+  const dBadge = document.getElementById('details-modal-source-badge');
 
   function resetDetailsModal() {
     dDesc.textContent = 'No hay descripción disponible para este lugar.';
@@ -692,11 +692,11 @@ document.addEventListener('DOMContentLoaded', () => {
     dAddress.textContent = item.address;
     dRating.textContent = item.rating > 0 ? item.rating.toFixed(1) : '-';
     dImage.src = item.image || 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=600&auto=format&fit=crop';
-    
+
     const isFav = state.favorites.some(f => f.id === id);
     dFavIcon.textContent = isFav ? 'favorite' : 'favorite_border';
     dFavIcon.style.fontVariationSettings = isFav ? "'FILL' 1" : "'FILL' 0";
-    dFavBtn.className = isFav 
+    dFavBtn.className = isFav
       ? 'absolute top-4 left-4 z-20 w-10 h-10 bg-white backdrop-blur-md rounded-full flex items-center justify-center text-red-500 shadow-sm transition-all'
       : 'absolute top-4 left-4 z-20 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white hover:text-red-500 shadow-sm transition-all';
 
@@ -731,7 +731,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (a.categoria) {
             const cats = a.categoria.split(',').map(c => c.trim().toLowerCase()).filter(Boolean);
             dCats.innerHTML = cats.map(cat => {
-              const icon  = CAT_ICONS_COMM[cat]  || 'place';
+              const icon = CAT_ICONS_COMM[cat] || 'place';
               const label = CAT_LABELS_COMM[cat] || (cat.charAt(0).toUpperCase() + cat.slice(1));
               return `<span class="flex items-center gap-1.5 bg-violet-50 border border-violet-200 text-violet-700 px-3 py-1.5 rounded-full text-xs font-bold">
                 <span class="material-symbols-outlined text-[14px]">${icon}</span>${label}
@@ -744,7 +744,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (a.accesibilidad) {
             const accs = a.accesibilidad.split(',').map(x => x.trim()).filter(Boolean);
             dAcc.innerHTML = accs.map(acc => {
-              const icon  = ACC_ICONS[acc]  || 'info';
+              const icon = ACC_ICONS[acc] || 'info';
               const label = ACC_LABELS[acc] || acc;
               return `<span class="flex items-center gap-1.5 bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full text-xs font-semibold">
                 <span class="material-symbols-outlined text-[14px]">${icon}</span>${label}
@@ -773,7 +773,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           }
         }
-      } catch(e) { console.warn('[Details] Error fetching community attraction:', e); }
+      } catch (e) { console.warn('[Details] Error fetching community attraction:', e); }
 
     } else {
       // ── Atracción de Google Places ──
@@ -788,19 +788,19 @@ document.addEventListener('DOMContentLoaded', () => {
             dHoursCont.classList.remove('hidden');
           }
         }
-      } catch(e) {}
+      } catch (e) { }
     }
 
-      // ── Reseñas ──
-      try {
-        const revResp = await fetch(`http://localhost:8000/api/resenas/atraccion/${id}`);
-        if (revResp.ok) {
-          const reviews = await revResp.json();
-          renderReviewsList(reviews);
-        }
-      } catch (e) {
-        console.error('Error fetching reviews:', e);
+    // ── Reseñas ──
+    try {
+      const revResp = await fetch(`http://localhost:8000/api/resenas/atraccion/${id}`);
+      if (revResp.ok) {
+        const reviews = await revResp.json();
+        renderReviewsList(reviews);
       }
+    } catch (e) {
+      console.error('Error fetching reviews:', e);
+    }
 
     dLoading.classList.add('hidden');
   };
@@ -808,7 +808,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Funciones de Reseñas ──
   let selectedReviewRating = 0;
   const stars = document.querySelectorAll('#review-stars-input span');
-  
+
   function renderReviewsList(reviews) {
     const list = document.getElementById('details-modal-reviews-list');
     if (!reviews || reviews.length === 0) {
@@ -861,12 +861,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = JSON.parse(userStr);
     const btn = document.getElementById('btn-submit-review');
     const commentInput = document.getElementById('review-comment-input');
-    
+
     if (selectedReviewRating === 0) { alert('Por favor selecciona una calificación.'); return; }
-    
+
     btn.disabled = true;
     btn.textContent = 'Enviando...';
-    
+
     try {
       const resp = await fetch('http://localhost:8000/api/resenas', {
         method: 'POST',
@@ -879,18 +879,18 @@ document.addEventListener('DOMContentLoaded', () => {
         })
       });
       if (!resp.ok) throw new Error('Error al enviar reseña');
-      
+
       // Reload reviews
       const revResp = await fetch(`http://localhost:8000/api/resenas/atraccion/${currentDetailsId}`);
       if (revResp.ok) {
         renderReviewsList(await revResp.json());
       }
-      
+
       // Reset form
       selectedReviewRating = 0;
       commentInput.value = '';
       stars.forEach(s => { s.classList.remove('text-amber-500'); s.classList.add('text-outline-variant'); s.style.fontVariationSettings = "'FILL' 0"; });
-      
+
     } catch (e) {
       alert('Error: ' + e.message);
     } finally {
@@ -910,7 +910,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const isFav = state.favorites.some(f => f.id === currentDetailsId);
       dFavIcon.textContent = isFav ? 'favorite' : 'favorite_border';
       dFavIcon.style.fontVariationSettings = isFav ? "'FILL' 1" : "'FILL' 0";
-      dFavBtn.className = isFav 
+      dFavBtn.className = isFav
         ? 'absolute top-4 left-4 z-20 w-10 h-10 bg-white backdrop-blur-md rounded-full flex items-center justify-center text-red-500 shadow-sm transition-all'
         : 'absolute top-4 left-4 z-20 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white hover:text-red-500 shadow-sm transition-all';
     }
@@ -931,7 +931,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSave = document.getElementById('btn-save-modal');
   let selectedModalId = null;
 
-  window.openAddToTripModal = async function(attractionId) {
+  window.openAddToTripModal = async function (attractionId) {
     const userStr = localStorage.getItem('itera_user');
     if (!userStr) { alert("Debes iniciar sesión."); window.location.href = '../auth/index.html'; return; }
     const user = JSON.parse(userStr);
@@ -964,7 +964,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </label>`);
       });
-    } catch(e) { modalTrips.innerHTML = '<p class="text-error text-sm text-center py-4">Error cargando viajes.</p>'; }
+    } catch (e) { modalTrips.innerHTML = '<p class="text-error text-sm text-center py-4">Error cargando viajes.</p>'; }
   };
 
   const closeModal = () => { modal.classList.add('opacity-0'); setTimeout(() => modal.classList.add('hidden'), 300); };
@@ -981,24 +981,161 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSave.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">refresh</span> Guardando...';
 
     try {
-      try { await fetch('http://localhost:8000/api/atracciones', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id: selectedModalId, nombre: item?.name || '', descripcion: item?.categoryLabel || '', costo: 0, necesita_turno: false, es_oficial: false }) }); } catch(e) {}
+      try { await fetch('http://localhost:8000/api/atracciones', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: selectedModalId, nombre: item?.name || '', descripcion: item?.categoryLabel || '', costo: 0, necesita_turno: false, es_oficial: false }) }); } catch (e) { }
 
       for (const tid of tripIds) {
         // Guardar sin fecha ni hora para que aparezca como pendiente en el itinerario
-        await fetch(`http://localhost:8000/api/viajes/${tid}/items`, { 
-          method:'POST', 
-          headers:{'Content-Type':'application/json'}, 
-          body: JSON.stringify({ 
-            atraccion_id: selectedModalId, 
-            fecha_asignada: null, 
-            hora_inicio: null, 
-            hora_fin: null 
-          }) 
+        await fetch(`http://localhost:8000/api/viajes/${tid}/items`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            atraccion_id: selectedModalId,
+            fecha_asignada: null,
+            hora_inicio: null,
+            hora_fin: null
+          })
         });
       }
       btnSave.innerHTML = '<span class="material-symbols-outlined text-sm">check</span> Guardado';
       setTimeout(() => { closeModal(); setTimeout(() => { btnSave.innerHTML = 'Guardar'; btnSave.disabled = false; }, 300); }, 1000);
-    } catch(e) { alert("Error al guardar."); btnSave.disabled = false; btnSave.innerHTML = 'Guardar'; }
+    } catch (e) { alert("Error al guardar."); btnSave.disabled = false; btnSave.innerHTML = 'Guardar'; }
+  });
+
+  // ── Crear Nuevo Viaje Rápido ──
+  const btnToggleNewTrip = document.getElementById('btn-toggle-new-trip');
+  const newTripForm = document.getElementById('new-trip-form');
+  const iconToggleNewTrip = document.getElementById('icon-toggle-new-trip');
+  const btnCreateAndSaveTrip = document.getElementById('btn-create-and-save-trip');
+  const newTripNameInput = document.getElementById('new-trip-name');
+
+  btnToggleNewTrip.addEventListener('click', () => {
+    newTripForm.classList.toggle('hidden');
+    iconToggleNewTrip.textContent = newTripForm.classList.contains('hidden') ? 'add' : 'remove';
+    if (!newTripForm.classList.contains('hidden')) newTripNameInput.focus();
+  });
+
+  btnCreateAndSaveTrip.addEventListener('click', async () => {
+    if (!selectedModalId) return;
+    const name = newTripNameInput.value.trim();
+    if (!name) { alert("Ingresa un nombre para el viaje."); return; }
+
+    const userStr = localStorage.getItem('itera_user');
+    if (!userStr) { alert("Debes iniciar sesión."); return; }
+    const user = JSON.parse(userStr);
+
+    btnCreateAndSaveTrip.disabled = true;
+    btnCreateAndSaveTrip.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">refresh</span> Procesando...';
+
+    try {
+      // 1. Obtener la localidad real de la atracción desde Google Places (addressComponents)
+      const item = state.results.find(r => r.id === selectedModalId);
+      let destName  = state.locationName || 'Destino Desconocido';
+      let destPhoto = null;
+      let destCountry = '';
+      let realPlaceId = state.placeId || '';
+
+      if (item && item.id) {
+        try {
+          // Consulta el nuevo endpoint que devuelve { city, country } usando addressComponents
+          const localityResp = await fetch(`/api/places/${item.id}/locality`);
+          if (localityResp.ok) {
+            const localityData = await localityResp.json();
+            if (localityData.city) destName = localityData.city;
+            if (localityData.country) destCountry = localityData.country;
+          }
+        } catch(e) { console.warn('No se pudo obtener la localidad:', e); }
+      }
+
+      // 2. Buscar la ciudad en Google Places para obtener su placeId y foto oficial
+      try {
+        const searchQ = destCountry ? `${destName}, ${destCountry}` : destName;
+        const searchResp = await fetch(`/api/places/textsearch?q=${encodeURIComponent(searchQ)}`);
+        if (searchResp.ok) {
+          const searchResults = await searchResp.json();
+          if (searchResults && searchResults.length > 0) {
+            const bestMatch = searchResults[0];
+            realPlaceId = bestMatch.id;
+            if (bestMatch.displayName && bestMatch.displayName.text) {
+              destName = bestMatch.displayName.text;
+            }
+            // Obtener foto principal del destino desde el placeId oficial
+            const placeResp = await fetch(`/api/places/${realPlaceId}/details`);
+            if (placeResp.ok) {
+              const pData = await placeResp.json();
+              if (pData.photos && pData.photos.length > 0) {
+                destPhoto = `/api/places/${realPlaceId}/photo?max_width=800`;
+              }
+            }
+          }
+        }
+      } catch(e) { console.warn('No se pudo obtener foto del destino:', e); }
+
+      // 3. Crear el nuevo viaje
+      const createResp = await fetch('http://localhost:8000/api/viajes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          creador_id: user.id,
+          nombre: name,
+          destino_principal: destName,
+          foto_url: destPhoto,
+          estado: 'pendiente'
+        })
+      });
+      if (!createResp.ok) throw new Error("Error creando el viaje");
+      const newTrip = await createResp.json();
+
+      // 3. Guardar el destino en la ruta del viaje
+      try {
+        await fetch(`http://localhost:8000/api/viajes/${newTrip.id}/destinos`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            city: destName,
+            country: destCountry || '',
+            nights: 1,
+            photo_url: destPhoto || '',
+            orden: 0,
+            google_place_id: realPlaceId
+          })
+        });
+      } catch (e) {
+        console.warn('No se pudo añadir el destino a la ruta:', e);
+      }
+
+      // 4. Asegurar que la atracción existe en base de datos
+      try { await fetch('http://localhost:8000/api/atracciones', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: selectedModalId, nombre: item?.name || '', descripcion: item?.categoryLabel || '', costo: 0, necesita_turno: false, es_oficial: false }) }); } catch (e) { }
+
+      // 4. Vincular la atracción al viaje nuevo
+      await fetch(`http://localhost:8000/api/viajes/${newTrip.id}/items`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          atraccion_id: selectedModalId,
+          fecha_asignada: null,
+          hora_inicio: null,
+          hora_fin: null
+        })
+      });
+
+      btnCreateAndSaveTrip.innerHTML = '<span class="material-symbols-outlined text-sm">check</span> ¡Creado y Guardado!';
+      setTimeout(() => {
+        closeModal();
+        setTimeout(() => {
+          btnCreateAndSaveTrip.innerHTML = 'Crear viaje y guardar atracción';
+          btnCreateAndSaveTrip.disabled = false;
+          newTripNameInput.value = '';
+          newTripForm.classList.add('hidden');
+          iconToggleNewTrip.textContent = 'add';
+        }, 300);
+      }, 1000);
+
+    } catch (e) {
+      console.error(e);
+      alert("Hubo un problema al crear el viaje: " + e.message);
+      btnCreateAndSaveTrip.disabled = false;
+      btnCreateAndSaveTrip.innerHTML = 'Crear viaje y guardar atracción';
+    }
   });
 
   // ── Auto-trigger from URL param ──
@@ -1012,7 +1149,7 @@ document.addEventListener('DOMContentLoaded', () => {
           heroInput.value = state.locationName;
           fetchData();
         }
-      }).catch(() => {});
+      }).catch(() => { });
   }
 
   // ── Init ──
