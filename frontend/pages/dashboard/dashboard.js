@@ -151,8 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const finalImg = viaje.finalImg;
 
-      // Calculate a dummy progress for UX purposes if not defined in backend
-      const progress = isConfirmed ? 100 : (Math.floor(Math.random() * 60) + 20);
+      // Progress variable removed - replaced by step stepper
 
       card.innerHTML = `
         <div class="absolute top-4 right-4 flex gap-2 z-10">
@@ -185,12 +184,39 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
           <div class="max-w-md">
-            <div class="flex justify-between items-center mb-2">
-              <span class="text-xs font-semibold text-outline">Progreso del Itinerario</span>
-              <span class="text-xs font-bold text-primary">${progress}%</span>
-            </div>
-            <div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
-              <div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: ${progress}%"></div>
+            <p class="text-xs font-semibold text-outline mb-3">Pasos del Itinerario</p>
+            <div class="flex items-center gap-0">
+              ${(() => {
+                // Determine completed steps based on status
+                // Step 1 (Concepto): always done if the trip exists
+                // Step 2 (Ruta): done if trip has dates or is not in 'pendiente' state
+                // Step 3 (Itinerario): done if confirmed/closed
+                const est = (viaje.estado || '').toLowerCase();
+                const step1 = true; // Trip exists = concept done
+                const step2 = est !== 'pendiente'; // Has gone past planning
+                const step3 = est === 'confirmado' || est === 'cerrado';
+
+                const steps = [
+                  { label: 'Concepto', icon: 'edit_note', done: step1 },
+                  { label: 'Ruta', icon: 'map', done: step2 },
+                  { label: 'Itinerario', icon: 'calendar_today', done: step3 },
+                ];
+
+                return steps.map((s, i) => `
+                  <div class="flex items-center ${i < steps.length - 1 ? 'flex-1' : ''}">
+                    <div class="flex flex-col items-center gap-1 shrink-0">
+                      <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all
+                        ${s.done ? 'bg-primary border-primary text-white' : 'bg-surface border-outline-variant text-outline-variant'}">
+                        <span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' ${s.done ? 1 : 0}">${s.icon}</span>
+                      </div>
+                      <span class="text-[9px] font-bold uppercase tracking-wide ${s.done ? 'text-primary' : 'text-outline-variant'}">${s.label}</span>
+                    </div>
+                    ${i < steps.length - 1 ? `
+                      <div class="flex-1 h-0.5 mb-4 mx-1 rounded-full ${step2 && i === 0 ? 'bg-primary' : step3 && i === 1 ? 'bg-primary' : 'bg-outline-variant/30'}"></div>
+                    ` : ''}
+                  </div>
+                `).join('');
+              })()}
             </div>
           </div>
         </div>
