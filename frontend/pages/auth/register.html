@@ -61,8 +61,7 @@
   </script>
 </head>
 <body class="bg-surface font-body text-on-surface antialiased overflow-x-hidden">
-<div id="navbar-container"></div>
-<script src="../../shared/components/navbar/navbar.js"></script>
+
 <main class="min-h-screen flex flex-col lg:flex-row">
 
   <!-- ── Left Section: Editorial Image & Typography ── -->
@@ -239,15 +238,23 @@
 </main>
 
 <script>
-  // Compute "edad" from date-of-birth before form submission
-  document.getElementById('reg-dob').addEventListener('change', function () {
-    const dob = new Date(this.value);
+  // Restrict date of birth to past dates only
+  const dobInput = document.getElementById('reg-dob');
+  if (dobInput) {
     const today = new Date();
-    let age = today.getFullYear() - dob.getFullYear();
-    const m = today.getMonth() - dob.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
-    document.getElementById('reg-edad').value = age;
-  });
+    const tzOffset = today.getTimezoneOffset() * 60000;
+    const localISOTime = (new Date(Date.now() - tzOffset)).toISOString().split('T')[0];
+    dobInput.max = localISOTime;
+
+    // Compute "edad" from date-of-birth before form submission
+    dobInput.addEventListener('change', function () {
+      const dob = new Date(this.value);
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+      document.getElementById('reg-edad').value = age;
+    });
+  }
 </script>
 <script src="auth.js"></script>
 </body>
