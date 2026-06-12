@@ -566,48 +566,32 @@
 
                 
                 <!-- Bento Stats Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     
-                    <!-- Globe Card Integrated into Bento -->
-                    <div class="glass-panel p-8 rounded-[32px] bento-item md:col-span-2 relative overflow-hidden h-[340px]">
-                        <div class="flex justify-between items-start relative z-10">
-                            <div>
-                                <h3 class="font-headline-sm text-on-surface tracking-tight">Presencia Global</h3>
-                                <p class="text-on-surface-variant/60 text-[14px]">Rastreando destinos en vivo.</p>
-                            </div>
-                            <span class="material-symbols-outlined text-primary/40 text-[32px]">public</span>
+                    <!-- Stats Cards -->
+                    <div class="glass-panel p-8 rounded-[32px] bento-item flex flex-col justify-between h-[220px]">
+                        <div class="flex justify-between items-center">
+                            <span class="material-symbols-outlined text-primary text-[32px] opacity-60">flight_takeoff</span>
+                            <span id="stats-destinations-badge" class="text-primary font-bold text-[14px] bg-primary/5 px-3 py-1.5 rounded-full cursor-pointer hover:bg-primary hover:text-white transition-all active:scale-95 duration-200 shadow-sm" onclick="window.location.href='../create-trip/index.html'">+0 Nuevos</span>
                         </div>
-                        <div class="absolute inset-0 z-0 opacity-80 mt-12" id="globe-container">
-                            <canvas class="w-full h-full cursor-grab" id="globe-canvas" style="opacity: 0; transition: opacity 1s;"></canvas>
-                            <div class="absolute inset-0 pointer-events-none" id="globe-markers"></div>
+                        <div>
+                            <p class="text-display-lg font-display-lg leading-none tracking-tighter" id="stats-countries">12</p>
+                            <p class="text-[14px] font-bold text-on-surface-variant/50 uppercase tracking-widest mt-2">Destinos</p>
                         </div>
                     </div>
                     
-                    <!-- Stats Floating Cards -->
-                    <div class="space-y-6">
-                        <div class="glass-panel p-8 rounded-[32px] bento-item flex flex-col justify-between h-[160px]">
-                            <div class="flex justify-between items-center">
-                                <span class="material-symbols-outlined text-primary text-[24px] opacity-60">flight_takeoff</span>
-                                <span id="stats-destinations-badge" class="text-primary font-bold text-[12px] bg-primary/5 px-2.5 py-1 rounded-full cursor-pointer hover:bg-primary hover:text-white transition-all active:scale-95 duration-200 shadow-sm" onclick="window.location.href='../create-trip/index.html'">+0 Nuevos</span>
+                    <div class="glass-panel p-8 rounded-[32px] bento-item flex flex-col justify-between h-[220px]">
+                        <div class="flex justify-between items-center">
+                            <span class="material-symbols-outlined text-tertiary text-[32px] opacity-60">groups</span>
+                        </div>
+                        <div class="flex gap-10">
+                            <div>
+                                <p class="text-4xl font-display-lg font-bold leading-none" id="profile-followers-count-large">0</p>
+                                <p class="text-[12px] font-bold text-on-surface-variant/50 uppercase tracking-widest mt-2">Seguidores</p>
                             </div>
                             <div>
-                                <p class="text-display-lg font-display-lg leading-none tracking-tighter" id="stats-countries">12</p>
-                                <p class="text-[12px] font-bold text-on-surface-variant/50 uppercase tracking-widest mt-1">Destinos</p>
-                            </div>
-                        </div>
-                        <div class="glass-panel p-8 rounded-[32px] bento-item flex flex-col justify-between h-[154px]">
-                            <div class="flex justify-between items-center">
-                                <span class="material-symbols-outlined text-tertiary text-[24px] opacity-60">groups</span>
-                            </div>
-                            <div class="flex gap-8">
-                                <div>
-                                    <p class="text-headline-lg font-display-lg leading-none" id="profile-followers-count-large">0</p>
-                                    <p class="text-[10px] font-bold text-on-surface-variant/50 uppercase tracking-widest mt-1">Seguidores</p>
-                                </div>
-                                <div>
-                                    <p class="text-headline-lg font-display-lg leading-none" id="profile-following-count-large">0</p>
-                                    <p class="text-[10px] font-bold text-on-surface-variant/50 uppercase tracking-widest mt-1">Siguiendo</p>
-                                </div>
+                                <p class="text-4xl font-display-lg font-bold leading-none" id="profile-following-count-large">0</p>
+                                <p class="text-[12px] font-bold text-on-surface-variant/50 uppercase tracking-widest mt-2">Siguiendo</p>
                             </div>
                         </div>
                     </div>

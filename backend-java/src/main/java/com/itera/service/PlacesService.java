@@ -150,6 +150,40 @@ public class PlacesService {
         return getPlace(placeId, fieldMask);
     }
 
+    // ─────────────────────────────────────────────────────────────────────────────
+    // GET /api/places/{placeId}/locality
+    // Devuelve la localidad (ciudad/provincia) de una atracción usando addressComponents
+    // ─────────────────────────────────────────────────────────────────────────────
+    public JsonNode getAttractionLocality(String placeId) {
+        JsonNode details = getPlace(placeId, "addressComponents,displayName");
+        com.fasterxml.jackson.databind.node.ObjectNode result = mapper.createObjectNode();
+
+        if (details != null && details.has("addressComponents")) {
+            String locality = null;
+            String adminLevel1 = null;
+            String country = null;
+
+            for (JsonNode comp : details.get("addressComponents")) {
+                JsonNode types = comp.get("types");
+                String longName = comp.path("longText").asText("");
+                if (types != null) {
+                    for (JsonNode t : types) {
+                        String type = t.asText();
+                        if ("locality".equals(type) && locality == null) locality = longName;
+                        if ("administrative_area_level_1".equals(type) && adminLevel1 == null) adminLevel1 = longName;
+                        if ("country".equals(type) && country == null) country = longName;
+                    }
+                }
+            }
+
+            // Prioridad: locality > administrative_area_level_1 > country
+            String cityName = locality != null ? locality : (adminLevel1 != null ? adminLevel1 : country);
+            result.put("city", cityName != null ? cityName : "");
+            result.put("country", country != null ? country : "");
+        }
+        return result;
+    }
+
     // ─────────────────────────────────────────────────────────────────────────
     // GET /api/places/{placeId}/photos?max_width=800&limit=6
     // Devuelve un array de URLs de fotos resolviendo cada photoName.
