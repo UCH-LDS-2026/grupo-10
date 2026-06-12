@@ -34,10 +34,17 @@ Una vez finalizada la ejecución, la consola deberá indicar que se corrieron lo
 ---
 
 ## 📊 Cómo ver el Reporte de Cobertura (JaCoCo)
-Al finalizar el comando `mvn test`, JaCoCo autogenera un informe visual en HTML. Para abrirlo y auditar la cobertura:
+Al finalizar el comando de ejecución de pruebas, JaCoCo autogenera un informe visual en HTML. Puedes abrirlo de forma directa desde la terminal (estando dentro de la carpeta `backend-java`) ejecutando alguno de los siguientes comandos:
 
-1. Navegar en los archivos del proyecto a la siguiente ruta:
-   `backend-java/target/site/jacoco/`
-2. Abrir el archivo **`index.html`** en cualquier navegador web.
+* **Si estás usando PowerShell (Terminal de VS Code, NetBeans, etc.):**
+  ```powershell
+  Start-Process "target/site/jacoco/index.html"
+  ```
+* **Si estás usando Consola de Comandos clásica (CMD):**
+  ```cmd
+  start target/site/jacoco/index.html
+  ```
+
+*Opcionalmente, puedes buscar manualmente la ruta `backend-java/target/site/jacoco/` en tu Explorador de Archivos y abrir el archivo **`index.html`** haciendo doble clic.*
 
 Allí se podrá auditar detalladamente la cobertura de los servicios (`AuthService`, `ResenaService` y `ViajeService`), incluyendo el porcentaje de cobertura y las líneas específicas de código analizadas.
