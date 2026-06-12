@@ -8,8 +8,17 @@ Asegurarse de tener el motor de base de datos MySQL (por ejemplo, mediante XAMPP
 ---
 
 ## 🚀 Cómo ejecutar los Tests
-Abrir una terminal o consola de comandos, posicionarse dentro de la carpeta **`backend-java`** del proyecto y ejecutar el siguiente comando estándar de Maven:
+Abrir una terminal o consola de comandos, posicionarse dentro de la carpeta **`backend-java`** del proyecto.
 
+Puedes ejecutar los tests de dos formas, dependiendo de si tienes Maven instalado en tu sistema o no:
+
+### Opción 1: Usando el Maven Wrapper del proyecto (Recomendado)
+Si no tienes Maven instalado de forma global, puedes usar el ejecutable wrapper incluido en el proyecto. Ejecuta este comando desde PowerShell (o la terminal de tu IDE):
+```powershell
+.\mvnw clean test
+```
+
+### Opción 2: Usando Maven Global (Si ya lo tienes instalado en tu PC)
 ```bash
 mvn clean test
 ```
