@@ -2,6 +2,50 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUser = null;
     let defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     
+    function showToast(message, type = 'success') {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            container.className = 'fixed bottom-5 right-5 z-[300] flex flex-col gap-3 pointer-events-none';
+            document.body.appendChild(container);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = 'px-6 py-4 rounded-2xl shadow-xl flex items-center gap-3 border backdrop-blur-md transform translate-y-10 opacity-0 transition-all duration-300 pointer-events-auto max-w-sm ';
+        
+        if (type === 'success') {
+            toast.className += 'bg-emerald-500/90 text-white border-emerald-400';
+        } else if (type === 'error') {
+            toast.className += 'bg-red-500/90 text-white border-red-400';
+        } else {
+            toast.className += 'bg-slate-800/90 text-white border-slate-700';
+        }
+
+        const icon = document.createElement('span');
+        icon.className = 'material-symbols-outlined text-xl shrink-0';
+        icon.textContent = type === 'success' ? 'check_circle' : (type === 'error' ? 'error' : 'info');
+        
+        const text = document.createElement('span');
+        text.className = 'font-semibold text-sm leading-relaxed';
+        text.textContent = message;
+
+        toast.appendChild(icon);
+        toast.appendChild(text);
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.remove('translate-y-10', 'opacity-0');
+        }, 10);
+
+        setTimeout(() => {
+            toast.classList.add('opacity-0', 'translate-y-2');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 4000);
+    }
+    
     // Map variables for custom attraction creation
     let createAttrMap = null;
     let createAttrMarker = null;
@@ -83,6 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
         await loadConfirmedTrips();
         await loadFollowInfo();
         await loadFriends();
+        
+        if (isOwner) {
+            await loadInvitations();
+        }
     }
 
     async function loadFollowInfo() {
@@ -311,21 +359,38 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!resp.ok) throw new Error('Error fetching trips');
             const trips = await resp.json();
 
-            // Filtrar viajes confirmados
-            let confirmedTrips = trips.filter(t => t.estado && t.estado.toLowerCase() === 'confirmado');
-
-            // Si NO somos los dueños del perfil, ocultar viajes privados
-            const isOwner = window.isProfileOwner !== false;
-            if (!isOwner) {
-                confirmedTrips = confirmedTrips.filter(t => t.es_privado !== true && t.esPrivado !== true);
+            if (!trips || trips.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <span class="material-symbols-outlined text-[48px] text-primary/30 mb-4">flight_takeoff</span>
+                        <p class="text-on-surface-variant font-medium">Aún no tienes itinerarios.</p>
+                    </div>
+                `;
+                return;
             }
 
-            // Calcular cantidad de destinos únicos de los viajes confirmados (incluyendo principal y sub-destinos)
+            // Si NO somos dueños del perfil, ocultar viajes privados
+            const isOwner = window.isProfileOwner !== false;
+            let displayTrips = isOwner
+                ? trips
+                : trips.filter(t => t.es_privado !== true && t.esPrivado !== true && !t.rol);
+
+            if (displayTrips.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <span class="material-symbols-outlined text-[48px] text-primary/30 mb-4">flight_takeoff</span>
+                        <p class="text-on-surface-variant font-medium">Aún no tienes itinerarios.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Calcular cantidad de destinos únicos
             const destinosSet = new Set();
             const upcomingDestinosSet = new Set();
             const todayStr = new Date().toISOString().split('T')[0];
 
-            confirmedTrips.forEach(trip => {
+            displayTrips.forEach(trip => {
                 const destRaw = trip.destino_principal || trip.destinoPrincipal;
                 if (destRaw) {
                     destRaw.split(',').forEach(d => {
@@ -341,96 +406,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Fetch de los sub-destinos vinculados a cada viaje confirmado
-            try {
-                const fetchPromises = confirmedTrips.map(async (trip) => {
-                    try {
-                        const dResp = await fetch(`http://localhost:8000/api/viajes/${trip.id}/destinos`);
-                        if (dResp.ok) {
-                            const dests = await dResp.json();
-                            const startRaw = trip.fecha_inicio || trip.fechaInicio;
-                            const isUpcoming = startRaw && startRaw >= todayStr;
-
-                            dests.forEach(d => {
-                                const city = (d.city || '').trim();
-                                if (city) {
-                                    destinosSet.add(city.toLowerCase());
-                                    if (isUpcoming) {
-                                        upcomingDestinosSet.add(city.toLowerCase());
-                                    }
-                                }
-                            });
-                        }
-                    } catch (err) {
-                        console.error('Error fetching sub-destinations for trip:', trip.id, err);
-                    }
-                });
-                await Promise.all(fetchPromises);
-            } catch (err) {
-                console.error('Error fetching sub-destinations:', err);
-            }
-
             const statsCountriesEl = document.getElementById('stats-countries');
-            if (statsCountriesEl) {
-                statsCountriesEl.textContent = destinosSet.size;
-            }
+            if (statsCountriesEl) statsCountriesEl.textContent = destinosSet.size;
 
             const statsBadgeEl = document.getElementById('stats-destinations-badge');
-            if (statsBadgeEl) {
-                statsBadgeEl.textContent = `+${upcomingDestinosSet.size} Nuevos`;
-            }
+            if (statsBadgeEl) statsBadgeEl.textContent = `+${upcomingDestinosSet.size} Nuevos`;
 
-            if (confirmedTrips.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-10">
-                        <span class="material-symbols-outlined text-[48px] text-primary/30 mb-4">flight_takeoff</span>
-                        <p class="text-on-surface-variant font-medium">Aún no tienes itinerarios confirmados.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            // Reducir el espaciado vertical del contenedor para el diseño compacto
             container.classList.remove('space-y-12');
             container.classList.add('space-y-6');
 
-            container.innerHTML = confirmedTrips.map(trip => {
+            container.innerHTML = displayTrips.map(trip => {
                 const img = (trip.foto_url || trip.fotoUrl) || 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80';
-                const dateOpts = {month:'short', day:'numeric', year:'numeric'};
+                const dateOpts = { month: 'short', day: 'numeric', year: 'numeric' };
                 const startRaw = trip.fecha_inicio || trip.fechaInicio;
                 const endRaw = trip.fecha_fin || trip.fechaFin;
                 const destRaw = trip.destino_principal || trip.destinoPrincipal || 'Destino no especificado';
-                
+
                 const fechaFormat = startRaw ? new Date(startRaw + 'T00:00:00').toLocaleDateString('es-ES', dateOpts) : '-';
-                const dateRangeFormat = (startRaw && endRaw) 
+                const dateRangeFormat = (startRaw && endRaw)
                     ? `${new Date(startRaw + 'T00:00:00').toLocaleDateString('es-ES')} - ${new Date(endRaw + 'T00:00:00').toLocaleDateString('es-ES')}`
                     : 'Fechas no especificadas';
 
+                // Badge de rol para viajes compartidos
+                let rolBadge = '';
+                if (trip.rol && trip.rol !== 'CREADOR') {
+                    const rolColor = trip.rol === 'EDITOR'
+                        ? 'bg-blue-100 text-blue-700 border border-blue-200'
+                        : 'bg-green-100 text-green-700 border border-green-200';
+                    const rolIcon = trip.rol === 'EDITOR' ? 'edit' : 'visibility';
+                    const rolLabel = trip.rol === 'EDITOR' ? 'Editor' : 'Lector';
+                    rolBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 ${rolColor}"><span class="material-symbols-outlined text-[11px]">${rolIcon}</span>${rolLabel}</span>`;
+                }
+
+                // Badge de estado
+                const estadoBadge = trip.estado
+                    ? `<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">${trip.estado}</span>`
+                    : '';
+
                 const isPriv = trip.es_privado === true || trip.esPrivado === true;
-                const privacyBadge = isPriv 
-                    ? `<span class="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-500 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">lock</span> Privado</span>` 
-                    : `<span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">public</span> Público</span>`;
-                
+                const privacyBadge = isPriv
+                    ? `<span class="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-500 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">lock</span>Privado</span>`
+                    : `<span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">public</span>Público</span>`;
+
                 return `
                     <div class="relative pl-8">
                         <div class="absolute left-0 top-3 w-2 h-2 rounded-full bg-primary ring-4 ring-primary/10"></div>
                         <div class="absolute left-[3.5px] top-6 bottom-[-24px] w-px bg-gradient-to-b from-primary/30 to-transparent"></div>
-                        <div class="glass-panel rounded-2xl p-4 bg-white/40 hover:bg-white/60 transition-all border-white/40 cursor-pointer flex items-center gap-4 shadow-sm hover:shadow-md" onclick="window.location.href='../trip-detail/index.html?id=${trip.id}'">
+                        <div class="glass-panel rounded-2xl p-4 bg-white/40 hover:bg-white/60 transition-all border-white/40 cursor-pointer flex items-center gap-4 shadow-sm hover:shadow-md" onclick="localStorage.setItem('current_trip_id','${trip.id}'); window.location.href='../trip-detail/index.html?id=${trip.id}'">
                             <div class="w-20 h-20 rounded-xl overflow-hidden shadow-sm flex-shrink-0">
-                                <img class="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src="${img}" alt="${trip.nombre}">
+                                <img class="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src="${img}" alt="${trip.nombre}" onerror="this.src='https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80'">
                             </div>
                             <div class="flex-1 min-w-0">
-                                <div class="flex items-center justify-between mb-1 gap-2">
-                                    <div class="flex items-center gap-2 min-w-0">
-                                        <h4 class="font-headline-sm text-base text-on-surface tracking-tight truncate">${trip.nombre}</h4>
-                                        ${privacyBadge}
-                                    </div>
-                                    <span class="text-[10px] text-primary font-bold uppercase tracking-widest whitespace-nowrap">${fechaFormat}</span>
+                                <div class="flex flex-wrap items-center gap-1.5 mb-1">
+                                    <h4 class="font-headline-sm text-base text-on-surface tracking-tight truncate">${trip.nombre}</h4>
+                                    ${estadoBadge}
+                                    ${rolBadge}
+                                    ${isOwner && !trip.rol ? privacyBadge : ''}
                                 </div>
                                 <p class="text-[12px] text-primary font-bold mb-1 uppercase tracking-wider truncate">${destRaw}</p>
-                                <p class="text-[13px] text-on-surface-variant/80 truncate">
-                                    ${dateRangeFormat}
-                                </p>
+                                <p class="text-[13px] text-on-surface-variant/80 truncate">${dateRangeFormat}</p>
                             </div>
                             <span class="material-symbols-outlined text-on-surface-variant/30 hidden sm:block text-sm">arrow_forward_ios</span>
                         </div>
@@ -439,11 +473,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }).join('');
 
         } catch (e) {
-            console.error('Error fetching confirmed trips:', e);
+            console.error('Error fetching trips:', e);
             container.innerHTML = `
                 <div class="text-center py-10">
                     <span class="material-symbols-outlined text-[40px] text-error mb-4">error</span>
                     <p class="text-error font-medium">Error al cargar los itinerarios.</p>
+                    <p class="text-sm text-on-surface-variant mt-2">Verificá que el servidor esté activo.</p>
                 </div>
             `;
         }
@@ -2011,6 +2046,98 @@ document.addEventListener('DOMContentLoaded', () => {
             btnElement.textContent = originalText;
         } finally {
             btnElement.disabled = false;
+        }
+    };
+
+    async function loadInvitations() {
+        const container = document.getElementById('invitaciones-list-container');
+        if (!container || !currentUser?.id) return;
+
+        try {
+            const resp = await fetch(`http://localhost:8000/api/viajes/invitaciones?usuario_id=${currentUser.id}`);
+            if (!resp.ok) throw new Error('Error fetching invitations');
+            const invitaciones = await resp.json();
+
+            if (invitaciones.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <span class="material-symbols-outlined text-[48px] text-primary/30 mb-4">mail</span>
+                        <p class="text-on-surface-variant font-medium">No tienes invitaciones pendientes.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = invitaciones.map(inv => {
+                const img = inv.viaje_foto || 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80';
+                const rolColor = inv.rol === 'EDITOR' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700';
+                const rolLabel = inv.rol === 'EDITOR' ? '✏️ Editor' : '👁️ Lector';
+                const senderName = inv.creador_nombre || inv.creadorNombre || 'Alguien';
+                
+                return `
+                    <div class="relative pl-8">
+                        <div class="absolute left-0 top-3 w-2 h-2 rounded-full bg-amber-500 ring-4 ring-amber-500/10"></div>
+                        <div class="absolute left-[3.5px] top-6 bottom-[-24px] w-px bg-gradient-to-b from-amber-500/30 to-transparent"></div>
+                        <div class="glass-panel rounded-2xl p-4 bg-white/40 border-white/40 flex flex-col sm:flex-row items-center gap-4 shadow-sm">
+                            <div class="w-20 h-20 rounded-xl overflow-hidden shadow-sm flex-shrink-0">
+                                <img class="w-full h-full object-cover" src="${img}" alt="${inv.viaje_nombre}">
+                            </div>
+                            <div class="flex-1 min-w-0 text-center sm:text-left">
+                                <div class="flex items-center justify-center sm:justify-start mb-1 gap-2">
+                                    <h4 class="font-headline-sm text-base text-on-surface tracking-tight truncate">${inv.viaje_nombre}</h4>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full ${rolColor}">${rolLabel}</span>
+                                </div>
+                                <p class="text-[13px] text-on-surface-variant/80">
+                                    <span class="font-semibold text-on-surface">${senderName}</span> te invitó a ver este viaje
+                                </p>
+                            </div>
+                            <div class="flex gap-2 w-full sm:w-auto mt-4 sm:mt-0">
+                                <button onclick="responderInvitacion('${inv.viaje_id}', 'RECHAZADO')" class="flex-1 sm:flex-none px-4 py-2 bg-red-100 text-red-600 rounded-lg font-bold hover:bg-red-200 transition-colors text-sm">Rechazar</button>
+                                <button onclick="responderInvitacion('${inv.viaje_id}', 'ACEPTADO')" class="flex-1 sm:flex-none px-4 py-2 bg-emerald-500 text-white rounded-lg font-bold hover:bg-emerald-600 transition-colors shadow-sm text-sm">Aceptar</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } catch (e) {
+            console.error('Error fetching invitations:', e);
+            container.innerHTML = `
+                <div class="text-center py-10">
+                    <span class="material-symbols-outlined text-[40px] text-error mb-4">error</span>
+                    <p class="text-error font-medium">Error al cargar las invitaciones.</p>
+                </div>
+            `;
+        }
+    }
+
+    window.responderInvitacion = async function(viajeId, estado) {
+        if (!currentUser?.id) return;
+        
+        try {
+            // El endpoint backend espera: PATCH /api/viajes/{viajeId}/invitacion/{usuarioId}
+            const resp = await fetch(`http://localhost:8000/api/viajes/${viajeId}/invitacion/${currentUser.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ estado: estado })
+            });
+            
+            if (!resp.ok) {
+                let msg = 'Error al procesar la invitación';
+                try { const data = await resp.json(); msg = data.message || msg; } catch(_) {}
+                throw new Error(msg);
+            }
+            
+            const msgText = estado === 'ACEPTADO' ? '¡Invitación aceptada! El viaje ya aparece en tu perfil.' : 'Invitación rechazada.';
+            showToast(msgText, estado === 'ACEPTADO' ? 'success' : 'info');
+            await loadInvitations();
+            if (estado === 'ACEPTADO') {
+                await loadConfirmedTrips(); // Refrescar los viajes si aceptó
+            }
+        } catch (e) {
+            console.error(e);
+            showToast(e.message || 'Ocurrió un error al procesar la invitación', 'error');
         }
     };
 

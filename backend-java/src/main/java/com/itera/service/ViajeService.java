@@ -4,16 +4,25 @@ import com.itera.dto.ViajeDTO;
 import com.itera.dto.ViajeDestinoDTO;
 import com.itera.dto.ViajeVueloDTO;
 import com.itera.dto.ItemItinerarioDTO;
+import com.itera.dto.ViajeAutoDTO;
 import com.itera.model.Atraccion;
+import com.lowagie.text.pdf.PdfPageEventHelper;
 import com.itera.model.ItemItinerario;
 import com.itera.model.Viaje;
 import com.itera.model.ViajeDestino;
 import com.itera.model.ViajeVuelo;
+import com.itera.model.ViajeAuto;
 import com.itera.repository.AtraccionRepository;
 import com.itera.repository.ItemItinerarioRepository;
 import com.itera.repository.ViajeDestinoRepository;
 import com.itera.repository.ViajeRepository;
 import com.itera.repository.ViajeVueloRepository;
+import com.itera.repository.UsuarioRepository;
+import com.itera.repository.ViajeUsuarioRepository;
+import com.itera.repository.ViajeAutoRepository;
+import com.itera.model.ViajeUsuario;
+import com.itera.model.ViajeUsuarioId;
+import com.itera.model.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -42,6 +51,9 @@ public class ViajeService {
     private final ViajeDestinoRepository destinoRepository;
     private final ViajeVueloRepository vueloRepository;
     private final PlacesService placesService;
+    private final UsuarioRepository usuarioRepository;
+    private final ViajeUsuarioRepository viajeUsuarioRepository;
+    private final ViajeAutoRepository viajeAutoRepository;
 
     // ===================================================================
     // VIAJES — CRUD principal
@@ -82,7 +94,7 @@ public class ViajeService {
         return toViajeResponse(viaje);
     }
 
-    public ViajeDTO.ViajeResponse obtenerViaje(String viajeId) {
+    public ViajeDTO.ViajeResponse obtenerViaje(String viajeId, String usuarioId) {
         Viaje viaje = viajeRepository.findById(Objects.requireNonNull(viajeId))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Viaje no encontrado."));
         
@@ -101,9 +113,23 @@ public class ViajeService {
             lastRenewedCache.put(viajeId, hoy);
         }
         
-        return toViajeResponse(viaje);
+        ViajeDTO.ViajeResponse resp = toViajeResponse(viaje);
+        if (usuarioId != null && !usuarioId.isBlank()) {
+            if (!viaje.getCreadorId().equals(usuarioId)) {
+                ViajeUsuario vu = viajeUsuarioRepository.findByIdViajeIdAndIdUsuarioId(viaje.getId(), usuarioId).orElse(null);
+                resp.setRol(vu != null ? vu.getRol() : "LECTOR");
+            } else {
+                resp.setRol("CREADOR");
+            }
+        }
+        return resp;
     }
 
+    public ViajeDTO.ViajeResponse obtenerViaje(String viajeId) {
+        return obtenerViaje(viajeId, null);
+    }
+
+    @Transactional(readOnly = true)
     public List<ViajeDTO.ViajeResponse> listarViajes(String creadorId) {
         if (creadorId == null || creadorId.isBlank()) {
             throw new ResponseStatusException(
@@ -112,7 +138,14 @@ public class ViajeService {
             );
         }
         
-        List<Viaje> viajes = viajeRepository.findByCreadorId(creadorId);
+        List<Viaje> viajesPropios = viajeRepository.findByCreadorId(creadorId);
+        List<Viaje> viajes = new ArrayList<>(viajesPropios);
+        
+        // Agregar los viajes compartidos aceptados — buscar el Viaje por ID para evitar LazyInitializationException
+        List<ViajeUsuario> viajesCompartidos = viajeUsuarioRepository.findByIdUsuarioIdAndEstado(creadorId, "ACEPTADO");
+        for (ViajeUsuario vu : viajesCompartidos) {
+            viajeRepository.findById(vu.getId().getViajeId()).ifPresent(viajes::add);
+        }
         
         // Refresh viajes expirados o con fotos temporales de Google para que nunca se venzan
         boolean actualizados = false;
@@ -134,11 +167,37 @@ public class ViajeService {
         }
         
         if (actualizados) {
-            viajes = viajeRepository.findByCreadorId(creadorId);
+            viajesPropios = viajeRepository.findByCreadorId(creadorId);
+            viajes = new ArrayList<>(viajesPropios);
+            viajesCompartidos = viajeUsuarioRepository.findByIdUsuarioIdAndEstado(creadorId, "ACEPTADO");
+            for (ViajeUsuario vu : viajesCompartidos) {
+                viajeRepository.findById(vu.getId().getViajeId()).ifPresent(viajes::add);
+            }
         }
 
         return viajes.stream()
-                .map(this::toViajeResponse)
+                .map(v -> {
+                    ViajeDTO.ViajeResponse resp = toViajeResponse(v);
+                    if (!v.getCreadorId().equals(creadorId)) {
+                        // Viaje compartido: asignar rol y datos del creador
+                        ViajeUsuario vu = viajeUsuarioRepository.findByIdViajeIdAndIdUsuarioId(v.getId(), creadorId).orElse(null);
+                        resp.setRol(vu != null ? vu.getRol() : "LECTOR");
+
+                        // Buscar nombre y username del creador original para mostrarlo en la UI
+                        usuarioRepository.findById(v.getCreadorId()).ifPresent(creador -> {
+                            resp.setCreadorNombre(
+                                (creador.getNombre() != null ? creador.getNombre() : "") +
+                                (creador.getApellido() != null ? " " + creador.getApellido() : "")
+                            );
+                            resp.setCreadorUsername(creador.getUsername());
+                        });
+                    } else {
+                        resp.setRol("CREADOR");
+                        boolean compartido = viajeUsuarioRepository.existsByIdViajeId(v.getId());
+                        resp.setCompartidoConOtros(compartido);
+                    }
+                    return resp;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -519,6 +578,91 @@ public class ViajeService {
                 .orden(v.getOrden())
                 .build();
     }
+    // ===================================================================
+    // INVITACIONES / COMPARTIR VIAJES
+    // ===================================================================
+
+    @Transactional
+    public ViajeDTO.InvitacionResponse compartirViaje(String viajeId, String creadorId, ViajeDTO.InvitacionCreate request) {
+        Viaje viaje = viajeRepository.findById(Objects.requireNonNull(viajeId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Viaje no encontrado."));
+
+        if (!viaje.getCreadorId().equals(creadorId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Solo el creador puede compartir el viaje.");
+        }
+
+        Usuario usuarioInvitado = usuarioRepository.findById(request.getUsuarioId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario a invitar no encontrado."));
+
+        if (usuarioInvitado.getId().equals(creadorId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No puedes invitarte a ti mismo.");
+        }
+
+        ViajeUsuarioId id = new ViajeUsuarioId(viajeId, usuarioInvitado.getId());
+        ViajeUsuario viajeUsuario = viajeUsuarioRepository.findById(id).orElse(null);
+
+        if (viajeUsuario != null) {
+            // Si ya existe, actualizamos el rol o reseteamos a pendiente si estaba rechazado
+            viajeUsuario.setRol(request.getRol());
+            viajeUsuario.setEstado("PENDIENTE");
+        } else {
+            viajeUsuario = ViajeUsuario.builder()
+                    .id(id)
+                    .viaje(viaje)
+                    .usuario(usuarioInvitado)
+                    .rol(request.getRol())
+                    .estado("PENDIENTE")
+                    .build();
+        }
+
+        viajeUsuarioRepository.save(viajeUsuario);
+        return toInvitacionResponse(viajeUsuario);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ViajeDTO.InvitacionResponse> obtenerInvitacionesPendientes(String usuarioId) {
+        if (!usuarioRepository.existsById(usuarioId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado.");
+        }
+
+        List<ViajeUsuario> invitaciones = viajeUsuarioRepository.findByIdUsuarioIdAndEstado(usuarioId, "PENDIENTE");
+
+        return invitaciones.stream()
+                .map(this::toInvitacionResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public ViajeDTO.InvitacionResponse responderInvitacion(String viajeId, String usuarioId, String estado) {
+        ViajeUsuarioId id = new ViajeUsuarioId(viajeId, usuarioId);
+        ViajeUsuario viajeUsuario = viajeUsuarioRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invitación no encontrada."));
+
+        if (!estado.equals("ACEPTADO") && !estado.equals("RECHAZADO")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Estado inválido.");
+        }
+
+        viajeUsuario.setEstado(estado);
+        viajeUsuarioRepository.save(viajeUsuario);
+
+        return toInvitacionResponse(viajeUsuario);
+    }
+
+    private ViajeDTO.InvitacionResponse toInvitacionResponse(ViajeUsuario vu) {
+        Viaje viaje = viajeRepository.findById(vu.getId().getViajeId()).orElse(null);
+        Usuario creador = viaje != null ? usuarioRepository.findById(viaje.getCreadorId()).orElse(null) : null;
+
+        return ViajeDTO.InvitacionResponse.builder()
+                .viajeId(vu.getId().getViajeId())
+                .viajeNombre(viaje != null ? viaje.getNombre() : "")
+                .viajeFoto(viaje != null ? viaje.getFotoUrl() : "")
+                .creadorNombre(creador != null ? creador.getNombre() + " " + creador.getApellido() : "")
+                .creadorUsername(creador != null ? creador.getUsername() : "")
+                .usuarioId(vu.getId().getUsuarioId())
+                .rol(vu.getRol())
+                .estado(vu.getEstado())
+                .build();
+    }
 
     public ViajeDTO.ViajeResponse actualizarEstado(String viajeId, String nuevoEstado) {
         Viaje viaje = viajeRepository.findById(Objects.requireNonNull(viajeId))
@@ -535,5 +679,58 @@ public class ViajeService {
      */
     private String sanitizePhotoUrl(String photoUrl, String googlePlaceId) {
         return photoUrl;
+    }
+
+    // ===================================================================
+    // ALQUILER DE AUTOS POR VIAJE
+    // ===================================================================
+
+    public List<ViajeAutoDTO.AutoResponse> listarAutos(String viajeId) {
+        if (!viajeRepository.existsById(Objects.requireNonNull(viajeId))) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Viaje no encontrado.");
+        }
+        return viajeAutoRepository.findByViajeIdOrderByOrdenAsc(viajeId).stream()
+                .map(this::toAutoResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<ViajeAutoDTO.AutoResponse> reemplazarAutos(
+            String viajeId, List<ViajeAutoDTO.AutoCreate> autos) {
+
+        if (!viajeRepository.existsById(Objects.requireNonNull(viajeId))) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Viaje no encontrado.");
+        }
+
+        // Borrar existentes
+        viajeAutoRepository.deleteByViajeId(viajeId);
+
+        List<ViajeAutoDTO.AutoResponse> responses = new ArrayList<>();
+        for (int i = 0; i < autos.size(); i++) {
+            ViajeAutoDTO.AutoCreate a = autos.get(i);
+            ViajeAuto nuevo = ViajeAuto.builder()
+                    .id(UUID.randomUUID().toString())
+                    .viajeId(viajeId)
+                    .company(a.getCompany() != null ? a.getCompany() : "")
+                    .booking(a.getBooking() != null ? a.getBooking() : "")
+                    .location(a.getLocation() != null ? a.getLocation() : "")
+                    .orden(i)
+                    .build();
+            viajeAutoRepository.save(nuevo);
+            responses.add(toAutoResponse(nuevo));
+        }
+
+        return responses;
+    }
+
+    private ViajeAutoDTO.AutoResponse toAutoResponse(ViajeAuto a) {
+        return ViajeAutoDTO.AutoResponse.builder()
+                .id(a.getId())
+                .viajeId(a.getViajeId())
+                .company(a.getCompany())
+                .booking(a.getBooking())
+                .location(a.getLocation())
+                .orden(a.getOrden())
+                .build();
     }
 }

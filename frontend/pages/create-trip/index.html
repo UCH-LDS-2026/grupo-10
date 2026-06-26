@@ -90,6 +90,8 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8b4X4Be-V-hYXJhGPzMyt-pMZ5QU0z40&libraries=places"></script>
+
+<link rel="icon" type="image/png" href="../../assets/logo/logo-fondoblanco.png" style="background-color: white;">
 </head>
 <body class="bg-surface text-on-surface min-h-screen">
 <div id="navbar-container"></div>
@@ -388,28 +390,6 @@
                     if (activeTemplate) {
                         destinoPrincipal = activeTemplate.destino_principal || "Varios Destinos";
                         tripFotoUrl = activeTemplate.foto_url;
-                        
-                        // Try to get a real Google photo for the main destination
-                        try {
-                            const dummyDiv = document.createElement('div');
-                            const placesService = new google.maps.places.PlacesService(dummyDiv);
-                            const mainPlace = await new Promise((resolve) => {
-                                placesService.textSearch({
-                                    query: activeTemplate.destino_principal || activeTemplate.nombre
-                                }, (results, status) => {
-                                    if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
-                                        resolve(results[0]);
-                                    } else { resolve(null); }
-                                });
-                            });
-
-                            if (mainPlace) {
-                                destinoPrincipal = mainPlace.name;
-                                if (mainPlace.photos && mainPlace.photos.length > 0) {
-                                    tripFotoUrl = `/api/places/${mainPlace.place_id}/photo?max_width=1200`;
-                                }
-                            }
-                        } catch (e) { console.warn("Error fetching main trip photo from Google:", e); }
                     }
 
                     let startDate = null;
@@ -469,48 +449,42 @@
                             // 1. Guardar Destinos
                             let localDests = [];
                             if (activeTemplate.destinos && activeTemplate.destinos.length > 0) {
-                                // Enriquecer destinos con fotos reales de Google si es posible
+                                const dummyDiv = document.createElement('div');
+                                const placesService = window.placesService || new google.maps.places.PlacesService(dummyDiv);
+
                                 const enrichedDestinos = [];
                                 for (let i = 0; i < activeTemplate.destinos.length; i++) {
                                     const d = activeTemplate.destinos[i];
-                                    let realPhoto = d.photo_url;
+                                    let photoUrl = d.photo_url || null;
                                     
                                     try {
-                                        const dummyDiv = document.createElement('div');
-                                        const placesService = new google.maps.places.PlacesService(dummyDiv);
-                                        const destPlace = await new Promise((resolve) => {
-                                            placesService.textSearch({
-                                                query: `${d.city}, ${d.country}`
-                                            }, (results, status) => {
-                                                if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
-                                                    resolve(results[0]);
-                                                } else { resolve(null); }
+                                        if (placesService) {
+                                            const queryStr = d.city + (d.country ? ' ' + d.country : '');
+                                            const res = await new Promise((resolve) => {
+                                                placesService.textSearch({ query: queryStr }, (results, status) => {
+                                                    if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length > 0) {
+                                                        resolve(results[0]);
+                                                    } else {
+                                                        resolve(null);
+                                                    }
+                                                });
                                             });
-                                        });
 
-                                        if (destPlace && destPlace.place_id) {
-                                            realPhoto = `/api/places/${destPlace.place_id}/photo?max_width=1200`;
+                                            if (res && res.place_id) {
+                                                photoUrl = `/api/places/${res.place_id}/photo?max_width=1000`;
+                                            }
                                         }
-
-                                        enrichedDestinos.push({
-                                            city: d.city,
-                                            country: d.country,
-                                            nights: d.nights || 5,
-                                            photo_url: realPhoto,
-                                            google_place_id: destPlace ? destPlace.place_id : null,
-                                            orden: i
-                                        });
-                                    } catch (e) { 
-                                        console.warn("Error fetching destination photo:", e); 
-                                        enrichedDestinos.push({
-                                            city: d.city,
-                                            country: d.country,
-                                            nights: d.nights || 5,
-                                            photo_url: realPhoto,
-                                            google_place_id: null,
-                                            orden: i
-                                        });
+                                    } catch (e) {
+                                        console.warn("Places search failed for destination", d.city);
                                     }
+
+                                    enrichedDestinos.push({
+                                        city: d.city,
+                                        country: d.country,
+                                        nights: d.nights || activeTemplate.duracion_dias || 5,
+                                        photo_url: photoUrl,
+                                        orden: i
+                                    });
                                 }
 
                                 await fetch(`http://localhost:8000/api/viajes/${tripId}/destinos`, {
@@ -533,43 +507,59 @@
                             // 2. Guardar Itinerario
                             if (activeTemplate.itinerario && activeTemplate.itinerario.length > 0 && localDests.length > 0) {
                                 const baseDate = new Date(startDate);
-                                const dummyDiv = document.createElement('div');
-                                const placesService = new google.maps.places.PlacesService(dummyDiv);
-                                const destinationCity = activeTemplate.destinos[0].city;
                                 const totalItems = activeTemplate.itinerario.length;
 
-                                for (let idx = 0; idx < totalItems; idx++) {
+                                const dummyDiv = document.createElement('div');
+                                const placesService = window.placesService || new google.maps.places.PlacesService(dummyDiv);
+
+                                // Process sequentially to avoid OVER_QUERY_LIMIT
+                                for (let idx = 0; idx < activeTemplate.itinerario.length; idx++) {
                                     const item = activeTemplate.itinerario[idx];
-                                    document.getElementById('overlay-desc').textContent = `Configurando: ${item.nombre} (${idx + 1} de ${totalItems})`;
-                                    
                                     const itemDate = new Date(baseDate);
                                     itemDate.setDate(baseDate.getDate() + item.diaOffset);
                                     
-                                    // Buscar atracción real en Google Places
-                                    let placeData = null;
+                                    let placeId = null;
+                                    let address = "";
+                                    let photoUrl = "";
+                                    let rating = 4.5;
+                                    
                                     try {
-                                        placeData = await new Promise((resolve) => {
-                                            placesService.textSearch({
-                                                query: `${item.nombre} in ${destinationCity}`
-                                            }, (results, status) => {
-                                                if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
-                                                    resolve(results[0]);
-                                                } else {
-                                                    resolve(null);
-                                                }
+                                        if (placesService) {
+                                            if (idx > 0) await new Promise(r => setTimeout(r, 300)); // Rate limiting
+                                            const searchCity = activeTemplate.destinos?.[0]?.city || destinoPrincipal;
+                                            const queryStr = item.nombre + ' en ' + searchCity;
+                                            const res = await new Promise((resolve) => {
+                                                placesService.textSearch({ query: queryStr }, (results, status) => {
+                                                    if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length > 0) {
+                                                        resolve(results[0]);
+                                                    } else {
+                                                        resolve(null);
+                                                    }
+                                                });
                                             });
-                                        });
-                                    } catch (e) { console.warn("Error searching place:", e); }
+
+                                            if (res) {
+                                                placeId = res.place_id;
+                                                address = res.formatted_address || "";
+                                                rating = res.rating || 4.5;
+                                                if (res.place_id) {
+                                                    photoUrl = `/api/places/${res.place_id}/photo?max_width=800`;
+                                                }
+                                            }
+                                        }
+                                    } catch(e) {
+                                        console.warn("Places search failed for", item.nombre, e);
+                                    }
 
                                     const attrPayload = {
-                                        id: placeData ? placeData.place_id : `attr-${Math.random().toString(36).substr(2, 9)}`,
-                                        nombre: placeData ? placeData.name : item.nombre,
+                                        id: `attr-${Math.random().toString(36).substr(2, 9)}`,
+                                        nombre: item.nombre,
                                         descripcion: item.descripcion,
                                         categoria: "Atracciones",
-                                        rating: placeData ? (placeData.rating || 4.5) : 4.5,
-                                        foto_url: placeData ? `/api/places/${placeData.place_id}/photo?max_width=800` : "",
-                                        direccion: placeData ? (placeData.formatted_address || "") : "",
-                                        google_place_id: placeData ? placeData.place_id : null,
+                                        rating: rating,
+                                        foto_url: photoUrl,
+                                        direccion: address,
+                                        google_place_id: placeId,
                                         es_oficial: true,
                                         necesita_turno: false
                                     };
@@ -585,14 +575,13 @@
                                          const attrData = await attrResp.json();
                                          finalAttrId = attrData.id;
                                      } else {
-                                         // Fallback: usar el ID temporal si el POST falló (aunque debería funcionar)
                                          finalAttrId = "fallback-" + Math.random().toString(36).substr(2, 5);
                                      }
                                      
                                      if (finalAttrId) {
                                          document.getElementById('overlay-desc').textContent = `Agregando: ${attrPayload.nombre}...`;
                                          
-                                         const resItem = await fetch(`http://localhost:8000/api/viajes/${tripId}/items`, {
+                                         await fetch(`http://localhost:8000/api/viajes/${tripId}/items`, {
                                              method: 'POST',
                                              headers: { 'Content-Type': 'application/json' },
                                              body: JSON.stringify({
@@ -604,33 +593,7 @@
                                                  atraccion_id: finalAttrId
                                              })
                                          });
-
-                                        // Guardar en localStorage para carga inmediata en trip-detail
-                                        if (resItem.ok) {
-                                            const savedItem = await resItem.json();
-                                            const dId = localDests[0].id; // Assume first destination for template
-                                            const dDay = item.diaOffset + 1;
-                                            
-                                            const localItin = JSON.parse(localStorage.getItem('itera_trip_itineraries_' + tripId) || '{}');
-                                            if (!localItin[dId]) localItin[dId] = {};
-                                            if (!localItin[dId][dDay]) localItin[dId][dDay] = [];
-                                            
-                                            localItin[dId][dDay].push({
-                                                id: savedItem.id,
-                                                title: attrPayload.nombre,
-                                                time: item.hora_inicio.substring(0, 5),
-                                                category: attrPayload.categoria,
-                                                desc: item.descripcion,
-                                                placeInfo: { 
-                                                    address: attrPayload.direccion, 
-                                                    photoUrl: attrPayload.foto_url, 
-                                                    placeId: attrPayload.google_place_id,
-                                                    rating: attrPayload.rating
-                                                }
-                                            });
-                                            localStorage.setItem('itera_trip_itineraries_' + tripId, JSON.stringify(localItin));
-                                        }
-                                    }
+                                     }
                                 }
                             }
                             
@@ -657,6 +620,7 @@
 
 <script src="../../shared/utils/auto-translator.js"></script>
 <script src="../../shared/utils/avatar-loader.js"></script>
+<script src="../../shared/components/notifications/notifications.js"></script>
 <script>
 function changeSystemLanguage(lang) {
     localStorage.setItem('itera_lang', lang);

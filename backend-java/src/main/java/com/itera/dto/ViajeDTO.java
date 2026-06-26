@@ -74,5 +74,63 @@ public class ViajeDTO {
 
         @JsonProperty("es_privado")
         private Boolean esPrivado = false;
+        
+        // Atributos adicionales para cuando se devuelve un viaje compartido
+        private String rol;
+
+        @JsonProperty("creador_nombre")
+        private String creadorNombre;
+
+        @JsonProperty("creador_username")
+        private String creadorUsername;
+
+        @JsonProperty("compartido_con_otros")
+        private Boolean compartidoConOtros = false;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class InvitacionCreate {
+        @JsonProperty("usuario_id")
+        @NotBlank(message = "El usuario_id es obligatorio")
+        private String usuarioId;
+
+        private String rol = "LECTOR";
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class InvitacionStatus {
+        @NotBlank(message = "El estado es obligatorio")
+        private String estado;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class InvitacionResponse {
+        @JsonProperty("viaje_id")
+        private String viajeId;
+        
+        @JsonProperty("viaje_nombre")
+        private String viajeNombre;
+        
+        @JsonProperty("viaje_foto")
+        private String viajeFoto;
+        
+        @JsonProperty("creador_nombre")
+        private String creadorNombre;
+        
+        @JsonProperty("creador_username")
+        private String creadorUsername;
+        
+        @JsonProperty("usuario_id")
+        private String usuarioId;
+        
+        private String rol;
+        private String estado;
     }
 }

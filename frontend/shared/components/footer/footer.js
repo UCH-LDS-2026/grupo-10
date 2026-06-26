@@ -128,7 +128,7 @@
           <h4 class="itera-footer-heading">Recursos</h4>
           <ul class="itera-footer-links">
             <li><a href="../destinations/index.html">Explorar</a></li>
-            <li><a href="#">Ayuda</a></li>
+            <li><a href="../help/index.html">Ayuda</a></li>
           </ul>
         </div>
 

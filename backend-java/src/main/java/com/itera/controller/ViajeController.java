@@ -4,7 +4,9 @@ import com.itera.dto.ItemItinerarioDTO;
 import com.itera.dto.ViajeDTO;
 import com.itera.dto.ViajeDestinoDTO;
 import com.itera.dto.ViajeVueloDTO;
+import com.itera.dto.ViajeAutoDTO;
 import com.itera.service.ViajeService;
+import com.itera.service.PdfService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ import java.util.List;
 public class ViajeController {
 
     private final ViajeService viajeService;
+    private final PdfService pdfService;
 
     // ===================================================================
     // VIAJES — CRUD principal
@@ -54,8 +57,10 @@ public class ViajeController {
 
     /** GET /api/viajes/{viajeId} — Obtener un viaje específico */
     @GetMapping("/{viajeId}")
-    public ResponseEntity<ViajeDTO.ViajeResponse> obtenerViaje(@PathVariable String viajeId) {
-        return ResponseEntity.ok(viajeService.obtenerViaje(viajeId));
+    public ResponseEntity<ViajeDTO.ViajeResponse> obtenerViaje(
+            @PathVariable String viajeId,
+            @RequestParam(name = "usuario_id", required = false) String usuarioId) {
+        return ResponseEntity.ok(viajeService.obtenerViaje(viajeId, usuarioId));
     }
 
     /** DELETE /api/viajes/{viajeId} — Eliminar viaje (cascade: destinos, vuelos, items) */
@@ -63,6 +68,43 @@ public class ViajeController {
     public ResponseEntity<Void> eliminarViaje(@PathVariable String viajeId) {
         viajeService.eliminarViaje(viajeId);
         return ResponseEntity.noContent().build();
+    }
+
+    /** GET /api/viajes/{viajeId}/export/pdf — Exportar itinerario en PDF (solo datos de BD) */
+    @GetMapping("/{viajeId}/export/pdf")
+    public ResponseEntity<byte[]> exportarItinerarioPdf(@PathVariable String viajeId) {
+        byte[] pdfBytes = pdfService.generarItinerarioPdf(viajeId);
+        return buildPdfResponse(pdfBytes, viajeId);
+    }
+
+    /** POST /api/viajes/{viajeId}/export/pdf — Exportar PDF con fallback de itinerario del frontend */
+    @PostMapping("/{viajeId}/export/pdf")
+    public ResponseEntity<byte[]> exportarItinerarioPdfConFallback(
+            @PathVariable String viajeId,
+            @RequestBody(required = false) java.util.List<java.util.Map<String, Object>> frontendItems) {
+        byte[] pdfBytes = pdfService.generarItinerarioPdfConFallback(viajeId, frontendItems);
+        return buildPdfResponse(pdfBytes, viajeId);
+    }
+
+    private ResponseEntity<byte[]> buildPdfResponse(byte[] pdfBytes, String viajeId) {
+        String nombreArchivo = "Itinerario_" + viajeId + ".pdf";
+        try {
+            ViajeDTO.ViajeResponse viaje = viajeService.obtenerViaje(viajeId);
+            if (viaje != null && viaje.getNombre() != null) {
+                String safeNombre = viaje.getNombre().replaceAll("[^a-zA-Z0-9-_]", "_");
+                nombreArchivo = "Itinerario_" + safeNombre + ".pdf";
+            }
+        } catch (Exception ignored) {}
+
+        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.setContentType(org.springframework.http.MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(org.springframework.http.ContentDisposition.attachment()
+                .filename(nombreArchivo, java.nio.charset.StandardCharsets.UTF_8)
+                .build());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
     }
 
     // ===================================================================
@@ -164,5 +206,53 @@ public class ViajeController {
             @RequestBody java.util.Map<String, String> body) {
         String nuevoEstado = body.get("estado");
         return ResponseEntity.ok(viajeService.actualizarEstado(viajeId, nuevoEstado));
+    }
+
+    // ===================================================================
+    // INVITACIONES / COMPARTIR VIAJES
+    // ===================================================================
+
+    /** POST /api/viajes/{viajeId}/compartir — Enviar invitación a un usuario */
+    @PostMapping("/{viajeId}/compartir")
+    public ResponseEntity<ViajeDTO.InvitacionResponse> compartirViaje(
+            @PathVariable String viajeId,
+            @RequestParam("creador_id") String creadorId,
+            @Valid @RequestBody ViajeDTO.InvitacionCreate request) {
+        return ResponseEntity.ok(viajeService.compartirViaje(viajeId, creadorId, request));
+    }
+
+    /** GET /api/viajes/invitaciones — Obtener invitaciones pendientes de un usuario */
+    @GetMapping("/invitaciones")
+    public ResponseEntity<List<ViajeDTO.InvitacionResponse>> obtenerInvitacionesPendientes(
+            @RequestParam("usuario_id") String usuarioId) {
+        return ResponseEntity.ok(viajeService.obtenerInvitacionesPendientes(usuarioId));
+    }
+
+    /** PATCH /api/viajes/{viajeId}/invitacion/{usuarioId} — Aceptar o rechazar invitación */
+    @PatchMapping("/{viajeId}/invitacion/{usuarioId}")
+    public ResponseEntity<ViajeDTO.InvitacionResponse> responderInvitacion(
+            @PathVariable String viajeId,
+            @PathVariable String usuarioId,
+            @RequestBody ViajeDTO.InvitacionStatus request) {
+        return ResponseEntity.ok(viajeService.responderInvitacion(viajeId, usuarioId, request.getEstado()));
+    }
+
+    // ===================================================================
+    // ALQUILER DE AUTOS POR VIAJE
+    // ===================================================================
+
+    /** GET /api/viajes/{viajeId}/autos */
+    @GetMapping("/{viajeId}/autos")
+    public ResponseEntity<List<ViajeAutoDTO.AutoResponse>> listarAutos(
+            @PathVariable String viajeId) {
+        return ResponseEntity.ok(viajeService.listarAutos(viajeId));
+    }
+
+    /** PUT /api/viajes/{viajeId}/autos — Reemplazar TODOS los autos (bulk save) */
+    @PutMapping("/{viajeId}/autos")
+    public ResponseEntity<List<ViajeAutoDTO.AutoResponse>> reemplazarAutos(
+            @PathVariable String viajeId,
+            @RequestBody List<ViajeAutoDTO.AutoCreate> autos) {
+        return ResponseEntity.ok(viajeService.reemplazarAutos(viajeId, autos));
     }
 }

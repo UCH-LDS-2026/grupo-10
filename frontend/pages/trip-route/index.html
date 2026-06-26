@@ -83,6 +83,8 @@
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
+
+<link rel="icon" type="image/png" href="../../assets/logo/logo-fondoblanco.png" style="background-color: white;">
 </head>
 <body class="bg-surface text-on-surface">
 <div id="navbar-container"></div>
@@ -326,8 +328,10 @@
             searchInput.placeholder = `Buscar ciudad en ${countryName}...`;
             searchInput.focus();
             
-            if (countryCode && window.autocomplete) {
+            if (countryCode && countryCode !== 'undefined' && countryCode !== 'null' && countryCode.trim().length === 2 && window.autocomplete) {
                 window.autocomplete.setComponentRestrictions({ country: countryCode.toLowerCase() });
+            } else if (window.autocomplete) {
+                window.autocomplete.setComponentRestrictions({ country: [] });
             }
         };
 
@@ -511,7 +515,10 @@
 
             window.autocomplete.addListener('place_changed', () => {
                 const place = window.autocomplete.getPlace();
-                if (!place.geometry) return;
+                if (!place.geometry) {
+                    alert("Por favor, selecciona un destino de las sugerencias que aparecen en la lista.");
+                    return;
+                }
 
                 let cityName = place.name;
                 let countryName = "";
@@ -678,6 +685,7 @@
 
 <script src="../../shared/utils/auto-translator.js"></script>
 <script src="../../shared/utils/avatar-loader.js"></script>
+<script src="../../shared/components/notifications/notifications.js"></script>
 <script>
 function changeSystemLanguage(lang) {
     localStorage.setItem('itera_lang', lang);

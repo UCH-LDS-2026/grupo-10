@@ -84,6 +84,8 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
+
+<link rel="icon" type="image/png" href="../../assets/logo/logo-fondoblanco.png" style="background-color: white;">
 </head>
 <body class="bg-surface font-body text-on-surface">
 <div id="navbar-container"></div>
@@ -103,11 +105,11 @@
 </div>
 </div>
 <nav class="space-y-2">
-<div class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl transition-all duration-300 ease-in-out hover:translate-x-1 cursor-pointer" onclick="window.location.href='../create-trip/index.html'">
+<div id="sidebar-concepto" class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl transition-all duration-300 ease-in-out hover:translate-x-1 cursor-pointer" onclick="window.location.href='../create-trip/index.html'">
 <span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span>
 <span>Concepto</span>
 </div>
-<div class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl transition-all duration-300 ease-in-out hover:translate-x-1 cursor-pointer" onclick="window.location.href='../trip-route/index.html'">
+<div id="sidebar-ruta" class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl transition-all duration-300 ease-in-out hover:translate-x-1 cursor-pointer" onclick="window.location.href='../trip-route/index.html'">
 <span class="material-symbols-outlined" data-icon="map">map</span>
 <span>Ruta</span>
 </div>
@@ -126,10 +128,20 @@
         <h1 class="text-4xl font-extrabold font-headline tracking-tight text-on-surface mb-2">Paso 3 de 3: Itinerario</h1>
         <p class="text-on-surface-variant">Revisa y personaliza tu aventura diaria.</p>
     </div>
-    <button onclick="openLogisticsModal()" class="flex items-center gap-2 px-5 py-2.5 bg-blue-100 text-blue-700 hover:bg-blue-200 font-bold rounded-xl transition-colors shadow-sm cursor-pointer border border-blue-200">
-        <span class="material-symbols-outlined">flight_takeoff</span>
-        Logística
-    </button>
+    <div class="flex gap-2">
+        <button onclick="openShareModal()" id="btn-compartir" class="flex items-center gap-2 px-5 py-2.5 bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed font-bold rounded-xl transition-colors shadow-sm cursor-pointer border border-secondary-fixed">
+            <span class="material-symbols-outlined">share</span>
+            Compartir
+        </button>
+        <button onclick="openLogisticsModal()" class="flex items-center gap-2 px-5 py-2.5 bg-blue-100 text-blue-700 hover:bg-blue-200 font-bold rounded-xl transition-colors shadow-sm cursor-pointer border border-blue-200">
+            <span class="material-symbols-outlined">flight_takeoff</span>
+            Logística
+        </button>
+        <button onclick="exportToPDF()" id="btn-export-pdf" class="flex items-center gap-2 px-5 py-2.5 bg-primary text-white hover:bg-blue-700 font-bold rounded-xl transition-colors shadow-sm cursor-pointer border border-primary">
+            <span class="material-symbols-outlined" id="btn-export-pdf-icon">download</span>
+            <span id="btn-export-pdf-text">Exportar PDF</span>
+        </button>
+    </div>
 </div>
 <!-- Destination Tabs -->
 <div class="flex flex-wrap gap-4 mb-8" id="destinations-tabs">
@@ -169,6 +181,17 @@
     </a>
 </div>
 
+<!-- Car Logistics Widget -->
+<div id="widget-cars" class="bg-surface-container-lowest p-6 rounded-xl shadow-sm hidden mb-8">
+    <div class="flex items-center justify-between mb-4">
+        <span class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Tus Autos</span>
+        <span class="material-symbols-outlined text-primary">directions_car</span>
+    </div>
+    <div id="widget-cars-content" class="space-y-4">
+        <!-- Rendered via JS -->
+    </div>
+</div>
+
 <!-- Flight Logistics Widget -->
 <div id="widget-flights" class="bg-surface-container-lowest p-6 rounded-xl shadow-sm hidden">
     <div class="flex items-center justify-between mb-4">
@@ -204,7 +227,7 @@
     <footer class="mt-12 bg-white dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
         <div class="px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-4">
-                <button class="px-6 py-3 text-on-surface-variant font-bold hover:text-on-surface transition-colors flex items-center gap-2 bg-surface-container-low rounded-xl" onclick="window.location.href='../trip-route/index.html'">
+                <button id="btn-atras" class="px-6 py-3 text-on-surface-variant font-bold hover:text-on-surface transition-colors flex items-center gap-2 bg-surface-container-low rounded-xl" onclick="window.location.href='../trip-route/index.html'">
                     <span class="material-symbols-outlined text-lg">arrow_back</span>
                     Atrás
                 </button>
@@ -395,52 +418,54 @@
             <div>
                 <h4 class="font-bold text-on-surface mb-1">Agencias Globales de Alquiler</h4>
                 <p class="text-xs text-on-surface-variant mb-4">Explora y reserva en las agencias más reconocidas a nivel mundial.</p>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div class="flex flex-wrap gap-4">
                     <!-- Hertz -->
-                    <a href="https://www.hertz.com" target="_blank" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex flex-col items-center gap-3 group">
-                        <img src="https://logo.clearbit.com/hertz.com" alt="Hertz" class="h-10 w-auto max-h-10 object-contain group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/100x40?text=Hertz'">
-                        <span class="font-bold text-sm text-on-surface">Hertz</span>
+                    <a href="https://www.hertz.com" target="_blank" class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex items-center justify-center w-24 h-24 shrink-0 group overflow-hidden">
+                        <img src="../../assets/car-logos/hertz.png" alt="Hertz" class="w-full h-full object-contain p-2 bg-white group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/150x150?text=Hertz'">
                     </a>
                     <!-- Avis -->
-                    <a href="https://www.avis.com" target="_blank" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex flex-col items-center gap-3 group">
-                        <img src="https://logo.clearbit.com/avis.com" alt="Avis" class="h-10 w-auto max-h-10 object-contain group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/100x40?text=Avis'">
-                        <span class="font-bold text-sm text-on-surface">Avis</span>
+                    <a href="https://www.avis.com" target="_blank" class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex items-center justify-center w-24 h-24 shrink-0 group overflow-hidden">
+                        <img src="../../assets/car-logos/avis.png" alt="Avis" class="w-full h-full object-contain p-2 bg-white group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/150x150?text=Avis'">
                     </a>
                     <!-- Enterprise -->
-                    <a href="https://www.enterprise.com" target="_blank" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex flex-col items-center gap-3 group">
-                        <img src="https://logo.clearbit.com/enterprise.com" alt="Enterprise" class="h-10 w-auto max-h-10 object-contain group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/100x40?text=Enterprise'">
-                        <span class="font-bold text-sm text-on-surface">Enterprise</span>
+                    <a href="https://www.enterprise.com" target="_blank" class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex items-center justify-center w-24 h-24 shrink-0 group overflow-hidden">
+                        <img src="../../assets/car-logos/enterprise.png" alt="Enterprise" class="w-full h-full object-contain p-2 bg-white group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/150x150?text=Enterprise'">
                     </a>
                     <!-- Sixt -->
-                    <a href="https://www.sixt.com" target="_blank" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex flex-col items-center gap-3 group">
-                        <img src="https://logo.clearbit.com/sixt.com" alt="Sixt" class="h-10 w-auto max-h-10 object-contain group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/100x40?text=Sixt'">
-                        <span class="font-bold text-sm text-on-surface">Sixt</span>
+                    <a href="https://www.sixt.com" target="_blank" class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex items-center justify-center w-24 h-24 shrink-0 group overflow-hidden">
+                        <img src="../../assets/car-logos/sixt.png" alt="Sixt" class="w-full h-full object-contain p-2 bg-white group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/150x150?text=Sixt'">
                     </a>
                     <!-- Europcar -->
-                    <a href="https://www.europcar.com" target="_blank" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex flex-col items-center gap-3 group">
-                        <img src="https://logo.clearbit.com/europcar.com" alt="Europcar" class="h-10 w-auto max-h-10 object-contain group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/100x40?text=Europcar'">
-                        <span class="font-bold text-sm text-on-surface">Europcar</span>
+                    <a href="https://www.europcar.com" target="_blank" class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex items-center justify-center w-24 h-24 shrink-0 group overflow-hidden">
+                        <img src="../../assets/car-logos/europcar.png" alt="Europcar" class="w-full h-full object-contain p-2 bg-white group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/150x150?text=Europcar'">
                     </a>
                     <!-- Alamo -->
-                    <a href="https://www.alamo.com" target="_blank" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex flex-col items-center gap-3 group">
-                        <img src="https://logo.clearbit.com/alamo.com" alt="Alamo" class="h-10 w-auto max-h-10 object-contain group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/100x40?text=Alamo'">
-                        <span class="font-bold text-sm text-on-surface">Alamo</span>
+                    <a href="https://www.alamo.com" target="_blank" class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-md transition-all flex items-center justify-center w-24 h-24 shrink-0 group overflow-hidden">
+                        <img src="../../assets/car-logos/alamo.png" alt="Alamo" class="w-full h-full object-contain p-2 bg-white group-hover:scale-110 transition-transform" onerror="this.src='https://via.placeholder.com/150x150?text=Alamo'">
                     </a>
                 </div>
             </div>
 
             <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30">
                 <h4 class="font-bold text-sm uppercase tracking-wider text-on-surface-variant mb-4">Guardar Detalles de Reserva</h4>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div id="log-cars-list" class="space-y-3 mb-4 max-h-40 overflow-y-auto pr-2"></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="space-y-1">
-                        <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Compañía Elegida</label>
+                        <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Compañía</label>
                         <input id="log-car-company" type="text" class="w-full bg-surface-container-lowest border-none rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary" placeholder="Ej: Sixt" />
                     </div>
                     <div class="space-y-1">
-                        <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Número de Reserva</label>
+                        <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">N° Reserva</label>
                         <input id="log-car-booking" type="text" class="w-full bg-surface-container-lowest border-none rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary" placeholder="Ej: ABC123456" />
                     </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-on-surface-variant tracking-wider">Lugar Retiro</label>
+                        <input id="log-car-location" type="text" class="w-full bg-surface-container-lowest border-none rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary" placeholder="Ej: Aeropuerto" />
+                    </div>
                 </div>
+                <button onclick="addLogCar()" class="mt-4 px-4 py-2 bg-primary/10 text-primary font-bold rounded-lg hover:bg-primary/20 transition-colors text-sm w-full md:w-auto flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">add_circle</span> <span id="add-car-btn-text">Añadir Reserva</span>
+                </button>
             </div>
         </div>
 
@@ -505,6 +530,85 @@
     </div>
 </div>
 
+<!-- Share Modal -->
+<div id="share-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:100; align-items:center; justify-content:center; padding:1rem; backdrop-filter:blur(4px);">
+    <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl p-6 shadow-2xl relative">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-5">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">share</span>
+                Compartir Viaje
+            </h3>
+            <button onclick="closeShareModal()" class="text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 p-2 rounded-full transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <!-- Sección búsqueda -->
+        <div id="share-search-section">
+            <label class="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-2 block">Buscar usuario</label>
+            <div class="relative">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
+                <input 
+                    type="text" 
+                    id="share-search-input"
+                    class="w-full pl-10 pr-4 py-3 border border-slate-200 dark:border-slate-600 rounded-xl bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary transition-all" 
+                    placeholder="Escribe el nombre o usuario..."
+                    oninput="searchUsersForShare()"
+                    autocomplete="off"
+                >
+            </div>
+            <!-- Resultados de búsqueda -->
+            <div id="share-search-results" style="display:none;" class="mt-2 border border-slate-200 dark:border-slate-600 rounded-xl overflow-hidden max-h-44 overflow-y-auto bg-white dark:bg-slate-800 shadow-md">
+                <!-- filled by JS -->
+            </div>
+        </div>
+
+        <!-- Usuario seleccionado (oculto por defecto) -->
+        <div id="share-selected-section" style="display:none;" class="mb-4">
+            <div class="flex items-center justify-between bg-primary/10 dark:bg-primary/20 border border-primary/30 rounded-xl p-3">
+                <div class="flex items-center gap-3">
+                    <div id="share-selected-avatar" class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">U</div>
+                    <div>
+                        <div id="share-selected-name" class="font-bold text-sm text-slate-900 dark:text-white">Nombre</div>
+                        <div id="share-selected-username" class="text-xs text-slate-500 dark:text-slate-400">@usuario</div>
+                    </div>
+                </div>
+                <button onclick="clearSelectedUserForShare()" class="text-slate-400 hover:text-red-500 transition-colors p-1">
+                    <span class="material-symbols-outlined text-[18px]">close</span>
+                </button>
+            </div>
+
+            <!-- Selector de rol -->
+            <div class="mt-3">
+                <label class="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-2 block">Asignar rol</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <label class="flex items-center gap-2 p-3 border-2 border-slate-200 dark:border-slate-600 rounded-xl cursor-pointer hover:border-primary transition-all has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+                        <input type="radio" name="share-role" value="LECTOR" class="accent-primary" checked>
+                        <div>
+                            <div class="font-bold text-sm text-slate-900 dark:text-white">Lector</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400">Solo puede ver</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-2 p-3 border-2 border-slate-200 dark:border-slate-600 rounded-xl cursor-pointer hover:border-primary transition-all has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+                        <input type="radio" name="share-role" value="EDITOR" class="accent-primary">
+                        <div>
+                            <div class="font-bold text-sm text-slate-900 dark:text-white">Editor</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400">Puede modificar</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Botón enviar -->
+            <button id="btn-send-invite" onclick="sendShareInvite()" class="w-full mt-4 py-3 bg-primary text-white font-bold rounded-xl hover:opacity-90 active:scale-[0.98] transition-all shadow-md">
+                <span class="material-symbols-outlined align-middle text-[18px] mr-1">send</span>
+                Enviar Invitación
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- Custom Confirmation Modal -->
 <div id="confirm-modal" class="fixed inset-0 bg-black/40 z-[200] hidden items-center justify-center p-4 backdrop-blur-[2px]">
     <div class="bg-white dark:bg-slate-800 w-full max-w-[320px] rounded-2xl shadow-xl overflow-hidden transform transition-all scale-95 opacity-0 duration-300" id="confirm-modal-box">
@@ -553,6 +657,130 @@ let currentDestIndex = 0;
 let currentDay = 1;
 let currentSelectedPlace = null;
 let pendingItems = [];
+let dismissedSlots = {};
+let currentCars = [];
+let editingCarIdx = null;
+
+window.getCarLogoUrl = function(companyName) {
+    if (!companyName) return null;
+    const name = companyName.toLowerCase();
+    if (name.includes('hertz')) return '../../assets/car-logos/hertz.png';
+    if (name.includes('avis')) return '../../assets/car-logos/avis.png';
+    if (name.includes('enterprise')) return '../../assets/car-logos/enterprise.png';
+    if (name.includes('sixt')) return '../../assets/car-logos/sixt.png';
+    if (name.includes('europcar')) return '../../assets/car-logos/europcar.png';
+    if (name.includes('alamo')) return '../../assets/car-logos/alamo.png';
+    return null;
+};
+
+window.renderLogCars = function() {
+    const list = document.getElementById('log-cars-list');
+    if (!list) return;
+    list.innerHTML = currentCars.map((car, idx) => {
+        const logoUrl = window.getCarLogoUrl(car.company);
+        return `
+        <div class="bg-surface-container-lowest p-3 rounded-xl flex items-center justify-between border border-outline-variant/30 shadow-sm">
+            <div class="flex items-center gap-3">
+                ${logoUrl ? `<img src="${logoUrl}" class="h-8 w-auto object-contain" onerror="this.style.display='none'">` : ''}
+                <div>
+                    <div class="font-bold text-sm text-on-surface">${car.company} ${car.booking ? `<span class="text-xs text-on-surface-variant font-normal">(Res: ${car.booking})</span>` : ''}</div>
+                    ${car.location ? `<div class="text-xs text-on-surface-variant mt-0.5 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">location_on</span> ${car.location}</div>` : ''}
+                </div>
+            </div>
+            <div class="flex gap-1 shrink-0">
+                <button onclick="editLogCar(${idx})" class="p-1.5 hover:bg-primary/10 text-primary rounded-full transition-colors flex" title="Editar"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+                <button onclick="removeLogCar(${idx})" class="p-1.5 hover:bg-red-50 text-red-400 rounded-full transition-colors flex" title="Eliminar"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+            </div>
+        </div>
+        `;
+    }).join('');
+};
+
+window.addLogCar = function() {
+    const company = document.getElementById('log-car-company').value.trim();
+    const booking = document.getElementById('log-car-booking').value.trim();
+    const loc = document.getElementById('log-car-location') ? document.getElementById('log-car-location').value.trim() : '';
+    if(company) {
+        if (editingCarIdx !== null) {
+            currentCars[editingCarIdx] = { company, booking, location: loc };
+            editingCarIdx = null;
+            const btnText = document.getElementById('add-car-btn-text');
+            if (btnText) btnText.textContent = 'Añadir Reserva';
+        } else {
+            currentCars.push({ company, booking, location: loc });
+        }
+        document.getElementById('log-car-company').value = '';
+        document.getElementById('log-car-booking').value = '';
+        if (document.getElementById('log-car-location')) document.getElementById('log-car-location').value = '';
+        renderLogCars();
+    }
+};
+
+window.editLogCar = function(idx) {
+    const car = currentCars[idx];
+    document.getElementById('log-car-company').value = car.company || '';
+    document.getElementById('log-car-booking').value = car.booking || '';
+    if (document.getElementById('log-car-location')) document.getElementById('log-car-location').value = car.location || '';
+    
+    editingCarIdx = idx;
+    
+    const btnText = document.getElementById('add-car-btn-text');
+    if (btnText) btnText.textContent = 'Guardar Cambios';
+    
+    document.getElementById('log-car-company').focus();
+};
+
+window.removeLogCar = function(idx) {
+    if (editingCarIdx === idx) {
+        editingCarIdx = null;
+        const btnText = document.getElementById('add-car-btn-text');
+        if (btnText) btnText.textContent = 'Añadir Reserva';
+        document.getElementById('log-car-company').value = '';
+        document.getElementById('log-car-booking').value = '';
+        if (document.getElementById('log-car-location')) document.getElementById('log-car-location').value = '';
+    } else if (editingCarIdx !== null && editingCarIdx > idx) {
+        editingCarIdx--;
+    }
+    currentCars.splice(idx, 1);
+    renderLogCars();
+};
+
+window.renderCarsWidget = function() {
+    let data = localStorage.getItem(LOGISTICS_KEY);
+    data = data ? JSON.parse(data) : {};
+    const cars = data.cars || [];
+    
+    const widget = document.getElementById('widget-cars');
+    const content = document.getElementById('widget-cars-content');
+    if (!widget || !content) return;
+    
+    if (cars.length > 0) {
+        widget.classList.remove('hidden');
+        content.innerHTML = cars.map(car => {
+            const logoUrl = window.getCarLogoUrl(car.company);
+            return `
+            <div class="bg-surface-container-lowest border border-outline-variant/30 p-4 rounded-xl shadow-sm flex items-start gap-4">
+                ${logoUrl ? `<div class="w-12 h-12 rounded-lg bg-white flex items-center justify-center p-1 border border-outline-variant/20 shrink-0"><img src="${logoUrl}" class="max-w-full max-h-full object-contain" onerror="this.style.display='none'"></div>` : ''}
+                <div>
+                    <div class="font-bold text-on-surface">${car.company}</div>
+                    ${car.booking ? `<div class="text-xs text-on-surface-variant mt-1">Reserva: <span class="font-bold text-primary">${car.booking}</span></div>` : ''}
+                    ${car.location ? `<div class="text-xs text-on-surface-variant mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">location_on</span> ${car.location}</div>` : ''}
+                </div>
+            </div>
+            `;
+        }).join('');
+    } else {
+        widget.classList.add('hidden');
+    }
+};
+
+window.dismissPlaceholder = function(typeName) {
+    const d = destinations[currentDestIndex];
+    const key = `${d.id}-${currentDay}-${typeName}`;
+    dismissedSlots[key] = true;
+    localStorage.setItem('itera_dismissed_slots', JSON.stringify(dismissedSlots));
+    renderDay();
+};
 
 // --- Mapeo de Iconos por Categoría ---
 const categoryIcons = {
@@ -606,8 +834,163 @@ if (currentTripId) localStorage.setItem('current_trip_id', currentTripId);
 const DEST_KEY = currentTripId ? 'itera_trip_destinations_' + currentTripId : 'itera_trip_destinations';
 const ITIN_KEY = currentTripId ? 'itera_trip_itineraries_' + currentTripId : 'itera_trip_itineraries';
 const LOGISTICS_KEY = currentTripId ? 'itera_trip_logistics_' + currentTripId : 'itera_trip_logistics';
+window.isLector = false;
+
+function showToast(message, type = 'success') {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = 'fixed bottom-5 right-5 z-[300] flex flex-col gap-3 pointer-events-none';
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'px-6 py-4 rounded-2xl shadow-xl flex items-center gap-3 border backdrop-blur-md transform translate-y-10 opacity-0 transition-all duration-300 pointer-events-auto max-w-sm ';
+    
+    if (type === 'success') {
+        toast.className += 'bg-emerald-500/90 text-white border-emerald-400';
+    } else if (type === 'error') {
+        toast.className += 'bg-red-500/90 text-white border-red-400';
+    } else {
+        toast.className += 'bg-slate-800/90 text-white border-slate-700';
+    }
+
+    const icon = document.createElement('span');
+    icon.className = 'material-symbols-outlined text-xl shrink-0';
+    icon.textContent = type === 'success' ? 'check_circle' : (type === 'error' ? 'error' : 'info');
+    
+    const text = document.createElement('span');
+    text.className = 'font-semibold text-sm leading-relaxed';
+    text.textContent = message;
+
+    toast.appendChild(icon);
+    toast.appendChild(text);
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.remove('translate-y-10', 'opacity-0');
+    }, 10);
+
+    setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 4000);
+}
 
 async function init() {
+    // 1. Verificar rol del usuario en este viaje primero
+    if (currentTripId) {
+        try {
+            const currentUser = JSON.parse(localStorage.getItem('itera_user'));
+            const tripResp = await fetch(`http://localhost:8000/api/viajes/${currentTripId}?usuario_id=${currentUser.id}`);
+            if (tripResp.ok) {
+                const tripData = await tripResp.json();
+                window.isLector = tripData.rol === 'LECTOR' && tripData.creador_id !== currentUser.id;
+                
+                if (window.isLector) {
+                    const btnCompartir = document.getElementById('btn-compartir');
+                    if (btnCompartir) btnCompartir.style.display = 'none';
+                    
+                    const btnLogistics = document.querySelector('button[onclick="openLogisticsModal()"]');
+                    if (btnLogistics) btnLogistics.style.display = 'none';
+
+                    const btnAddAttr = document.querySelector('button[onclick="openAddAttractionModal()"]');
+                    if (btnAddAttr) btnAddAttr.style.display = 'none';
+
+                    const sidebarConcepto = document.getElementById('sidebar-concepto');
+                    if (sidebarConcepto) sidebarConcepto.style.display = 'none';
+
+                    const sidebarRuta = document.getElementById('sidebar-ruta');
+                    if (sidebarRuta) sidebarRuta.style.display = 'none';
+
+                    const btnAtras = document.getElementById('btn-atras');
+                    if (btnAtras) btnAtras.style.display = 'none';
+
+                    const btnFinalizar = document.getElementById('btn-finalizar');
+                    if (btnFinalizar) {
+                        btnFinalizar.innerHTML = `
+                            Volver a Mis Viajes
+                            <span class="material-symbols-outlined">arrow_back</span>
+                        `;
+                        btnFinalizar.onclick = function() {
+                            window.location.href = '../profile/index.html';
+                        };
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn('Error al verificar el rol del usuario:', e);
+        }
+
+        // Cargar vuelos y autos desde el backend
+        try {
+            const vuelosResp = await fetch(`http://localhost:8000/api/viajes/${currentTripId}/vuelos`);
+            const autosResp = await fetch(`http://localhost:8000/api/viajes/${currentTripId}/autos`);
+            
+            let flightsIda = [];
+            let flightsVuelta = [];
+            let cars = [];
+            
+            if (vuelosResp.ok) {
+                const backendVuelos = await vuelosResp.json();
+                flightsIda = backendVuelos
+                    .filter(v => v.direction === 'ida')
+                    .sort((a, b) => (a.orden || 0) - (b.orden || 0))
+                    .map(v => ({
+                        airline: v.airline || '',
+                        flight: v.flight || '',
+                        origin: v.origin || '',
+                        dest: v.dest || '',
+                        dep: v.dep || '',
+                        arr: v.arr || '',
+                        type: v.flightType || 'final'
+                    }));
+                flightsVuelta = backendVuelos
+                    .filter(v => v.direction === 'vuelta')
+                    .sort((a, b) => (a.orden || 0) - (b.orden || 0))
+                    .map(v => ({
+                        airline: v.airline || '',
+                        flight: v.flight || '',
+                        origin: v.origin || '',
+                        dest: v.dest || '',
+                        dep: v.dep || '',
+                        arr: v.arr || '',
+                        type: v.flightType || 'final'
+                    }));
+            }
+            
+            if (autosResp.ok) {
+                const backendAutos = await autosResp.json();
+                cars = backendAutos
+                    .sort((a, b) => (a.orden || 0) - (b.orden || 0))
+                    .map(a => ({
+                        company: a.company || '',
+                        booking: a.booking || '',
+                        location: a.location || ''
+                    }));
+            }
+            
+            // Si cargamos algo del backend, lo sincronizamos en localStorage
+            if (vuelosResp.ok || autosResp.ok) {
+                const savedData = localStorage.getItem(LOGISTICS_KEY);
+                let logisticsData = savedData ? JSON.parse(savedData) : {};
+                if (vuelosResp.ok) {
+                    logisticsData.flightsIda = flightsIda;
+                    logisticsData.flightsVuelta = flightsVuelta;
+                }
+                if (autosResp.ok) {
+                    logisticsData.cars = cars;
+                }
+                localStorage.setItem(LOGISTICS_KEY, JSON.stringify(logisticsData));
+            }
+        } catch (e) {
+            console.warn('Error al sincronizar logística desde el backend:', e);
+        }
+    }
+
     // Cargar destinos desde key por viaje, fallback a backend
     let data = localStorage.getItem(DEST_KEY);
     if (data) {
@@ -651,6 +1034,9 @@ async function init() {
             }
         });
     }
+
+    const savedDismissed = localStorage.getItem('itera_dismissed_slots');
+    if (savedDismissed) dismissedSlots = JSON.parse(savedDismissed);
 
     // Load items from backend and merge with local
     if (currentTripId) {
@@ -736,11 +1122,19 @@ async function init() {
     renderTabs();
     selectDestination(0);
     renderFlightsWidget();
+    renderCarsWidget();
     renderRouteMap();
 }
 
 function renderTabs() {
     const tabsContainer = document.getElementById('destinations-tabs');
+    const addDestBtnHtml = window.isLector ? '' : `
+        <button onclick="openQuickAddDestModal()" class="px-6 py-3 rounded-full font-bold whitespace-nowrap transition-all bg-surface-container-low text-primary border-2 border-dashed border-primary/30 hover:bg-primary/5 hover:border-primary/50 flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm">add</span>
+            Agregar Destino
+        </button>
+    `;
+
     tabsContainer.innerHTML = destinations.map((d, index) => {
         const isCountry = d.isCountry;
         const isActive = index === currentDestIndex;
@@ -752,27 +1146,46 @@ function renderTabs() {
             classes += isCountry ? "bg-amber-100 text-amber-700 hover:bg-amber-200" : "bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest";
         }
         
+        const deleteBtnHtml = window.isLector ? '' : `
+            <button onclick="event.stopPropagation(); deleteDestAt(${index})" class="absolute -top-1.5 -right-1.5 w-6 h-6 flex items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md text-error opacity-0 group-hover/dest:opacity-100 hover:scale-110 transition-all border border-error/10 z-10" title="Eliminar destino">
+                <span class="material-symbols-outlined text-[14px] font-bold">close</span>
+            </button>
+        `;
+
         return `
             <div class="relative group/dest">
                 <button onclick="selectDestination(${index})" class="${classes}">
                     ${d.city}
                 </button>
-                <button onclick="event.stopPropagation(); deleteDestAt(${index})" class="absolute -top-1.5 -right-1.5 w-6 h-6 flex items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md text-error opacity-0 group-hover/dest:opacity-100 hover:scale-110 transition-all border border-error/10 z-10" title="Eliminar destino">
-                    <span class="material-symbols-outlined text-[14px] font-bold">close</span>
-                </button>
+                ${deleteBtnHtml}
             </div>
         `;
-    }).join('') + `
-        <button onclick="openQuickAddDestModal()" class="px-6 py-3 rounded-full font-bold whitespace-nowrap transition-all bg-surface-container-low text-primary border-2 border-dashed border-primary/30 hover:bg-primary/5 hover:border-primary/50 flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm">add</span>
-            Agregar Destino
-        </button>
-    `;
+    }).join('') + addDestBtnHtml;
 }
 
 window.deleteDestAt = function(index) {
+    if (window.isLector) return;
     if (destinations.length <= 1) {
-        alert("El viaje debe tener al menos un destino.");
+        // Create custom styled alert toast
+        const toast = document.createElement('div');
+        toast.className = 'fixed bottom-6 left-1/2 bg-error text-on-error px-6 py-3 rounded-full shadow-lg font-semibold text-sm flex items-center gap-2 z-50 transition-all duration-300';
+        toast.style.transform = 'translate(-50%, 20px)';
+        toast.style.opacity = '0';
+        toast.innerHTML = `<span class="material-symbols-outlined">error</span> El viaje debe tener al menos un destino.`;
+        document.body.appendChild(toast);
+        
+        // Trigger entrance animation
+        requestAnimationFrame(() => {
+            toast.style.transform = 'translate(-50%, 0)';
+            toast.style.opacity = '1';
+        });
+
+        // Trigger exit animation and remove
+        setTimeout(() => {
+            toast.style.transform = 'translate(-50%, 20px)';
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
         return;
     }
     
@@ -792,6 +1205,7 @@ window.closeDeleteModal = function() {
 };
 
 window.confirmDeleteAction = async function() {
+    if (window.isLector) return;
     const index = window.pendingDeleteIndex;
     if (index === null || index === undefined) return;
 
@@ -927,20 +1341,22 @@ function renderDay() {
         { isPlaceholder: true, time: '15:00', defaultTitle: 'Actividad de la Tarde', icon: 'local_see', typeName: 'Tarde', text: 'Añade otra atracción turística o paseo', min: '14:30', max: '18:59' },
         { isPlaceholder: true, time: '20:00', defaultTitle: 'Cena', icon: 'nightlife', typeName: 'Noche', text: 'Programa la cena o actividad nocturna', min: '19:00', max: '23:59' }
     ];
-
     let combinedItems = [...attrs];
-    defaultSlots.forEach(slot => {
-        const hasAttrInSlot = attrs.some(a => a.time >= slot.min && a.time <= slot.max);
-        if (!hasAttrInSlot) {
-            combinedItems.push(slot);
-        }
-    });
+    if (!window.isLector) {
+        defaultSlots.forEach(slot => {
+            const hasAttrInSlot = attrs.some(a => a.time >= slot.min && a.time <= slot.max);
+            const slotKey = `${d.id}-${currentDay}-${slot.typeName}`;
+            if (!hasAttrInSlot && !dismissedSlots[slotKey]) {
+                combinedItems.push(slot);
+            }
+        });
+    }
 
     combinedItems.sort((a, b) => a.time.localeCompare(b.time));
 
     // 1. Render Pending Items (Only on first day of first destination for now, or always at top)
     let pendingHtml = '';
-    if (pendingItems.length > 0) {
+    if (pendingItems.length > 0 && !window.isLector) {
         pendingHtml = `
         <div class="mb-8 p-4 bg-amber-50 rounded-xl border border-amber-200">
             <h4 class="text-amber-800 font-bold text-sm flex items-center gap-2 mb-3">
@@ -979,7 +1395,7 @@ function renderDay() {
             ${combinedItems.map((item, index) => {
                 if (item.isPlaceholder) {
                     return `
-                    <div class="relative pl-[135px] mb-2 group cursor-pointer" onclick="openAddSuggestedAttraction('${item.defaultTitle}', '${item.time}')">
+                    <div class="relative pl-[135px] mb-2 group cursor-pointer">
                         <div class="absolute left-0 top-[18px] w-[62px] text-right">
                             <span class="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest group-hover:text-primary transition-colors">${item.time}</span>
                         </div>
@@ -987,7 +1403,7 @@ function renderDay() {
                             <span class="material-symbols-outlined text-[16px]">${item.icon}</span>
                         </div>
                         <div class="absolute left-[100px] top-[22px] w-3 h-3 rounded-full bg-surface-container-highest border-2 border-surface shadow-sm z-10 group-hover:bg-primary transition-colors"></div>
-                        <div class="bg-transparent border border-dashed border-outline-variant/40 p-3 pr-4 rounded-xl hover:border-primary/50 hover:bg-primary/5 transition-all relative flex items-center justify-between">
+                        <div class="bg-transparent border border-dashed border-outline-variant/40 p-3 pr-4 rounded-xl hover:border-primary/50 hover:bg-primary/5 transition-all relative flex items-center justify-between" onclick="openAddSuggestedAttraction('${item.defaultTitle}', '${item.time}')">
                             <div class="flex items-center gap-4">
                                 <div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:bg-white group-hover:text-primary group-hover:shadow-sm transition-all">
                                     <span class="material-symbols-outlined text-[20px]" data-icon="${item.icon}">${item.icon}</span>
@@ -1001,6 +1417,9 @@ function renderDay() {
                             </div>
                             <button class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
                                 <span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                            </button>
+                            <button onclick="event.stopPropagation(); window.dismissPlaceholder('${item.typeName}')" class="absolute -top-3 -right-2 w-7 h-7 rounded-full bg-surface-container text-on-surface-variant hover:bg-red-100 hover:text-red-500 flex items-center justify-center shadow-md transition-all border border-outline-variant/20 z-30" title="Ocultar sugerencia">
+                                <span class="material-symbols-outlined text-[14px]">close</span>
                             </button>
                         </div>
                     </div>
@@ -1041,8 +1460,10 @@ function renderDay() {
                                     <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(attr.title)}&destination_place_id=${attr.placeInfo?.placeId || ''}', '_blank')" class="p-1.5 hover:bg-blue-50 rounded-full transition-colors text-blue-500" title="¿Cómo llegar? (Google Maps)">
                                         <span class="material-symbols-outlined text-sm">directions</span>
                                     </button>
-                                    <button onclick="openEditAttractionModal('${attr.id}')" class="p-1.5 hover:bg-primary/10 rounded-full transition-colors text-primary" title="Editar"><span class="material-symbols-outlined text-sm">edit</span></button>
-                                    <button onclick="deleteAttraction('${attr.id}')" class="p-1.5 hover:bg-red-50 rounded-full transition-colors text-red-400" title="Eliminar"><span class="material-symbols-outlined text-sm">delete</span></button>
+                                    ${window.isLector ? '' : `
+                                        <button onclick="openEditAttractionModal('${attr.id}')" class="p-1.5 hover:bg-primary/10 rounded-full transition-colors text-primary" title="Editar"><span class="material-symbols-outlined text-sm">edit</span></button>
+                                        <button onclick="deleteAttraction('${attr.id}')" class="p-1.5 hover:bg-red-50 rounded-full transition-colors text-red-400" title="Eliminar"><span class="material-symbols-outlined text-sm">delete</span></button>
+                                    `}
                                 </div>
                             </div>
                             
@@ -1082,26 +1503,46 @@ function renderDay() {
                         if (attr.routeToNext.mode === 'BICYCLING') icon = 'directions_bike';
                         if (attr.routeToNext.mode === 'TRANSIT') icon = 'directions_transit';
                         
-                        html += `
-                        <div class="relative pl-[135px] mb-2 group flex items-center justify-start h-8">
-                            <div class="absolute left-[100px] top-[-20px] bottom-[-20px] w-0.5 border-l-2 border-dashed border-primary/50"></div>
-                            <button onclick="openRouteLogistics('${attr.id}', '${nextAttr.id}', '${safeTitle}', '${nextSafeTitle}', '${safeAddress}', '${nextSafeAddress}')" class="bg-primary/10 hover:bg-primary/20 text-primary font-bold px-4 py-1.5 rounded-full shadow-sm flex items-center gap-3 transition-colors z-20 text-xs border border-primary/20 group/btn">
-                                <span class="material-symbols-outlined text-[16px]">${icon}</span>
-                                <span>${attr.routeToNext.duration} (${attr.routeToNext.distance})</span>
-                                <span class="material-symbols-outlined text-[14px] opacity-0 group-hover/btn:opacity-100 transition-opacity">edit</span>
-                            </button>
-                        </div>
-                        `;
+                        if (window.isLector) {
+                            html += `
+                            <div class="relative pl-[135px] mb-2 group flex items-center justify-start h-8">
+                                <div class="absolute left-[100px] top-[-20px] bottom-[-20px] w-0.5 border-l-2 border-dashed border-primary/50"></div>
+                                <div class="bg-primary/5 text-primary font-bold px-4 py-1.5 rounded-full flex items-center gap-3 text-xs border border-primary/10">
+                                    <span class="material-symbols-outlined text-[16px]">${icon}</span>
+                                    <span>${attr.routeToNext.duration} (${attr.routeToNext.distance})</span>
+                                </div>
+                            </div>
+                            `;
+                        } else {
+                            html += `
+                            <div class="relative pl-[135px] mb-2 group flex items-center justify-start h-8">
+                                <div class="absolute left-[100px] top-[-20px] bottom-[-20px] w-0.5 border-l-2 border-dashed border-primary/50"></div>
+                                <button onclick="openRouteLogistics('${attr.id}', '${nextAttr.id}', '${safeTitle}', '${nextSafeTitle}', '${safeAddress}', '${nextSafeAddress}')" class="bg-primary/10 hover:bg-primary/20 text-primary font-bold px-4 py-1.5 rounded-full shadow-sm flex items-center gap-3 transition-colors z-20 text-xs border border-primary/20 group/btn">
+                                    <span class="material-symbols-outlined text-[16px]">${icon}</span>
+                                    <span>${attr.routeToNext.duration} (${attr.routeToNext.distance})</span>
+                                    <span class="material-symbols-outlined text-[14px] opacity-0 group-hover/btn:opacity-100 transition-opacity">edit</span>
+                                </button>
+                            </div>
+                            `;
+                        }
                     } else {
-                        html += `
-                        <div class="relative pl-[135px] mb-2 group flex items-center justify-start h-8">
-                            <div class="absolute left-[100px] top-[-20px] bottom-[-20px] w-0.5 border-l-2 border-dashed border-outline-variant/30"></div>
-                            <button onclick="openRouteLogistics('${attr.id}', '${nextAttr.id}', '${safeTitle}', '${nextSafeTitle}', '${safeAddress}', '${nextSafeAddress}')" class="bg-surface-container-high hover:bg-primary/10 text-on-surface-variant hover:text-primary px-4 py-1.5 rounded-full flex items-center gap-2 transition-all z-20 text-[10px] font-bold uppercase tracking-wider border border-transparent hover:border-primary/20">
-                                <span class="material-symbols-outlined text-[14px]">add_circle</span>
-                                Logística
-                            </button>
-                        </div>
-                        `;
+                        if (window.isLector) {
+                            html += `
+                            <div class="relative pl-[135px] mb-2 group flex items-center justify-start h-8">
+                                <div class="absolute left-[100px] top-[-20px] bottom-[-20px] w-0.5 border-l-2 border-dashed border-outline-variant/30"></div>
+                            </div>
+                            `;
+                        } else {
+                            html += `
+                            <div class="relative pl-[135px] mb-2 group flex items-center justify-start h-8">
+                                <div class="absolute left-[100px] top-[-20px] bottom-[-20px] w-0.5 border-l-2 border-dashed border-outline-variant/30"></div>
+                                <button onclick="openRouteLogistics('${attr.id}', '${nextAttr.id}', '${safeTitle}', '${nextSafeTitle}', '${safeAddress}', '${nextSafeAddress}')" class="bg-surface-container-high hover:bg-primary/10 text-on-surface-variant hover:text-primary px-4 py-1.5 rounded-full flex items-center gap-2 transition-all z-20 text-[10px] font-bold uppercase tracking-wider border border-transparent hover:border-primary/20">
+                                    <span class="material-symbols-outlined text-[14px]">add_circle</span>
+                                    Logística
+                                </button>
+                            </div>
+                            `;
+                        }
                     }
                 }
                 
@@ -1142,11 +1583,17 @@ function renderCalendarWidget() {
         daysBefore += parseInt(destinations[j].nights);
     }
 
+    window.calendarMonthOffset = window.calendarMonthOffset || 0;
+
     const destStartDate = new Date(globalStartDate);
     destStartDate.setDate(destStartDate.getDate() + daysBefore);
     
-    const displayYear = destStartDate.getFullYear();
-    const displayMonth = destStartDate.getMonth();
+    // Calcular el mes a mostrar usando el offset
+    const displayDate = new Date(destStartDate);
+    displayDate.setMonth(displayDate.getMonth() + window.calendarMonthOffset);
+    
+    const displayYear = displayDate.getFullYear();
+    const displayMonth = displayDate.getMonth();
 
     const editingDate = new Date(destStartDate);
     editingDate.setDate(editingDate.getDate() + (currentDay - 1));
@@ -1162,8 +1609,8 @@ function renderCalendarWidget() {
         <div class="flex items-center justify-between mb-4">
             <h3 class="text-base font-bold text-on-surface">${monthNames[displayMonth]} ${displayYear}</h3>
             <div class="flex gap-0.5">
-                <button class="p-1 hover:bg-surface-container rounded-full text-on-surface-variant"><span class="material-symbols-outlined text-lg">chevron_left</span></button>
-                <button class="p-1 hover:bg-surface-container rounded-full text-on-surface-variant"><span class="material-symbols-outlined text-lg">chevron_right</span></button>
+                <button onclick="window.calendarMonthOffset--; renderCalendarWidget()" class="p-1 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-lg">chevron_left</span></button>
+                <button onclick="window.calendarMonthOffset++; renderCalendarWidget()" class="p-1 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-lg">chevron_right</span></button>
             </div>
         </div>
         <div class="grid grid-cols-7 gap-y-1">
@@ -1246,6 +1693,7 @@ function selectDay(day) {
 }
 
 function openAddAttractionModal() {
+    if (window.isLector) return;
     editingAttractionId = null;
     document.getElementById('modal-title-text').textContent = 'Añadir Actividad';
     
@@ -1269,6 +1717,7 @@ function openAddAttractionModal() {
 }
 
 function openAddSuggestedAttraction(title, time) {
+    if (window.isLector) return;
     editingAttractionId = null;
     document.getElementById('modal-title-text').textContent = 'Añadir Actividad';
     
@@ -1296,6 +1745,7 @@ function openAddSuggestedAttraction(title, time) {
 }
 
 function openEditAttractionModal(id) {
+    if (window.isLector) return;
     const d = destinations[currentDestIndex];
     const attr = itineraries[d.id][currentDay].find(a => a.id === id);
     if (!attr) return;
@@ -1337,6 +1787,7 @@ function openEditAttractionModal(id) {
 }
 
 function openProgramPendingModal(id) {
+    if (window.isLector) return;
     const item = pendingItems.find(p => p.id === id);
     if (!item) return;
 
@@ -1350,7 +1801,7 @@ function openProgramPendingModal(id) {
     document.getElementById('attr-desc').value = '';
     
     // If we have a Google Place ID, fetch full details automatically
-    if (item.atraccion_id && window.placesService) {
+    if (item.google_place_id && window.placesService) {
         // Show detail view immediately
         document.getElementById('attr-search-view').classList.add('hidden');
         document.getElementById('attr-search-view').classList.remove('flex');
@@ -1359,7 +1810,7 @@ function openProgramPendingModal(id) {
         document.getElementById('attr-detail-content').innerHTML = '<div class="text-center p-8 text-on-surface-variant"><span class="material-symbols-outlined animate-spin block text-3xl mx-auto mb-2">refresh</span> Cargando detalles...</div>';
 
         window.placesService.getDetails({
-            placeId: item.atraccion_id,
+            placeId: item.google_place_id,
             fields: ['name', 'formatted_address', 'rating', 'photos', 'editorial_summary', 'reviews', 'website', 'formatted_phone_number', 'opening_hours']
         }, (place, status) => {
             if (status === google.maps.places.PlacesServiceStatus.OK && place) {
@@ -1372,11 +1823,9 @@ function openProgramPendingModal(id) {
                     name: place.name,
                     address: place.formatted_address || '',
                     rating: place.rating || null,
-                    photoUrl: photoUrl
+                    photoUrl: photoUrl,
+                    placeId: place.place_id
                 };
-                
-                document.getElementById('attr-title').value = place.name;
-                document.getElementById('attr-place-address').textContent = place.formatted_address || '';
                 document.getElementById('attr-place-rating').textContent = place.rating ? `Valoración: ${place.rating} ⭐` : '';
                 
                 if (photoUrl) {
@@ -1436,6 +1885,7 @@ function openProgramPendingModal(id) {
 let pendingDeleteId = null;
 
 function deletePendingItem(id) {
+    if (window.isLector) return;
     pendingDeleteId = id;
     const modal = document.getElementById('confirm-modal');
     const box = document.getElementById('confirm-modal-box');
@@ -1528,7 +1978,14 @@ function searchPlaces() {
     const city = d.city + ', ' + d.country;
     const inputVal = document.getElementById('attr-search-input').value.trim();
     
-    const query = inputVal ? `${inputVal} en ${city}` : `${currentSearchCategory} en ${city}`;
+    // Para textSearch de Google Maps, el lenguaje natural funciona mejor.
+    // Mapeamos las categorías a términos de búsqueda que devuelvan listas de resultados.
+    let catQuery = currentSearchCategory;
+    if (currentSearchCategory === 'Atracciones') catQuery = 'lugares turísticos';
+    else if (currentSearchCategory === 'Gastronomía') catQuery = 'restaurantes';
+    else if (currentSearchCategory === 'Alojamiento') catQuery = 'hoteles';
+
+    const query = inputVal ? `${inputVal} en ${city}` : `${catQuery} en ${city}`;
     
     const request = {
         query: query,
@@ -1688,6 +2145,7 @@ function showPlaceDetails(placeId, index) {
 }
 
 async function saveAttraction() {
+    if (window.isLector) return;
     let title = document.getElementById('attr-title').value.trim();
     const time = document.getElementById('attr-time').value;
     const category = document.getElementById('attr-category').value;
@@ -1749,6 +2207,7 @@ async function saveAttraction() {
 }
 
 function deleteAttraction(id) {
+    if (window.isLector) return;
     const d = destinations[currentDestIndex];
     itineraries[d.id][currentDay] = itineraries[d.id][currentDay].filter(a => a.id !== id);
     localStorage.setItem(ITIN_KEY, JSON.stringify(itineraries));
@@ -1875,6 +2334,7 @@ let currentRouteEditing = { originId: null, destId: null };
 let currentRouteCalculated = null;
 
 function openRouteLogistics(originId, destId, originTitle, destTitle, originAddress, destAddress) {
+    if (window.isLector) return;
     currentRouteEditing = { originId, destId };
     currentRouteCalculated = null; // Reset
     
@@ -1899,6 +2359,7 @@ function openRouteLogistics(originId, destId, originTitle, destTitle, originAddr
 }
 
 function openLogisticsModal() {
+    if (window.isLector) return;
     const savedData = localStorage.getItem(LOGISTICS_KEY);
     if (savedData) {
         const data = JSON.parse(savedData);
@@ -1917,14 +2378,25 @@ function openLogisticsModal() {
             flightSegmentsVuelta = [];
         }
         
-        if (data.carCompany) document.getElementById('log-car-company').value = data.carCompany;
-        if (data.carBooking) document.getElementById('log-car-booking').value = data.carBooking;
+        if (data.cars && Array.isArray(data.cars)) {
+            currentCars = [...data.cars];
+        } else if (data.carCompany) {
+            currentCars = [{ company: data.carCompany, booking: data.carBooking || '', location: '' }];
+        } else {
+            currentCars = [];
+        }
     } else {
         flightSegmentsIda = [createEmptyFlight()];
         flightSegmentsVuelta = [];
+        currentCars = [];
     }
     
+    document.getElementById('log-car-company').value = '';
+    document.getElementById('log-car-booking').value = '';
+    if (document.getElementById('log-car-location')) document.getElementById('log-car-location').value = '';
+    
     renderFlightSegments();
+    renderLogCars();
     
     document.getElementById('logistics-modal').classList.remove('hidden');
     document.getElementById('logistics-modal').classList.add('flex');
@@ -1936,14 +2408,66 @@ function closeLogisticsModal() {
     document.getElementById('logistics-modal').classList.remove('flex');
 }
 
+function addLogCar() {
+    const compInput = document.getElementById('log-car-company');
+    const bookInput = document.getElementById('log-car-booking');
+    const locInput = document.getElementById('log-car-location');
+    
+    const company = compInput.value.trim();
+    const booking = bookInput.value.trim();
+    const location = locInput ? locInput.value.trim() : '';
+    
+    if (!company) {
+        alert("Por favor ingresa al menos la compañía de alquiler.");
+        return;
+    }
+    
+    currentCars.push({ company, booking, location });
+    
+    compInput.value = '';
+    bookInput.value = '';
+    if (locInput) locInput.value = '';
+    
+    renderLogCars();
+}
+
+function removeLogCar(index) {
+    currentCars.splice(index, 1);
+    renderLogCars();
+}
+
+function renderLogCars() {
+    const container = document.getElementById('log-cars-list');
+    if (!container) return;
+    
+    if (currentCars.length === 0) {
+        container.innerHTML = '<div class="text-xs text-on-surface-variant italic">No hay reservas de autos añadidas.</div>';
+        return;
+    }
+    
+    container.innerHTML = currentCars.map((car, i) => `
+        <div class="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/30 flex justify-between items-center group">
+            <div class="min-w-0">
+                <div class="font-bold text-sm text-on-surface truncate">${car.company}</div>
+                ${car.booking || car.location ? `<div class="text-[10px] text-on-surface-variant mt-0.5 truncate">${car.booking ? 'Reserva: ' + car.booking : ''}${car.booking && car.location ? ' • ' : ''}${car.location ? 'Retiro: ' + car.location : ''}</div>` : ''}
+            </div>
+            <button onclick="removeLogCar(${i})" class="text-error opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-error/10 rounded ml-2 shrink-0"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+        </div>
+    `).join('');
+}
+
 async function saveLogisticsData() {
+    if (window.isLector) return;
     const savedData = localStorage.getItem(LOGISTICS_KEY);
     let data = savedData ? JSON.parse(savedData) : {};
     
     data.flightsIda = flightSegmentsIda;
     data.flightsVuelta = flightSegmentsVuelta;
-    data.carCompany = document.getElementById('log-car-company').value;
-    data.carBooking = document.getElementById('log-car-booking').value;
+    const comp = document.getElementById('log-car-company').value.trim();
+    if (comp) {
+        addLogCar();
+    }
+    data.cars = currentCars;
     
     localStorage.setItem(LOGISTICS_KEY, JSON.stringify(data));
     
@@ -1998,10 +2522,28 @@ async function saveLogisticsData() {
         } catch(e) {
             console.warn('No se pudieron sincronizar vuelos:', e);
         }
+
+        try {
+            const allAutos = currentCars.map((c, i) => ({
+                company: c.company || '',
+                booking: c.booking || '',
+                location: c.location || '',
+                orden: i
+            }));
+            
+            await fetch(`http://localhost:8000/api/viajes/${currentTripId}/autos`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(allAutos)
+            });
+        } catch(e) {
+            console.warn('No se pudieron sincronizar autos:', e);
+        }
     }
     
     renderDay(); // Actualizar el itinerario para mostrar la ruta guardada
     renderFlightsWidget();
+    renderCarsWidget();
     closeLogisticsModal();
 }
 
@@ -2132,6 +2674,61 @@ function renderFlightsWidget() {
     html += renderRoute('Vuelos de Vuelta', vuelta);
     
     content.innerHTML = html;
+}
+
+function renderCarsWidget() {
+    const savedData = localStorage.getItem(LOGISTICS_KEY);
+    if (!savedData) return;
+    
+    const data = JSON.parse(savedData);
+    let cars = data.cars || [];
+    
+    // Support backward compatibility
+    if (cars.length === 0 && data.carCompany) {
+        cars = [{
+            company: data.carCompany,
+            booking: data.carBooking || '',
+            location: ''
+        }];
+    }
+    
+    const widget = document.getElementById('widget-cars');
+    const content = document.getElementById('widget-cars-content');
+    
+    if (cars.length === 0) {
+        if (widget) widget.classList.add('hidden');
+        return;
+    }
+    
+    if (widget) widget.classList.remove('hidden');
+    let html = '';
+    
+    cars.forEach(car => {
+        const logoName = car.company.toLowerCase().replace(/\s+/g, '');
+        const validLogos = ['hertz', 'avis', 'enterprise', 'sixt', 'europcar', 'alamo'];
+        const logoUrl = validLogos.includes(logoName) ? `../../assets/car-logos/${logoName}.png` : '';
+        
+        const logoHtml = logoUrl 
+            ? `<div class="w-20 h-20 bg-white rounded-lg p-2 border border-outline-variant/30 flex items-center justify-center shrink-0">
+                 <img src="${logoUrl}" alt="${car.company}" class="w-full h-full object-contain" onerror="this.style.display='none'">
+               </div>`
+            : `<div class="w-16 h-16 bg-tertiary/10 text-tertiary rounded-lg border border-tertiary/20 flex items-center justify-center shrink-0">
+                 <span class="material-symbols-outlined text-2xl">directions_car</span>
+               </div>`;
+
+        html += `
+            <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/30 flex items-center gap-4">
+                ${logoHtml}
+                <div class="flex-1 min-w-0">
+                    ${!logoUrl ? `<h5 class="font-bold text-sm text-on-surface truncate mb-1">${car.company}</h5>` : ''}
+                    ${car.booking ? `<div class="text-xs text-on-surface-variant"><span class="font-bold">Reserva:</span> ${car.booking}</div>` : ''}
+                    ${car.location ? `<div class="text-xs text-on-surface-variant mt-0.5"><span class="font-bold">Retiro:</span> ${car.location}</div>` : ''}
+                </div>
+            </div>
+        `;
+    });
+    
+    if (content) content.innerHTML = html;
 }
 
 function renderRouteMap() {
@@ -2346,6 +2943,10 @@ function renderTransitInstructions(leg) {
 
 
 async function finalizeItinerary() {
+    if (window.isLector) {
+        window.location.href = '../profile/index.html';
+        return;
+    }
     if (!currentTripId) return;
     
     const btn = document.getElementById('btn-finalizar');
@@ -2374,6 +2975,203 @@ async function finalizeItinerary() {
         window.location.href = '../dashboard/index.html?t=confirmados';
     }
 }
+
+// ==========================================
+// SHARE MODAL LOGIC
+// ==========================================
+let shareSelectedUserId = null;
+
+window.openShareModal = function() {
+    const modal = document.getElementById('share-modal');
+    modal.style.display = 'flex';
+    // Reset state
+    document.getElementById('share-search-input').value = '';
+    document.getElementById('share-search-results').style.display = 'none';
+    document.getElementById('share-selected-section').style.display = 'none';
+    document.getElementById('share-search-section').style.display = 'block';
+    shareSelectedUserId = null;
+    // Reset radio
+    const radios = document.querySelectorAll('input[name="share-role"]');
+    if (radios.length) radios[0].checked = true;
+};
+
+window.closeShareModal = function() {
+    document.getElementById('share-modal').style.display = 'none';
+};
+
+let shareSearchTimeout = null;
+window.searchUsersForShare = function() {
+    clearTimeout(shareSearchTimeout);
+    shareSearchTimeout = setTimeout(async () => {
+        const query = document.getElementById('share-search-input').value.trim();
+        const resultsEl = document.getElementById('share-search-results');
+
+        if (!query) {
+            resultsEl.style.display = 'none';
+            return;
+        }
+
+        try {
+            const resp = await fetch(`http://localhost:8000/api/usuarios/buscar?query=${encodeURIComponent(query)}`);
+            if (!resp.ok) throw new Error('Error al buscar usuarios');
+            const users = await resp.json();
+
+            const currentUser = JSON.parse(localStorage.getItem('itera_user') || '{}');
+            const filtered = users.filter(u => String(u.id) !== String(currentUser.id));
+
+            if (filtered.length === 0) {
+                resultsEl.innerHTML = '<div class="p-3 text-sm text-slate-500 text-center">No se encontraron usuarios</div>';
+                resultsEl.style.display = 'block';
+                return;
+            }
+
+            resultsEl.innerHTML = filtered.map(u => {
+                const name = (u.nombre || '').replace(/'/g, "\\'");
+                const uname = (u.username || u.nombre || '').replace(/'/g, "\\'");
+                const avatar = (u.nombre || 'U').charAt(0).toUpperCase();
+                return `
+                    <div class="flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors" onclick="selectUserForShare('${u.id}', '${name}', '${uname}')">
+                        <div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm shrink-0">${avatar}</div>
+                        <div>
+                            <div class="font-semibold text-sm text-slate-900 dark:text-white">${u.nombre || ''}</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400">@${u.username || (u.nombre || '').toLowerCase().replace(/\s/g, '')}</div>
+                        </div>
+                    </div>`;
+            }).join('');
+            resultsEl.style.display = 'block';
+        } catch (e) {
+            console.error('Error buscando usuarios:', e);
+        }
+    }, 300);
+};
+
+window.selectUserForShare = function(userId, name, username) {
+    shareSelectedUserId = userId;
+
+    document.getElementById('share-selected-name').textContent = name;
+    document.getElementById('share-selected-username').textContent = '@' + username;
+    document.getElementById('share-selected-avatar').textContent = name.charAt(0).toUpperCase();
+
+    // Ocultar sección de búsqueda, mostrar sección de usuario seleccionado
+    document.getElementById('share-search-section').style.display = 'none';
+    document.getElementById('share-selected-section').style.display = 'block';
+};
+
+window.clearSelectedUserForShare = function() {
+    shareSelectedUserId = null;
+    document.getElementById('share-search-section').style.display = 'block';
+    document.getElementById('share-selected-section').style.display = 'none';
+    document.getElementById('share-search-input').value = '';
+    document.getElementById('share-search-results').style.display = 'none';
+};
+
+window.sendShareInvite = async function() {
+    if (!shareSelectedUserId) {
+        showToast('Por favor seleccioná un usuario primero.', 'error');
+        return;
+    }
+
+    const currentUser = JSON.parse(localStorage.getItem('itera_user') || '{}');
+    const selectedRadio = document.querySelector('input[name="share-role"]:checked');
+    const role = selectedRadio ? selectedRadio.value : 'LECTOR';
+
+    const btn = document.getElementById('btn-send-invite');
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined align-middle text-[18px] mr-1">hourglass_empty</span> Enviando...';
+    btn.disabled = true;
+
+    try {
+        const resp = await fetch(`http://localhost:8000/api/viajes/${currentTripId}/compartir?creador_id=${currentUser.id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                usuario_id: String(shareSelectedUserId),
+                rol: role
+            })
+        });
+
+        if (!resp.ok) {
+            let msg = 'Error al enviar la invitación';
+            try { const d = await resp.json(); msg = d.message || msg; } catch (_) {}
+            throw new Error(msg);
+        }
+
+        showToast('¡Invitación enviada correctamente!', 'success');
+        closeShareModal();
+    } catch (e) {
+        console.error(e);
+        showToast(e.message || 'Ocurrió un error al enviar la invitación.', 'error');
+    } finally {
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+    }
+};
+
+window.exportToPDF = async function() {
+    if (!currentTripId) {
+        showToast('ID del viaje no encontrado.', 'error');
+        return;
+    }
+
+    const btn = document.getElementById('btn-export-pdf');
+    const icon = document.getElementById('btn-export-pdf-icon');
+    const text = document.getElementById('btn-export-pdf-text');
+    
+    if (!btn) return;
+
+    // Guardar estado original
+    const originalText = text.textContent;
+    const originalIcon = icon.textContent;
+
+    // Cambiar a cargando
+    btn.disabled = true;
+    icon.textContent = 'hourglass_empty';
+    icon.classList.add('animate-spin');
+    text.textContent = 'Generando...';
+
+    try {
+        const resp = await fetch(`http://localhost:8000/api/viajes/${currentTripId}/export/pdf`);
+        if (!resp.ok) {
+            throw new Error('Error al generar el PDF del itinerario');
+        }
+
+        const blob = await resp.blob();
+        
+        // Intentar obtener el nombre del archivo del header content-disposition
+        let filename = `itinerario_${currentTripId}.pdf`;
+        const disposition = resp.headers.get('content-disposition');
+        if (disposition && disposition.indexOf('attachment') !== -1) {
+            const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            const matches = filenameRegex.exec(disposition);
+            if (matches != null && matches[1]) {
+                filename = matches[1].replace(/['"]/g, '');
+                // Decodificar si viene con codificación UTF-8
+                filename = decodeURIComponent(filename);
+            }
+        }
+
+        // Descargar el archivo
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+
+        showToast('¡Itinerario exportado correctamente!', 'success');
+    } catch (e) {
+        console.error(e);
+        showToast(e.message || 'Error al exportar el itinerario.', 'error');
+    } finally {
+        // Restaurar estado original del botón
+        btn.disabled = false;
+        icon.textContent = originalIcon;
+        icon.classList.remove('animate-spin');
+        text.textContent = originalText;
+    }
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     init();
@@ -2407,6 +3205,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <script src="../../shared/utils/auto-translator.js"></script>
 <script src="../../shared/utils/avatar-loader.js"></script>
+<script src="../../shared/components/notifications/notifications.js"></script>
 
 <!-- Quick Add Destination Modal -->
 <div id="quick-add-dest-modal" class="fixed inset-0 bg-black/60 z-[110] hidden items-center justify-center p-4 backdrop-blur-sm">
@@ -2435,6 +3234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <script>
     function openQuickAddDestModal() {
+        if (window.isLector) return;
         const modal = document.getElementById('quick-add-dest-modal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
@@ -2459,6 +3259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function onQuickPlaceSelected() {
+        if (window.isLector) return;
         const place = window.quickAddAutocomplete.getPlace();
         if (!place.geometry) return;
 

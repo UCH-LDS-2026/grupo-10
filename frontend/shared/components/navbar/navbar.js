@@ -23,9 +23,12 @@ function renderNavbar(t) {
       <div id="header-container" class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto transition-all duration-500">
         <!-- Logo & Navigation - Left -->
         <div class="flex items-center gap-8">
-          <span onclick="window.location.href='../home/index.html'" class="text-3xl font-medium uppercase tracking-widest text-slate-900 dark:text-white cursor-pointer select-none transition-transform hover:scale-[1.02]" style="font-family: 'Montserrat', sans-serif;">
-            ITER<span style="letter-spacing: -2px;">Λ</span>
-          </span>
+          <div class="flex items-center gap-3">
+            <img src="../../assets/logo/logo-itera.png" alt="Itera Logo" class="h-10 w-auto object-contain drop-shadow-md">
+            <span onclick="window.location.href='../home/index.html'" class="text-3xl font-medium uppercase tracking-widest text-slate-900 dark:text-white cursor-pointer select-none transition-transform hover:scale-[1.02]" style="font-family: 'Montserrat', sans-serif;">
+              ITER<span style="letter-spacing: -2px;">Λ</span>
+            </span>
+          </div>
           <nav class="hidden md:flex items-center gap-6">
             <a class="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors text-sm font-semibold" href="../home/index.html">Inicio</a>
             <a class="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors text-sm font-semibold" href="../dashboard/index.html">Mis Viajes</a>
@@ -118,9 +121,10 @@ function renderNavbar(t) {
             <span class="material-symbols-outlined">search</span>
           </button>
 
-          <!-- Notification Icon (Static) -->
-          <button class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all active:scale-95 duration-150">
-            <span class="material-symbols-outlined">notifications</span>
+          <!-- Notificaciones -->
+          <button id="notif-btn" onclick="if(window.openNotificationsModal) window.openNotificationsModal();" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all active:scale-95 duration-150 flex items-center justify-center relative" title="Notificaciones">
+              <span class="material-symbols-outlined">notifications</span>
+              <span id="notif-badge" class="absolute top-1 right-1.5 w-2 h-2 bg-error rounded-full hidden"></span>
           </button>
 
           <!-- Profile Dropdown -->
@@ -137,8 +141,9 @@ function renderNavbar(t) {
                 <a href="../profile/index.html" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
                   <span class="material-symbols-outlined text-base">person</span> Perfil
                 </a>
-                <a href="#" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
-                  <span class="material-symbols-outlined text-base">settings</span> Configuración
+
+                <a href="../help/index.html" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
+                  <span class="material-symbols-outlined text-base">help</span> Ayuda
                 </a>
                 <div class="border-t border-slate-100 dark:border-slate-700 my-1"></div>
                 <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-sm text-error hover:bg-error/5 flex items-center gap-2 transition-colors font-bold">
@@ -251,20 +256,15 @@ function injectSearchModal() {
 function injectSearchButtonIfMissing() {
   if (document.getElementById('btn-buscar-perfil')) return;
 
-  // Find notification button in the document
-  const notifBtn = document.getElementById('notif-btn') || 
-                   Array.from(document.querySelectorAll('button')).find(btn => {
-                     const iconSpan = btn.querySelector('span');
-                     return iconSpan && iconSpan.textContent.trim() === 'notifications';
-                   });
+  const avatarBtnContainer = document.querySelector('.relative.group') || document.getElementById('avatar-btn')?.parentNode;
 
-  if (notifBtn) {
+  if (avatarBtnContainer) {
     const searchBtn = document.createElement('button');
     searchBtn.id = 'btn-buscar-perfil';
     searchBtn.onclick = () => window.openSearchUserModal();
     
-    // Auto-detect styling (transparent glass or dynamic slate)
-    const isWhiteText = notifBtn.classList.contains('text-white') || notifBtn.classList.contains('text-white/95');
+    // Auto-detect styling based on a nav link style
+    const isWhiteText = document.querySelector('.nav-link')?.classList.contains('text-white/95');
     
     if (isWhiteText) {
       searchBtn.className = "p-2 text-white hover:bg-white/20 rounded-lg transition-all active:scale-95 duration-150 drop-shadow-md flex items-center justify-center animate-fade-in";
@@ -275,7 +275,7 @@ function injectSearchButtonIfMissing() {
     searchBtn.innerHTML = `<span class="material-symbols-outlined">search</span>`;
     searchBtn.title = "Buscar Perfiles";
     
-    notifBtn.parentNode.insertBefore(searchBtn, notifBtn);
+    avatarBtnContainer.parentNode.insertBefore(searchBtn, avatarBtnContainer);
   }
 }
 

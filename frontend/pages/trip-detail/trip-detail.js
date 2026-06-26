@@ -38,7 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Fetch attraction details for each item to get names and images
             const itemsWithDetails = await Promise.all(items.map(async (item) => {
                 try {
-                    const attrResp = await fetch(`/api/places/${item.atraccionId}/details`);
+                    const placeIdToFetch = item.google_place_id || item.atraccion_id || item.atraccionId;
+                    const attrResp = await fetch(`/api/places/${placeIdToFetch}/details`);
                     const details = attrResp.ok ? await attrResp.json() : null;
                     return { ...item, details };
                 } catch (e) {
@@ -55,6 +56,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderTrip(viaje, items) {
+        const isLector = viaje.rol === 'LECTOR' && viaje.creador_id !== userObj.id;
+        
+        if (isLector) {
+            const btnCompartir = document.getElementById('btn-compartir');
+            if (btnCompartir) btnCompartir.style.display = 'none';
+            
+            // For Logistics, maybe they can view it, but let's hide "Guardar Logística" inside modal?
+            // Since we can't easily hook into modal open right here for the save button, we can hide the entire Logistics button for LECTORs to simplify, or hide the save button.
+            // Let's just hide the save button inside the modal and disable inputs if LECTOR, or simply hide the whole logistics button.
+            // A simpler approach is to hide the "Logística" button entirely if they are just a reader.
+            const btnLogistics = document.querySelector('button[onclick="openLogisticsModal()"]');
+            if (btnLogistics) btnLogistics.style.display = 'none';
+        }
+
         // Hero Section
         const bgContainer = document.getElementById('td-hero-img-container');
         if (bgContainer) {
@@ -148,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderItemCard(item, isPending) {
         const name = item.details?.displayName?.text || item.details?.name || 'Atracción';
-        const img = item.details?.photos?.[0]?.name ? `/api/places/${item.atraccionId}/photo?max_width=400` : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400';
+        const img = item.details?.photos?.[0]?.name ? `/api/places/${item.google_place_id || item.atraccion_id || item.atraccionId}/photo?max_width=400` : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400';
         
         return `
         <div class="bg-amber-50/50 border border-amber-200 p-4 rounded-2xl flex gap-4 items-center">
@@ -168,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderItemRow(item) {
         const name = item.details?.displayName?.text || item.details?.name || 'Atracción';
-        const img = item.details?.photos?.[0]?.name ? `/api/places/${item.atraccionId}/photo?max_width=400` : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400';
+        const img = item.details?.photos?.[0]?.name ? `/api/places/${item.google_place_id || item.atraccion_id || item.atraccionId}/photo?max_width=400` : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400';
         const time = item.horaInicio ? item.horaInicio.substring(0, 5) : null;
         
         const warningHtml = !time ? `
@@ -212,4 +227,135 @@ document.addEventListener('DOMContentLoaded', () => {
 window.handleLogout = function() {
     localStorage.removeItem('itera_user');
     window.location.href = '../auth/index.html';
+};
+
+// ==========================================
+// SHARE MODAL LOGIC
+// ==========================================
+let shareSelectedUserId = null;
+
+window.openShareModal = function() {
+    document.getElementById('share-modal').classList.remove('hidden');
+    document.getElementById('share-modal').classList.add('flex');
+    document.getElementById('share-search-input').value = '';
+    document.getElementById('share-search-results').classList.add('hidden');
+    clearSelectedUserForShare();
+};
+
+window.closeShareModal = function() {
+    document.getElementById('share-modal').classList.add('hidden');
+    document.getElementById('share-modal').classList.remove('flex');
+};
+
+window.searchUsersForShare = async function() {
+    const query = document.getElementById('share-search-input').value.trim();
+    if (!query) return;
+
+    try {
+        const resp = await fetch(`http://localhost:8000/api/usuarios/buscar?query=${encodeURIComponent(query)}`);
+        if (!resp.ok) throw new Error('Error searching users');
+        const users = await resp.json();
+        
+        const resultsContainer = document.getElementById('share-search-results');
+        resultsContainer.classList.remove('hidden');
+        
+        const currentUser = JSON.parse(localStorage.getItem('itera_user'));
+        const filteredUsers = users.filter(u => u.id !== currentUser.id); // No invitarse a si mismo
+
+        if (filteredUsers.length === 0) {
+            resultsContainer.innerHTML = '<p class="text-sm text-on-surface-variant p-2 text-center">No se encontraron usuarios.</p>';
+            return;
+        }
+
+        resultsContainer.innerHTML = filteredUsers.map(u => `
+            <div onclick="selectUserForShare('${u.id}', '${u.nombre}', '${u.apellido}', '${u.username}')" class="flex items-center gap-3 p-2 hover:bg-surface-container-high rounded-lg cursor-pointer transition-colors">
+                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">${u.nombre ? u.nombre.charAt(0).toUpperCase() : 'U'}</div>
+                <div>
+                    <div class="text-sm font-bold text-on-surface">${u.nombre} ${u.apellido}</div>
+                    <div class="text-xs text-on-surface-variant">@${u.username}</div>
+                </div>
+            </div>
+        `).join('');
+    } catch (e) {
+        console.error(e);
+        const resultsContainer = document.getElementById('share-search-results');
+        resultsContainer.classList.remove('hidden');
+        resultsContainer.innerHTML = '<p class="text-sm text-red-500 p-2 text-center">Error al buscar usuarios.</p>';
+    }
+};
+
+window.selectUserForShare = function(id, nombre, apellido, username) {
+    shareSelectedUserId = id;
+    
+    document.getElementById('share-search-results').classList.add('hidden');
+    document.getElementById('share-search-input').parentElement.parentElement.classList.add('hidden');
+    
+    document.getElementById('share-selected-user-container').classList.remove('hidden');
+    document.getElementById('share-selected-user-container').classList.add('flex');
+    
+    document.getElementById('share-selected-avatar').innerText = nombre ? nombre.charAt(0).toUpperCase() : 'U';
+    document.getElementById('share-selected-name').innerText = `${nombre} ${apellido}`;
+    document.getElementById('share-selected-username').innerText = `@${username}`;
+    
+    document.getElementById('share-role-container').classList.remove('hidden');
+    
+    document.getElementById('btn-send-invite').disabled = false;
+};
+
+window.clearSelectedUserForShare = function() {
+    shareSelectedUserId = null;
+    
+    document.getElementById('share-selected-user-container').classList.add('hidden');
+    document.getElementById('share-selected-user-container').classList.remove('flex');
+    
+    document.getElementById('share-search-input').parentElement.parentElement.classList.remove('hidden');
+    document.getElementById('share-search-input').value = '';
+    
+    document.getElementById('share-role-container').classList.add('hidden');
+    
+    document.getElementById('btn-send-invite').disabled = true;
+};
+
+window.sendShareInvite = async function() {
+    if (!shareSelectedUserId) return;
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const tripId = urlParams.get('id') || localStorage.getItem('current_trip_id');
+    const currentUser = JSON.parse(localStorage.getItem('itera_user'));
+    
+    const role = document.getElementById('share-role-select').value;
+    
+    const btn = document.getElementById('btn-send-invite');
+    const originalText = btn.innerText;
+    btn.innerText = 'Enviando...';
+    btn.disabled = true;
+    
+    try {
+        const reqBody = {
+            usuario_id: shareSelectedUserId,
+            rol: role
+        };
+        
+        const resp = await fetch(`http://localhost:8000/api/viajes/${tripId}/compartir?creador_id=${currentUser.id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reqBody)
+        });
+        
+        if (!resp.ok) {
+            const data = await resp.json();
+            throw new Error(data.message || 'Error al enviar invitación');
+        }
+        
+        alert('Invitación enviada correctamente');
+        closeShareModal();
+    } catch (e) {
+        console.error(e);
+        alert(e.message || 'Ocurrió un error al enviar la invitación');
+    } finally {
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
 };
