@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Centro de Ayuda - ITERA</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#0058bf",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#006fef",
+                        "surface": "#f8f9fa",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#414755",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        h1, h2, h3, h4, .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="text-on-surface pb-20">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200/60 sticky top-0 z-50 shadow-sm">
+        <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+            <div class="flex items-center gap-8">
+                <a href="../home/index.html" class="flex items-center gap-3">
+                    <img src="../../assets/logo/logo-itera.png" alt="Itera Logo" class="h-10 w-auto object-contain">
+                    <span class="text-3xl font-medium uppercase tracking-widest text-slate-900" style="font-family: 'Montserrat', sans-serif;">ITER<span style="letter-spacing: -2px;">Λ</span></span>
+                </a>
+                <nav class="hidden md:flex items-center gap-6">
+                    <a class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors" href="../home/index.html">Inicio</a>
+                    <a class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors" href="../dashboard/index.html">Mis Viajes</a>
+                    <a class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors" href="../destinations/index.html">Explorar Destinos</a>
+                    <a class="text-primary font-bold border-b-2 border-primary pb-1 text-sm transition-colors" href="#">Ayuda</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <!-- Notificaciones -->
+                <button id="notif-btn" onclick="if(window.openNotificationsModal) window.openNotificationsModal();" class="p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-all active:scale-95 duration-150 shadow-sm flex items-center justify-center relative border border-transparent hover:border-slate-200" title="Notificaciones">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span id="notif-badge" class="absolute top-1 right-1.5 w-2 h-2 bg-error rounded-full hidden"></span>
+                </button>
+
+                <div class="relative group">
+                    <button id="avatar-btn" class="h-10 w-10 rounded-full overflow-hidden border-2 border-slate-200 shadow-sm bg-slate-100 hover:border-primary focus:outline-none transition-colors duration-300" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        <img alt="User profile avatar" id="header-avatar" class="h-full w-full object-cover" src="https://cdn-icons-png.flaticon.com/512/149/149071.png"/>
+                    </button>
+                    <div class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden z-50">
+                        <div class="py-1">
+                            <a href="../profile/index.html" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
+                                <span class="material-symbols-outlined text-base">person</span> Perfil
+                            </a>
+
+                            <a href="../help/index.html" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
+                                <span class="material-symbols-outlined text-base">help</span> Ayuda
+                            </a>
+                            <div class="border-t border-slate-100 dark:border-slate-700 my-1"></div>
+                            <a href="../auth/index.html" class="px-4 py-2 text-sm text-error hover:bg-error/5 flex items-center gap-2 transition-colors">
+                                <span class="material-symbols-outlined text-base">logout</span> Cerrar sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto mt-12 px-6">
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-6">
+                <span class="material-symbols-outlined text-3xl">help</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold font-headline mb-4 text-slate-900">Centro de Ayuda</h1>
+            <p class="text-lg text-on-surface-variant">Preguntas frecuentes para sacar el máximo provecho a tu experiencia en ITERA.</p>
+        </div>
+
+        <div class="space-y-4" id="faq-container">
+            <!-- FAQ 1 -->
+            <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <button class="w-full flex items-center justify-between gap-4 text-left font-headline font-bold text-lg text-slate-800 focus:outline-none" onclick="toggleFaq(this)">
+                    <span>¿Qué es ITERA y cómo funciona?</span>
+                    <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
+                </button>
+                <div class="faq-content hidden mt-4 text-on-surface-variant leading-relaxed">
+                    ITERA es una plataforma diseñada para organizar tus viajes y descubrir destinos. Aquí puedes encontrar atracciones, gastronomía y alojamiento recomendados tanto por nuestros sistemas como por una amplia comunidad de viajeros (Joyas Ocultas).
+                </div>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <button class="w-full flex items-center justify-between gap-4 text-left font-headline font-bold text-lg text-slate-800 focus:outline-none" onclick="toggleFaq(this)">
+                    <span>¿Cómo creo un nuevo viaje en la plataforma?</span>
+                    <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
+                </button>
+                <div class="faq-content hidden mt-4 text-on-surface-variant leading-relaxed">
+                    Para crear un viaje, dirígete a la sección "Mis Viajes" desde la barra de navegación superior y haz clic en el botón "Crear Nuevo Viaje". Podrás elegir tu destino principal, las fechas y el estilo de viaje que prefieres.
+                </div>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <button class="w-full flex items-center justify-between gap-4 text-left font-headline font-bold text-lg text-slate-800 focus:outline-none" onclick="toggleFaq(this)">
+                    <span>¿Cuál es la diferencia entre un lugar verificado y una joya oculta?</span>
+                    <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
+                </button>
+                <div class="faq-content hidden mt-4 text-on-surface-variant leading-relaxed">
+                    Un lugar <strong>Verificado</strong> (indicado con un sello verde) es aquel validado oficialmente a través de bases de datos de mapas globales. Por otro lado, una <strong>Joya Oculta</strong> (indicada con un sello violeta) es una recomendación única aportada directamente por la comunidad de viajeros que no necesariamente aparece en los mapas tradicionales.
+                </div>
+            </div>
+
+            <!-- FAQ 4 -->
+            <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <button class="w-full flex items-center justify-between gap-4 text-left font-headline font-bold text-lg text-slate-800 focus:outline-none" onclick="toggleFaq(this)">
+                    <span>¿Puedo invitar amigos a organizar mi viaje?</span>
+                    <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
+                </button>
+                <div class="faq-content hidden mt-4 text-on-surface-variant leading-relaxed">
+                    ¡Sí! Puedes buscar los perfiles de tus amigos en la plataforma usando el buscador superior (ícono de lupa) y agregarlos como compañeros de viaje en tu tablero de planificación. Todos podrán colaborar armando el itinerario y dividiendo gastos.
+                </div>
+            </div>
+
+            <!-- FAQ 5 -->
+            <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <button class="w-full flex items-center justify-between gap-4 text-left font-headline font-bold text-lg text-slate-800 focus:outline-none" onclick="toggleFaq(this)">
+                    <span>¿Cómo agrego lugares a mi itinerario?</span>
+                    <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
+                </button>
+                <div class="faq-content hidden mt-4 text-on-surface-variant leading-relaxed">
+                    Mientras exploras destinos desde la pestaña "Explorar Destinos", simplemente haz clic en el botón circular de "Agregar a un viaje" (ícono de marcapáginas) que aparece sobre la foto de cada lugar. Luego, selecciona a qué viaje quieres añadirlo y ¡listo!
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleFaq(btn) {
+            const content = btn.nextElementSibling;
+            const icon = btn.querySelector('.material-symbols-outlined');
+            const isHidden = content.classList.contains('hidden');
+            
+            // Close all
+            document.querySelectorAll('.faq-content').forEach(el => {
+                el.classList.add('hidden');
+            });
+            document.querySelectorAll('#faq-container button .material-symbols-outlined').forEach(el => {
+                el.style.transform = 'rotate(0deg)';
+            });
+
+            // If it was hidden, open it
+            if (isHidden) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+    </script>
+    <script src="../../shared/utils/avatar-loader.js"></script>
+    <script src="../../shared/components/notifications/notifications.js"></script>
+</body>
+</html>

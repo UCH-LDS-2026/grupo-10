@@ -145,25 +145,60 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isConfirmed) badgeCls = 'bg-secondary-fixed text-on-secondary-fixed-variant';
       else if (isPlanning) badgeCls = 'bg-tertiary-fixed text-on-tertiary-fixed-variant';
 
+      const isShared = (viaje.rol === 'LECTOR' || viaje.rol === 'EDITOR') && viaje.creador_id !== user.id;
+      const sharedByName = viaje.creador_nombre ? viaje.creador_nombre.trim() : (viaje.creador_username ? '@' + viaje.creador_username : null);
+
       const card = document.createElement('div');
       card.className = "bg-surface-container-lowest rounded-2xl p-6 shadow-[0_32px_48px_-12px_rgba(25,28,29,0.04)] flex flex-col md:flex-row gap-8 items-center border border-outline-variant/5 group hover:shadow-xl transition-all duration-300 cursor-pointer relative";
       card.onclick = () => { localStorage.setItem('current_trip_id', viaje.id); window.location.href = `../trip-detail/index.html?id=${viaje.id}`; };
 
       const finalImg = viaje.finalImg;
 
-      // Progress variable removed - replaced by step stepper
-
       card.innerHTML = `
         <div class="absolute top-4 right-4 flex gap-2 z-10">
-          <button class="p-2 bg-white/80 backdrop-blur-md border border-outline-variant/20 hover:bg-primary/10 hover:text-primary text-on-surface-variant rounded-full transition-all shadow-sm flex items-center justify-center" onclick="event.stopPropagation(); window.exportTrip('${viaje.id}');" title="Exportar viaje">
-            <span class="material-symbols-outlined text-xl">ios_share</span>
-          </button>
-          <button class="p-2 bg-white/80 backdrop-blur-md border border-outline-variant/20 hover:bg-primary/10 hover:text-primary text-on-surface-variant rounded-full transition-all shadow-sm flex items-center justify-center" onclick="event.stopPropagation(); window.editTrip('${viaje.id}');" title="Editar viaje">
-            <span class="material-symbols-outlined text-xl">edit</span>
-          </button>
-          <button class="p-2 bg-white/80 backdrop-blur-md border border-outline-variant/20 hover:bg-error/10 hover:text-error text-on-surface-variant rounded-full transition-all shadow-sm flex items-center justify-center" onclick="event.stopPropagation(); window.deleteTrip('${viaje.id}');" title="Eliminar viaje">
-            <span class="material-symbols-outlined text-xl">delete</span>
-          </button>
+          ${(() => {
+            const isOwner = viaje.creador_id === user.id;
+            const isEditor = viaje.rol === 'EDITOR';
+            const isLector = viaje.rol === 'LECTOR';
+            const isShared = !isOwner || viaje.compartido_con_otros;
+            
+            let badgeHtml = '';
+            if (isShared) {
+                badgeHtml = `<span class="px-3 py-1 bg-violet-100 text-violet-700 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm border border-violet-200 flex items-center gap-1 backdrop-blur-md">
+                    <span class="material-symbols-outlined text-[14px]">folder_shared</span> Compartido
+                </span>`;
+            }
+            
+            if (isLector && !isOwner) {
+                return `${badgeHtml}
+                <button class="p-2 bg-white/80 backdrop-blur-md border border-outline-variant/20 hover:bg-primary/10 hover:text-primary text-on-surface-variant rounded-full transition-all shadow-sm flex items-center justify-center" onclick="event.stopPropagation(); window.exportTripToPDF('${viaje.id}', '${(viaje.nombre || 'Itinerario').replace(/'/g, "\\'")}', this);" title="Exportar PDF">
+                  <span class="material-symbols-outlined text-xl">picture_as_pdf</span>
+                </button>`;
+            }
+            
+            if (isEditor && !isOwner) {
+                return `${badgeHtml}
+                <button class="p-2 bg-white/80 backdrop-blur-md border border-outline-variant/20 hover:bg-primary/10 hover:text-primary text-on-surface-variant rounded-full transition-all shadow-sm flex items-center justify-center" onclick="event.stopPropagation(); window.exportTripToPDF('${viaje.id}', '${(viaje.nombre || 'Itinerario').replace(/'/g, "\\'")}', this);" title="Exportar PDF">
+                  <span class="material-symbols-outlined text-xl">picture_as_pdf</span>
+                </button>
+                <button class="p-2 bg-white/80 backdrop-blur-md border border-outline-variant/20 hover:bg-primary/10 hover:text-primary text-on-surface-variant rounded-full transition-all shadow-sm flex items-center justify-center" onclick="event.stopPropagation(); window.editTrip('${viaje.id}');" title="Editar viaje">
+                  <span class="material-symbols-outlined text-xl">edit</span>
+                </button>`;
+            }
+            
+            return `
+              ${badgeHtml}
+              <button class="p-2 bg-white/80 backdrop-blur-md border border-outline-variant/20 hover:bg-primary/10 hover:text-primary text-on-surface-variant rounded-full transition-all shadow-sm flex items-center justify-center" onclick="event.stopPropagation(); window.exportTripToPDF('${viaje.id}', '${(viaje.nombre || 'Itinerario').replace(/'/g, "\\'")}', this);" title="Exportar PDF">
+                <span class="material-symbols-outlined text-xl">picture_as_pdf</span>
+              </button>
+              <button class="p-2 bg-white/80 backdrop-blur-md border border-outline-variant/20 hover:bg-primary/10 hover:text-primary text-on-surface-variant rounded-full transition-all shadow-sm flex items-center justify-center" onclick="event.stopPropagation(); window.editTrip('${viaje.id}');" title="Editar viaje">
+                <span class="material-symbols-outlined text-xl">edit</span>
+              </button>
+              <button class="p-2 bg-white/80 backdrop-blur-md border border-outline-variant/20 hover:bg-error/10 hover:text-error text-on-surface-variant rounded-full transition-all shadow-sm flex items-center justify-center" onclick="event.stopPropagation(); window.deleteTrip('${viaje.id}');" title="Eliminar viaje">
+                <span class="material-symbols-outlined text-xl">delete</span>
+              </button>
+            `;
+          })()}
         </div>
         <div class="w-full md:w-64 h-44 rounded-xl overflow-hidden shrink-0">
           <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${finalImg}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';"/>
@@ -172,8 +207,25 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="flex flex-wrap items-center gap-3 mb-2">
             <h2 class="text-2xl font-bold text-on-surface">${viaje.nombre}</h2>
             <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${badgeCls}">${viaje.estado || 'Borrador'}</span>
+            ${(() => {
+              const rol = viaje.rol;
+              if (rol === 'CREADOR') {
+                return `<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-700 border border-amber-200 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[13px]">star</span> Creador
+                </span>`;
+              } else if (rol === 'EDITOR') {
+                return `<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700 border border-blue-200 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[13px]">edit</span> Editor
+                </span>`;
+              } else if (rol === 'LECTOR') {
+                return `<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-green-100 text-green-700 border border-green-200 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[13px]">visibility</span> Lector
+                </span>`;
+              }
+              return '';
+            })()}
           </div>
-          <div class="flex items-center gap-6 text-on-surface-variant text-sm mb-6">
+          <div class="flex flex-wrap items-center gap-4 text-on-surface-variant text-sm mb-6">
             <div class="flex items-center gap-1.5">
               <span class="material-symbols-outlined text-lg" data-icon="calendar_today">calendar_today</span>
               ${viaje.fecha_inicio || '-'} al ${viaje.fecha_fin || '-'}
@@ -182,6 +234,12 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class="material-symbols-outlined text-lg" data-icon="schedule">schedule</span>
               ${viaje.duracion_dias ? viaje.duracion_dias + ' Días' : 'Varios Días'}
             </div>
+            ${isShared && sharedByName ? `
+            <div class="flex items-center gap-1.5 px-3 py-1 bg-violet-50 border border-violet-200 rounded-full">
+              <span class="material-symbols-outlined text-[15px] text-violet-500">person_add</span>
+              <span class="text-[11px] font-semibold text-violet-600">Compartido por <span class="font-bold">${sharedByName}</span></span>
+            </div>
+            ` : ''}
           </div>
           <div class="max-w-md">
             <p class="text-xs font-semibold text-outline mb-3">Pasos del Itinerario</p>
@@ -406,182 +464,156 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = '../create-trip/index.html';
   };
 
-  window.exportTrip = async function (id) {
-    const viaje = allTrips.find(v => v.id === id);
-    if (!viaje) return;
-
-    const btn = event.currentTarget;
-    const originalContent = btn.innerHTML;
-    btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">refresh</span>';
-    btn.disabled = true;
-
-    try {
-      // Carga masiva de datos del viaje
-      const [respItin, respDest, respVuelos] = await Promise.all([
-        fetch(`http://localhost:8000/api/viajes/${id}/itinerario`),
-        fetch(`http://localhost:8000/api/viajes/${id}/destinos`),
-        fetch(`http://localhost:8000/api/viajes/${id}/vuelos`)
-      ]);
-
-      const items = respItin.ok ? await respItin.json() : [];
-      const destinations = respDest.ok ? await respDest.json() : [];
-      const flights = respVuelos.ok ? await respVuelos.json() : [];
-
-      const element = document.createElement('div');
-      element.style.padding = '50px';
-      element.style.fontFamily = "'Inter', sans-serif";
-      element.style.color = '#1e293b';
-      element.style.backgroundColor = '#fff';
-
-      // Agrupar items por fecha
-      const groupedItems = items.reduce((acc, item) => {
-        const date = item.fecha_asignada;
-        if (!acc[date]) acc[date] = [];
-        acc[date].push(item);
-        return acc;
-      }, {});
-
-      // Ordenar fechas
-      const sortedDates = Object.keys(groupedItems).sort();
-
-      element.innerHTML = `
-            <!-- HEADER -->
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #0058bf; padding-bottom: 25px; margin-bottom: 35px;">
-                <div>
-                    <h1 style="font-size: 32px; font-weight: 800; color: #0f172a; margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;">${viaje.nombre}</h1>
-                    <p style="color: #0058bf; font-weight: 700; margin: 5px 0 0 0; text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">Dossier Oficial de Viaje — ITERA</p>
-                </div>
-                <div style="text-align: right;">
-                    <div style="font-size: 24px; font-weight: 900; color: #0058bf;">ITERA</div>
-                    <div style="font-size: 10px; color: #94a3b8;">Smart Travel Assistant</div>
-                </div>
-            </div>
-
-            <!-- RESUMEN EJECUTIVO -->
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 40px;">
-                <div style="background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid #f1f5f9;">
-                    <strong style="display: block; font-size: 10px; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">Cronograma</strong>
-                    <div style="font-weight: 700; font-size: 14px;">${viaje.fecha_inicio} — ${viaje.fecha_fin}</div>
-                </div>
-                <div style="background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid #f1f5f9;">
-                    <strong style="display: block; font-size: 10px; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">Estado del Plan</strong>
-                    <div style="font-weight: 700; font-size: 14px; color: #059669;">${viaje.estado}</div>
-                </div>
-                <div style="background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid #f1f5f9;">
-                    <strong style="display: block; font-size: 10px; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">Destinos</strong>
-                    <div style="font-weight: 700; font-size: 14px;">${destinations.length} Ciudades</div>
-                </div>
-            </div>
-
-            <!-- RUTA Y DESTINOS -->
-            <div style="margin-bottom: 45px;">
-                <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                    <span style="width: 8px; height: 18px; background: #0058bf; display: inline-block; border-radius: 2px;"></span>
-                    Ruta del Viaje
-                </h2>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    ${destinations.map((d, i) => `
-                        <div style="display: flex; align-items: center; gap: 15px; background: #fff; border: 1px solid #f1f5f9; padding: 15px; border-radius: 12px;">
-                            <div style="width: 30px; height: 30px; background: #eff6ff; color: #0058bf; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px;">${i + 1}</div>
-                            <div style="flex: 1;">
-                                <span style="font-weight: 700; font-size: 15px; color: #1e293b;">${d.city}</span>
-                                <span style="color: #94a3b8; font-size: 13px; margin-left: 5px;">— ${d.country}</span>
-                            </div>
-                            <div style="font-size: 13px; font-weight: 600; color: #64748b;">${d.nights} Noches</div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-
-            <!-- VUELOS -->
-            ${flights.length > 0 ? `
-            <div style="margin-bottom: 45px;">
-                <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                    <span style="width: 8px; height: 18px; background: #0058bf; display: inline-block; border-radius: 2px;"></span>
-                    Logística Aérea
-                </h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    ${flights.map(v => `
-                        <div style="border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                                <span style="font-size: 11px; font-weight: 800; color: #0058bf; text-transform: uppercase;">${v.airline} — ${v.flight}</span>
-                                <span style="font-size: 11px; color: #94a3b8;">${v.direction.toUpperCase()}</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div style="text-align: left;">
-                                    <div style="font-weight: 800; font-size: 16px;">${v.origin}</div>
-                                    <div style="font-size: 12px; color: #64748b;">${v.dep ? v.dep.substring(0, 5) : '-'}</div>
-                                </div>
-                                <div style="color: #cbd5e1;">→</div>
-                                <div style="text-align: right;">
-                                    <div style="font-weight: 800; font-size: 16px;">${v.dest}</div>
-                                    <div style="font-size: 12px; color: #64748b;">${v.arr ? v.arr.substring(0, 5) : '-'}</div>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-            ` : ''}
-
-            <!-- ITINERARIO DÍA POR DÍA -->
-            <div style="page-break-before: always;">
-                <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
-                    <span style="width: 8px; height: 18px; background: #0058bf; display: inline-block; border-radius: 2px;"></span>
-                    Itinerario Detallado
-                </h2>
-
-                ${sortedDates.map(date => `
-                    <div style="margin-bottom: 35px;">
-                        <div style="background: #0f172a; color: #fff; padding: 12px 20px; border-radius: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-weight: 800; font-size: 15px; text-transform: capitalize;">${new Date(date + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}</span>
-                            <span style="font-size: 11px; opacity: 0.7; font-weight: 600;">DIA ${Math.floor((new Date(date) - new Date(viaje.fecha_inicio)) / (1000 * 60 * 60 * 24)) + 1}</span>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 10px; padding-left: 10px;">
-                            ${groupedItems[date].sort((a, b) => (a.hora_inicio || '').localeCompare(b.hora_inicio || '')).map(item => `
-                                <div style="display: flex; gap: 20px; align-items: flex-start;">
-                                    <div style="font-size: 13px; font-weight: 800; color: #0058bf; min-width: 50px; padding-top: 2px;">
-                                        ${item.hora_inicio ? item.hora_inicio.substring(0, 5) : '--:--'}
-                                    </div>
-                                    <div style="flex: 1; background: #fcfcfc; border: 1px solid #f1f5f9; padding: 15px; border-radius: 12px; position: relative;">
-                                        <div style="width: 4px; height: 70%; background: #0058bf; position: absolute; left: 0; top: 15%; border-radius: 0 4px 4px 0;"></div>
-                                        <h4 style="font-size: 15px; font-weight: 700; margin: 0 0 5px 0; color: #1e293b;">${item.atraccion_nombre}</h4>
-                                        ${item.hora_fin ? `<div style="font-size: 12px; color: #94a3b8;">Finaliza a las ${item.hora_fin.substring(0, 5)}</div>` : ''}
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `).join('')}
-                
-                ${sortedDates.length === 0 ? '<div style="padding: 50px; text-align: center; color: #94a3b8; border: 2px dashed #f1f5f9; border-radius: 20px;">No has programado actividades específicas aún.</div>' : ''}
-            </div>
-
-            <!-- FOOTER -->
-            <div style="margin-top: 80px; border-top: 1px solid #f1f5f9; padding-top: 30px; text-align: center;">
-                <div style="font-weight: 800; color: #0058bf; font-size: 14px; margin-bottom: 5px;">ITERA</div>
-                <div style="font-size: 10px; color: #cbd5e1; letter-spacing: 2px; text-transform: uppercase;">Smart Travel Assistant — Personalized Itinerary</div>
-            </div>
-        `;
-
-      const opt = {
-        margin: 10,
-        filename: `itera_dossier_${viaje.nombre.replace(/\s+/g, '_')}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-
-      await html2pdf().set(opt).from(element).save();
-
-    } catch (e) {
-      console.error("Error al exportar PDF completo:", e);
-      alert("Hubo un problema al generar el Dossier de Viaje. Intenta de nuevo.");
-    } finally {
-      btn.innerHTML = originalContent;
-      btn.disabled = false;
-    }
-  };
-
   loadTrips();
 });
+
+// ============================================================
+// PDF Export: descarga el itinerario directamente desde el backend
+// ============================================================
+window.exportTripToPDF = async function(tripId, tripName, btn) {
+  const iconEl = btn ? btn.querySelector('.material-symbols-outlined') : null;
+  const originalIcon = iconEl ? iconEl.textContent : '';
+
+  try {
+    // Mostrar estado de carga
+    if (iconEl) {
+      iconEl.textContent = 'hourglass_empty';
+      iconEl.classList.add('animate-spin');
+    }
+    if (btn) btn.disabled = true;
+
+    // Recopilar itinerario del localStorage para este viaje (fallback para viajes manuales)
+    const ITIN_KEY = 'itera_trip_itineraries_' + tripId;
+    const DEST_KEY = 'itera_trip_destinations_' + tripId;
+    let frontendItems = [];
+
+    try {
+      const rawItin = localStorage.getItem(ITIN_KEY);
+      const rawDests = localStorage.getItem(DEST_KEY);
+      if (rawItin) {
+        const itineraries = JSON.parse(rawItin);
+        const destinations = rawDests ? JSON.parse(rawDests) : [];
+
+        // Calcular fecha de inicio del viaje
+        let tripStartDate = null;
+        const tripRaw = localStorage.getItem('itera_trip_meta_' + tripId);
+        if (tripRaw) {
+          try {
+            const meta = JSON.parse(tripRaw);
+            if (meta.fecha_inicio) tripStartDate = new Date(meta.fecha_inicio);
+          } catch(e) {}
+        }
+
+        // Si no hay meta guardada, obtener del backend
+        if (!tripStartDate) {
+          try {
+            const tr = await fetch(`http://localhost:8000/api/viajes/${tripId}`);
+            if (tr.ok) {
+              const tv = await tr.json();
+              if (tv.fecha_inicio) tripStartDate = new Date(tv.fecha_inicio);
+            }
+          } catch(e) {}
+        }
+
+        // Calcular noches acumuladas por destino
+        let accNights = 0;
+        for (const dest of destinations) {
+          const destId = dest.id || dest.city;
+          const nights = parseInt(dest.nights) || 1;
+          const destItin = itineraries[destId] || itineraries[dest.id] || {};
+
+          for (const [dayStr, attrs] of Object.entries(destItin)) {
+            if (!Array.isArray(attrs)) continue;
+            const dayNum = parseInt(dayStr) - 1;
+            let fecha = '';
+            if (tripStartDate) {
+              const d = new Date(tripStartDate);
+              d.setDate(d.getDate() + accNights + dayNum);
+              fecha = d.toISOString().split('T')[0];
+            } else {
+              fecha = `Destino ${dest.city || dest.id} - Día ${dayStr}`;
+            }
+
+            for (const attr of attrs) {
+              frontendItems.push({
+                fecha: fecha,
+                hora_inicio: attr.time || '',
+                hora_fin: attr.timeEnd || '',
+                nombre: attr.title || attr.nombre || 'Actividad',
+                descripcion: attr.desc || attr.descripcion || '',
+                categoria: attr.category || attr.categoria || '',
+                direccion: (attr.placeInfo && attr.placeInfo.address) ? attr.placeInfo.address : (attr.direccion || '')
+              });
+            }
+          }
+          accNights += nights;
+        }
+
+        // También buscar por destino_id directamente si no hay destinations
+        if (frontendItems.length === 0) {
+          for (const [destId, days] of Object.entries(itineraries)) {
+            for (const [dayStr, attrs] of Object.entries(days)) {
+              if (!Array.isArray(attrs)) continue;
+              for (const attr of attrs) {
+                frontendItems.push({
+                  fecha: `Día ${dayStr}`,
+                  hora_inicio: attr.time || '',
+                  hora_fin: attr.timeEnd || '',
+                  nombre: attr.title || attr.nombre || 'Actividad',
+                  descripcion: attr.desc || attr.descripcion || '',
+                  categoria: attr.category || attr.categoria || '',
+                  direccion: (attr.placeInfo && attr.placeInfo.address) ? attr.placeInfo.address : (attr.direccion || '')
+                });
+              }
+            }
+          }
+        }
+      }
+    } catch(e) {
+      console.warn('No se pudo leer el itinerario local:', e);
+    }
+
+    // Usar POST para enviar el itinerario local como fallback
+    const response = await fetch(`http://localhost:8000/api/viajes/${tripId}/export/pdf`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(frontendItems)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error del servidor: ${response.status}`);
+    }
+
+    // Obtener nombre de archivo del header si está disponible
+    const disposition = response.headers.get('Content-Disposition');
+    let fileName = `Itinerario_${(tripName || 'Viaje').replace(/[^a-zA-Z0-9_\-\u00C0-\u017E ]/g, '')}.pdf`;
+    if (disposition) {
+      const match = disposition.match(/filename\*?=(?:UTF-8'')?["']?([^;"'\n]+)["']?/i);
+      if (match && match[1]) {
+        try { fileName = decodeURIComponent(match[1].replace(/\+/g, ' ')); } catch(e) {}
+      }
+    }
+
+    // Crear blob y disparar descarga
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+  } catch (err) {
+    console.error('Error al exportar PDF:', err);
+    alert('No se pudo generar el PDF. Asegurate de que el backend esté activo e intentá de nuevo.');
+  } finally {
+    // Restaurar botón
+    if (iconEl) {
+      iconEl.textContent = originalIcon;
+      iconEl.classList.remove('animate-spin');
+    }
+    if (btn) btn.disabled = false;
+  }
+};

@@ -529,6 +529,8 @@
         scrollbar-color: #cbd5e1 transparent;
       }
 </style>
+
+<link rel="icon" type="image/png" href="../../assets/logo/logo-fondoblanco.png" style="background-color: white;">
 </head>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8b4X4Be-V-hYXJhGPzMyt-pMZ5QU0z40&v=alpha&libraries=places,maps3d,marker" async defer></script>
 <body class="text-on-surface min-h-screen pb-24 md:pb-0">
@@ -537,7 +539,10 @@
 <header id="main-header" class="fixed top-0 w-full z-50 transition-all duration-500 bg-transparent py-2 border-b border-white/10">
 <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto transition-all duration-500" id="header-container">
 <div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<img id="header-logo-img" src="../../assets/logo/logo-itera.png" alt="Itera Logo" class="h-10 w-auto object-contain drop-shadow-md brightness-0 invert filter transition-all duration-300">
 <span id="header-logo" class="text-3xl font-medium uppercase tracking-widest text-white transition-colors duration-300 drop-shadow-md" style="font-family: 'Montserrat', sans-serif;">ITER<span style="letter-spacing: -2px;">Λ</span></span>
+</div>
 <nav class="hidden md:flex items-center gap-6">
 <a id="nav-link-1" class="text-white font-bold border-b-2 border-white pb-1 text-base transition-colors duration-300 drop-shadow-md" href="#">Inicio</a>
 <a class="nav-link text-white/95 hover:text-white transition-colors text-base font-bold duration-300 drop-shadow-md" href="../dashboard/index.html">Mis Viajes</a>
@@ -616,9 +621,13 @@
 <button id="btn-buscar-perfil" onclick="window.openSearchUserModal()" class="p-2 hover:bg-white/20 rounded-lg transition-all active:scale-95 duration-150 text-white drop-shadow-md flex items-center justify-center animate-fade-in" title="Buscar Perfiles">
     <span class="material-symbols-outlined">search</span>
 </button>
-<button id="notif-btn" class="p-2 hover:bg-white/20 rounded-lg transition-all active:scale-95 duration-150 text-white drop-shadow-md">
-<span class="material-symbols-outlined">notifications</span>
+
+<!-- Notificaciones -->
+<button id="notif-btn" onclick="if(window.openNotificationsModal) window.openNotificationsModal();" class="p-2 text-white hover:bg-white/20 rounded-lg transition-all active:scale-95 duration-150 drop-shadow-md flex items-center justify-center relative" title="Notificaciones">
+    <span class="material-symbols-outlined">notifications</span>
+    <span id="notif-badge" class="absolute top-1 right-1.5 w-2 h-2 bg-error rounded-full hidden"></span>
 </button>
+
 <div class="relative group">
 <button id="avatar-btn" class="h-11 w-11 rounded-full overflow-hidden border-2 border-white/50 shadow-sm bg-white/20 focus:outline-none transition-all duration-300 hover:border-white" onclick="this.nextElementSibling.classList.toggle('hidden')">
 <img alt="User profile avatar" id="header-avatar" class="h-full w-full object-cover" data-alt="close-up portrait of a professional man with a friendly expression in bright studio lighting" src="https://cdn-icons-png.flaticon.com/512/149/149071.png"/>
@@ -629,9 +638,10 @@
 <span class="material-symbols-outlined text-base">person</span>
 Perfil
 </a>
-<a href="#" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
-<span class="material-symbols-outlined text-base">settings</span>
-Configuración
+
+<a href="../help/index.html" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-base">help</span>
+Ayuda
 </a>
 <div class="border-t border-slate-100 dark:border-slate-700 my-1"></div>
 <a href="../auth/index.html" class="px-4 py-2 text-sm text-error hover:bg-error/5 flex items-center gap-2 transition-colors">
@@ -651,6 +661,7 @@ window.addEventListener('scroll', () => {
     const header = document.getElementById('main-header');
     const container = document.getElementById('header-container');
     const logo = document.getElementById('header-logo');
+    const logoImg = document.getElementById('header-logo-img');
     const navLink1 = document.getElementById('nav-link-1');
     const navLinks = document.querySelectorAll('.nav-link');
     const langBtn = document.getElementById('lang-btn');
@@ -662,6 +673,7 @@ window.addEventListener('scroll', () => {
         header.classList.add('bg-white/85', 'backdrop-blur-xl', 'shadow-sm', 'dark:bg-slate-900/85', 'py-0', 'border-slate-200/60', 'dark:border-slate-700/50');
         
         logo.classList.remove('text-white', 'drop-shadow-md');
+        if(logoImg) logoImg.classList.remove('brightness-0', 'invert');
         logo.classList.add('text-slate-900', 'dark:text-white');
         
         if (navLink1) {
@@ -696,6 +708,7 @@ window.addEventListener('scroll', () => {
         header.classList.remove('bg-white/85', 'backdrop-blur-xl', 'shadow-sm', 'dark:bg-slate-900/85', 'py-0', 'border-slate-200/60', 'dark:border-slate-700/50');
         
         logo.classList.add('text-white', 'drop-shadow-md');
+        if(logoImg) logoImg.classList.add('brightness-0', 'invert');
         logo.classList.remove('text-slate-900', 'dark:text-white');
         
         if (navLink1) {
@@ -970,7 +983,7 @@ window.addEventListener('scroll', () => {
                 </div>
             </div>
             <div class="flex flex-col relative z-30">
-                <h2 id="global-map-title" class="text-4xl md:text-5xl font-extrabold font-headline text-white mb-2 drop-shadow-md reveal-title-straight">Explora el <span>Mundo</span></h2>
+                <h2 id="global-map-title" class="text-4xl md:text-5xl font-extrabold font-headline text-white mb-2 drop-shadow-md reveal-title-straight">Mapa <span>3D</span></h2>
                 <p class="text-white/90 text-lg md:text-xl drop-shadow-sm">Descubre los destinos más emblemáticos del planeta en nuestro mapa interactivo.</p>
             </div>
         </div>
@@ -1127,6 +1140,7 @@ window.addEventListener('scroll', () => {
 <script src="../../shared/utils/translations.js"></script>
 <script src="../../shared/utils/auto-translator.js"></script>
 <script src="../../shared/utils/avatar-loader.js"></script>
+<script src="../../shared/components/notifications/notifications.js"></script>
 <script src="home.js"></script>
 <script>
 // --- Funciones de Idioma ---
@@ -1142,6 +1156,16 @@ function changeSystemLanguage(lang) {
         const flagCode = codeMap[lang.toLowerCase()] || lang.toLowerCase();
         flagImg.src = `https://flagcdn.com/w20/${flagCode}.png`;
     }
+
+    // Restaurar los títulos al HTML en español original antes de traducir
+    const titleIds = ['gallery-title', 'global-map-title', 'fast-plans-title', 'user-trips-title'];
+    titleIds.forEach(id => {
+        const title = document.getElementById(id);
+        if (title && title.hasAttribute('data-original-html')) {
+            title.innerHTML = title.getAttribute('data-original-html');
+        }
+    });
+
     if (window.autoTranslatePage) {
         window.autoTranslatePage(lang);
     } else {
@@ -1174,7 +1198,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, { threshold: 0.15 });
     
-    const elementsToObserve = ['polaroid-gallery', 'fast-plans-section', 'user-trips-section'];
+    const elementsToObserve = ['polaroid-gallery', 'global-map-section', 'fast-plans-section', 'user-trips-section'];
     elementsToObserve.forEach(id => {
         const el = document.getElementById(id);
         if (el) observer.observe(el);
@@ -1183,9 +1207,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Animación de letras una a una ---
 document.addEventListener('DOMContentLoaded', () => {
+    const titleIds = ['gallery-title', 'global-map-title', 'fast-plans-title', 'user-trips-title'];
+    
+    // Guardar el HTML original en español de inmediato antes de cualquier modificación o traducción
+    titleIds.forEach(id => {
+        const title = document.getElementById(id);
+        if (title && !title.hasAttribute('data-original-html')) {
+            title.setAttribute('data-original-html', title.innerHTML);
+        }
+    });
+
     function initTitleAnimations() {
-        const titleIds = ['gallery-title', 'global-map-title', 'fast-plans-title', 'user-trips-title'];
-        
         titleIds.forEach(id => {
             const title = document.getElementById(id);
             if (!title) return;
@@ -1223,11 +1255,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Registrar siempre el listener para cuando termine la traducción
+    document.addEventListener('translationFinished', initTitleAnimations);
+
     const savedLang = localStorage.getItem('itera_lang') || 'es';
     if (savedLang.toLowerCase() === 'es') {
         initTitleAnimations();
-    } else {
-        document.addEventListener('translationFinished', initTitleAnimations);
     }
 });
 </script>

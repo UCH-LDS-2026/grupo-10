@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Explorar - ITERA</title>
-<meta name="description" content="Descubre tu próxima aventura con ITERA. Explora atracciones, gastronomía y movilidad en destinos de todo el mundo."/>
+<meta name="description" content="Descubre tu próxima aventura con ITERA. Explora atracciones, gastronomía y alojamiento en destinos de todo el mundo."/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -98,6 +98,8 @@
         }
     }
 </script>
+
+<link rel="icon" type="image/png" href="../../assets/logo/logo-fondoblanco.png" style="background-color: white;">
 </head>
 <body class="bg-background text-on-background font-body selection:bg-primary-fixed-dim">
 
@@ -105,7 +107,10 @@
 <header id="main-header" class="fixed top-0 w-full z-50 transition-all duration-500 bg-transparent py-2 border-b border-white/10">
 <div id="header-container" class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto transition-all duration-500">
     <div class="flex items-center gap-8">
-        <span id="header-logo" class="text-3xl font-medium uppercase tracking-widest text-white transition-colors duration-300 drop-shadow-md" style="font-family: 'Montserrat', sans-serif;">ITER<span style="letter-spacing: -2px;">Λ</span></span>
+        <div class="flex items-center gap-3">
+<img id="header-logo-img" src="../../assets/logo/logo-itera.png" alt="Itera Logo" class="h-10 w-auto object-contain drop-shadow-md brightness-0 invert filter transition-all duration-300">
+<span id="header-logo" class="text-3xl font-medium uppercase tracking-widest text-white transition-colors duration-300 drop-shadow-md" style="font-family: 'Montserrat', sans-serif;">ITER<span style="letter-spacing: -2px;">Λ</span></span>
+</div>
         <nav class="hidden md:flex items-center gap-6">
             <a class="nav-link text-white/95 hover:text-white transition-colors text-sm font-medium duration-300 drop-shadow-md" href="../home/index.html">Inicio</a>
             <a class="nav-link text-white/95 hover:text-white transition-colors text-sm font-medium duration-300 drop-shadow-md" href="../dashboard/index.html">Mis Viajes</a>
@@ -184,9 +189,13 @@
         <button id="btn-buscar-perfil" onclick="window.openSearchUserModal()" class="p-2 text-white hover:bg-white/20 rounded-lg transition-all active:scale-95 duration-150 drop-shadow-md flex items-center justify-center animate-fade-in" title="Buscar Perfiles">
             <span class="material-symbols-outlined">search</span>
         </button>
-        <button id="notif-btn" class="p-2 text-white hover:bg-white/20 rounded-lg transition-all active:scale-95 duration-150 drop-shadow-md">
+
+        <!-- Notificaciones -->
+        <button id="notif-btn" onclick="if(window.openNotificationsModal) window.openNotificationsModal();" class="p-2 text-white hover:bg-white/20 rounded-lg transition-all active:scale-95 duration-150 drop-shadow-md flex items-center justify-center relative" title="Notificaciones">
             <span class="material-symbols-outlined">notifications</span>
+            <span id="notif-badge" class="absolute top-1 right-1.5 w-2 h-2 bg-error rounded-full hidden"></span>
         </button>
+
         <div class="relative group">
             <button id="avatar-btn" class="h-10 w-10 rounded-full overflow-hidden border-2 border-white/50 shadow-sm bg-white/20 focus:outline-none transition-colors duration-300" onclick="this.nextElementSibling.classList.toggle('hidden')">
                 <img alt="User profile avatar" id="header-avatar" class="h-full w-full object-cover" src="https://cdn-icons-png.flaticon.com/512/149/149071.png"/>
@@ -196,8 +205,9 @@
                     <a href="../profile/index.html" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
                         <span class="material-symbols-outlined text-base">person</span> Perfil
                     </a>
-                    <a href="#" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
-                        <span class="material-symbols-outlined text-base">settings</span> Configuración
+
+                    <a href="../help/index.html" class="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors">
+                        <span class="material-symbols-outlined text-base">help</span> Ayuda
                     </a>
                     <div class="border-t border-slate-100 dark:border-slate-700 my-1"></div>
                     <a href="../auth/index.html" class="px-4 py-2 text-sm text-error hover:bg-error/5 flex items-center gap-2 transition-colors">
@@ -214,6 +224,7 @@
 window.addEventListener('scroll', () => {
     const header = document.getElementById('main-header');
     const logo = document.getElementById('header-logo');
+    const logoImg = document.getElementById('header-logo-img');
     const navLinkActive = document.getElementById('nav-link-active');
     const navLinks = document.querySelectorAll('.nav-link');
     const langBtn = document.getElementById('lang-btn');
@@ -225,6 +236,7 @@ window.addEventListener('scroll', () => {
         header.classList.add('bg-white/85', 'backdrop-blur-xl', 'shadow-sm', 'dark:bg-slate-900/85', 'py-0', 'border-slate-200/60', 'dark:border-slate-700/50');
         
         logo.classList.remove('text-white', 'drop-shadow-md');
+        if(logoImg) logoImg.classList.remove('brightness-0', 'invert');
         logo.classList.add('text-slate-900', 'dark:text-white');
         
         navLinkActive.classList.remove('text-white', 'border-white', 'drop-shadow-md');
@@ -257,6 +269,7 @@ window.addEventListener('scroll', () => {
         header.classList.remove('bg-white/85', 'backdrop-blur-xl', 'shadow-sm', 'dark:bg-slate-900/85', 'py-0', 'border-slate-200/60', 'dark:border-slate-700/50');
         
         logo.classList.add('text-white', 'drop-shadow-md');
+        if(logoImg) logoImg.classList.add('brightness-0', 'invert');
         logo.classList.remove('text-slate-900', 'dark:text-white');
         
         navLinkActive.classList.add('text-white', 'border-white', 'drop-shadow-md');
@@ -621,6 +634,7 @@ window.addEventListener('scroll', () => {
 <script src="destinations.js"></script>
 <script src="../../shared/utils/auto-translator.js"></script>
 <script src="../../shared/utils/avatar-loader.js"></script>
+<script src="../../shared/components/notifications/notifications.js"></script>
 <script>
 function changeSystemLanguage(lang) {
     localStorage.setItem('itera_lang', lang);

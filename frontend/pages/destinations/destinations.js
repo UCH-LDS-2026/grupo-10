@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const CATEGORIES = [
     { key: 'tourist_attraction', label: 'Atracciones', icon: 'attractions' },
     { key: 'restaurant', label: 'Gastronomía', icon: 'restaurant' },
-    { key: 'transit_station', label: 'Movilidad', icon: 'directions_car' }
+    { key: 'lodging', label: 'Alojamiento', icon: 'hotel' }
   ];
   const SUB_CATS = [
     { key: 'all', label: 'Todos', icon: 'map' },
@@ -563,7 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const priceColor = priceVal === 'free' ? 'text-emerald-600' : 'text-[#0077FF]';
       const imgSrc = p.image || 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=600&auto=format&fit=crop';
       const catLabel = p.categoryLabel || 'Lugar';
-      const btnLabel = catLabel === 'Gastronomía' ? 'Reservar' : catLabel === 'Movilidad' ? 'Comprar' : 'Ver Detalles';
+      const btnLabel = (catLabel === 'Gastronomía' || catLabel === 'Alojamiento') ? 'Reservar' : 'Ver Detalles';
 
       const safeAddress = p.address ? String(p.address) : '';
       const addressDisplay = safeAddress.split(',')[0] || '';
